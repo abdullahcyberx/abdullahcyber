@@ -169,17 +169,16 @@ const HeroHeader = ({ isScrolled, handleSmoothScroll }: { isScrolled: boolean, h
         }}
       >
         <ProCard>
-          <TypewriterText
-            text="Web Penetration Tester"
-            style={{
-              fontSize: "1.8rem",
-              fontFamily: "'Roboto Mono', monospace", // aesthetic monospaced title
-              letterSpacing: "1px",
-              textAlign: "center",
-              marginTop: "1rem",
-              color: "#0ff",
-            }}
-          />
+          <h1 style={{ 
+            fontSize: '1.8rem', 
+            textAlign: 'center', 
+            color: '#0ff', 
+            margin: '0', 
+            fontFamily: "'Roboto Mono', monospace", 
+            letterSpacing: '1px' 
+          }}>
+            Muhammad Abdullah – Cybersecurity Student & Penetration Tester
+          </h1>
           <p
             style={{
               fontSize: "1.05rem",
@@ -212,10 +211,12 @@ const certsData = [
   { title: "IT Essential", provider: "Cisco", date: "", file: "/certificates/cisco/it essential cisco.pdf" },
   { title: "Network Defense", provider: "Cisco", date: "", file: "/certificates/cisco/network defense cisco.pdf" },
   { title: "CPPS", provider: "Hack and Fix", date: "", file: "/certificates/hack and fix/CPPS.pdf" },
-  { title: "Internship Certificate", provider: "Digital Empowerment Network", date: "", file: "/certificates/intership den/Abdullah den certificate.pdf" },
-  { title: "NESCON Fast Typing", provider: "NESCON", date: "", file: "/certificates/nescon fast typing.pdf" },
-  { title: "Advent Of Cyber 2025", provider: "TryHackMe", date: "Dec 2025", file: "/certificates/try hack me/Advent Of Cyber 2025.pdf" },
   { title: "Urdu Course Cyber Sec", provider: "Urdu Course", date: "", file: "/certificates/urdu course cyber sec.pdf" }
+];
+
+const achievementsData = [
+  { title: "NESCON Fast Typing", provider: "NESCON", date: "", file: "/certificates/nescon fast typing.pdf" },
+  { title: "Advent Of Cyber 2025", provider: "TryHackMe", date: "Dec 2025", file: "/certificates/try hack me/Advent Of Cyber 2025.pdf" }
 ];
 
 export default function App() {
@@ -258,13 +259,29 @@ export default function App() {
 
       <section id="about" className="section">
         <h2 className="text-gradient section-title">About Me</h2>
-        <GlassCard>
-          <p>
-            I focus on web penetration testing, testing web applications to find
-            security flaws by understanding application logic and performing
-            hands-on vulnerability testing.
-          </p>
-        </GlassCard>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+          <GlassCard>
+            <p style={{ lineHeight: 1.6 }}>
+              I am Muhammad Abdullah, also known as Abdullah Cyber, a cybersecurity student at Riphah International University in Pakistan. I specialize in web penetration testing, vulnerability assessment, and ethical hacking. My goal is to identify and secure real-world web application vulnerabilities through hands-on testing and continuous learning.
+            </p>
+          </GlassCard>
+          <GlassCard>
+            <p style={{ lineHeight: 1.6 }}>
+              Muhammad Abdullah Cybersecurity portfolio showcases projects related to web security, ethical hacking, and penetration testing. As a Riphah University cybersecurity student, Abdullah Cyber focuses on practical skills and real-world attack simulations to improve application security.
+            </p>
+          </GlassCard>
+        </div>
+      </section>
+
+      <section id="education" className="section">
+        <h2 className="text-gradient section-title">Education</h2>
+        <ProCard>
+          <h3 style={{ marginBottom: '0.25rem' }}>Bachelors in Cyber Security</h3>
+          <p style={{ color: '#777', fontSize: '0.9rem', marginBottom: '1rem' }}>Riphah International University | 2024 – 2028 (Expected)</p>
+          <ul style={{ color: '#aaa', lineHeight: 1.6, paddingLeft: '1.2rem', margin: 0 }}>
+            <li>Currently studying in the 4th semester, building foundational knowledge and practical skills.</li>
+          </ul>
+        </ProCard>
       </section>
 
       <section id="experience" className="section">
@@ -284,6 +301,9 @@ export default function App() {
             <ul style={{ color: '#aaa', lineHeight: 1.6, paddingLeft: '1.2rem', margin: 0 }}>
               <li>Conducted penetration testing and vulnerability assessments in simulated cyber-attack environments to identify security weaknesses and recommend improvement measures.</li>
             </ul>
+            <a href="/certificates/intership den/Abdullah den certificate.pdf" target="_blank" rel="noopener noreferrer" style={{ display: 'inline-block', marginTop: '1rem', color: '#00ffff', textDecoration: 'underline', fontWeight: 500 }}>
+              View Internship Certificate
+            </a>
           </ProCard>
           <ProCard>
             <h3 style={{ marginBottom: '0.25rem' }}>CTF Organizer & Player</h3>
@@ -368,8 +388,23 @@ export default function App() {
         </div>
       </section>
 
+      <section id="achievements" className="section">
+        <h2 className="text-gradient section-title">Achievements</h2>
+        <div className="content-grid">
+          {achievementsData.map((cert, index) => (
+            <a key={index} href={cert.file} target="_blank" rel="noopener noreferrer" style={{ textDecoration: 'none', color: 'inherit' }}>
+              <GlassCard>
+                <h3>{cert.title}</h3>
+                <p>{cert.provider}</p>
+                {cert.date && <p style={{ color: '#777', fontSize: '0.85rem' }}>{cert.date}</p>}
+              </GlassCard>
+            </a>
+          ))}
+        </div>
+      </section>
+
       <section id="projects" className="section">
-        <h2 className="text-gradient section-title">Projects</h2>
+        <h2 className="text-gradient section-title">Cybersecurity Projects by Muhammad Abdullah</h2>
         <div className="content-grid">
           <ProCard>
             <h3>Phishing Awareness Campaign</h3>
@@ -404,7 +439,19 @@ export default function App() {
         </ProCard>
       </section>
 
+      <div style={{ display: 'none' }}>
+        Muhammad Abdullah Cybersecurity Student Pakistan
+        Abdullah Cyber Portfolio
+        Riphah University Cybersecurity Student Abdullah
+        Ethical Hacker Muhammad Abdullah
+        Penetration Tester Abdullah Cyber
+        abdullahcyber.dev cybersecurity portfolio
+      </div>
+
       <footer className="footer">
+        <div style={{ marginBottom: '1.5rem', color: '#999' }}>
+          <p>Muhammad Abdullah | Abdullah Cyber | Cybersecurity Student at Riphah International University Pakistan</p>
+        </div>
         <div className="social-links">
           <a href="https://github.com/abdullahcyberx" target="_blank" rel="noreferrer" className="social-btn">
             <svg viewBox="0 0 24 24" fill="currentColor">

@@ -84,6 +84,7 @@
 .text-gradient {
   background: linear-gradient(90deg, #ffffff, #666666);
   -webkit-background-clip: text;
+  background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
@@ -125,7 +126,7 @@
 
 .content-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 1.5rem;
 }
 
@@ -256,4 +257,30 @@
   transform: translateY(-2px);
 }
 
-
+@media (max-width: 768px) {
+  .section {
+    padding: 3.5rem 5% 1.5rem;
+  }
+  .section-title {
+    font-size: 1.6rem;
+    margin-bottom: 2rem;
+  }
+  .header {
+    flex-direction: column;
+    padding: 1rem 5%;
+  }
+  .typing {
+    font-size: 1.8rem;
+    min-height: 2.5rem;
+  }
+  .hero-desc {
+    font-size: 0.95rem;
+  }
+  .glass-card, .pro-card {
+    padding: 1.5rem;
+  }
+  .hero {
+    padding-top: 8rem;
+    min-height: 80vh;
+  }
+}

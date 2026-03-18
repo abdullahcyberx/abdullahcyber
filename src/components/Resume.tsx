@@ -94,13 +94,14 @@ export default function Resume() {
           </div>
 
           <Section title="EDUCATION">
-            <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.95rem', color: '#222', fontStyle: 'italic' }}>Bachelor of Cyber Security</h4>
+            <h4 style={{ margin: '0 0 0.25rem', fontSize: '0.95rem', color: '#222', fontStyle: 'italic' }}>Bachelors in Cyber Security</h4>
             <p style={{ margin: 0, fontSize: '0.9rem', color: '#444' }}>Riphah International University</p>
-            <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#666', fontStyle: 'italic' }}>Expected Complete: 2028</p>
+            <p style={{ margin: '0.25rem 0 0', fontSize: '0.85rem', color: '#666', fontStyle: 'italic' }}>2024 - 2028 (Expected) | 4th Semester</p>
           </Section>
 
           <Section title="ACHIEVEMENTS">
             <ul style={{ paddingLeft: '1.2rem', margin: 0, fontSize: '0.9rem', color: '#444', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+              <li>NESCON Fast Typing</li>
               <li>Advent of Cyber 2025 (THM)</li>
               <li>2nd Place Riphah CTF</li>
               <li>2nd Place Islamia Bahawalpur CTF</li>
@@ -120,7 +121,6 @@ export default function Resume() {
           <Section title="MORE">
             <ul style={{ paddingLeft: '1.2rem', margin: 0, fontSize: '0.9rem', color: '#444', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
               <li>Hafiz-e-Quran</li>
-              <li>100+ Wpm Typing Speed</li>
               <li>Vibe Coder</li>
             </ul>
           </Section>
