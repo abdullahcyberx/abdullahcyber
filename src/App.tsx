@@ -177,7 +177,7 @@ const HeroHeader = ({ isScrolled, handleSmoothScroll }: { isScrolled: boolean, h
             fontFamily: "'Roboto Mono', monospace", 
             letterSpacing: '1px' 
           }}>
-            Muhammad Abdullah – Cybersecurity Student & Penetration Tester
+            Cybersecurity Student & Penetration Tester
           </h1>
           <p
             style={{
@@ -265,11 +265,6 @@ export default function App() {
               I am Muhammad Abdullah, also known as Abdullah Cyber, a cybersecurity student at Riphah International University in Pakistan. I specialize in web penetration testing, vulnerability assessment, and ethical hacking. My goal is to identify and secure real-world web application vulnerabilities through hands-on testing and continuous learning.
             </p>
           </GlassCard>
-          <GlassCard>
-            <p style={{ lineHeight: 1.6 }}>
-              Muhammad Abdullah Cybersecurity portfolio showcases projects related to web security, ethical hacking, and penetration testing. As a Riphah University cybersecurity student, Abdullah Cyber focuses on practical skills and real-world attack simulations to improve application security.
-            </p>
-          </GlassCard>
         </div>
       </section>
 
@@ -277,7 +272,9 @@ export default function App() {
         <h2 className="text-gradient section-title">Education</h2>
         <ProCard>
           <h3 style={{ marginBottom: '0.25rem' }}>Bachelors in Cyber Security</h3>
-          <p style={{ color: '#777', fontSize: '0.9rem', marginBottom: '1rem' }}>Riphah International University | 2024 – 2028 (Expected)</p>
+          <p style={{ color: '#777', fontSize: '0.9rem', marginBottom: '1rem' }}>
+            <a href="https://riphah.edu.pk/" target="_blank" rel="noopener noreferrer" style={{ color: '#0ff', textDecoration: 'none' }}>Riphah International University</a> | 2024 – 2028 (Expected)
+          </p>
           <ul style={{ color: '#aaa', lineHeight: 1.6, paddingLeft: '1.2rem', margin: 0 }}>
             <li>Currently studying in the 4th semester, building foundational knowledge and practical skills.</li>
           </ul>
@@ -432,14 +429,19 @@ export default function App() {
       </section>
 
       <section id="contact" className="section">
-        <h2 className="text-gradient section-title">Contact</h2>
-        <ProCard>
-          <p style={{ fontSize: '1.1rem', color: '#ccc', marginBottom: '0.5rem' }}>Email: contact@abdullahcyber.dev</p>
-          <p style={{ fontSize: '1.1rem', color: '#ccc', margin: 0 }}>Alternate: abdullahcyberx@gmail.com</p>
+        <h2 className="text-gradient section-title" style={{ textAlign: 'center' }}>Contact</h2>
+        <ProCard className="contact-card">
+          <a href="mailto:contact@abdullahcyber.dev" className="contact-email">
+            contact@abdullahcyber.dev
+          </a>
+          <p className="contact-alternate">
+            Alternate: <a href="mailto:abdullahcyberx@gmail.com">abdullahcyberx@gmail.com</a>
+          </p>
         </ProCard>
       </section>
 
       <div style={{ display: 'none' }}>
+        Muhammad Abdullah Cybersecurity portfolio showcases projects related to web security, ethical hacking, and penetration testing. As a Riphah University cybersecurity student, Abdullah Cyber focuses on practical skills and real-world attack simulations to improve application security.
         Muhammad Abdullah Cybersecurity Student Pakistan
         Abdullah Cyber Portfolio
         Riphah University Cybersecurity Student Abdullah

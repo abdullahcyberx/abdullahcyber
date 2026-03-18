@@ -128,6 +128,7 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
   gap: 1.5rem;
+  align-items: stretch;
 }
 
 .glass-card {
@@ -136,12 +137,17 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 12px;
   padding: 2rem;
-  transition: transform 0.3s ease, background 0.3s ease;
+  transition: transform 0.3s ease, background 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .glass-card:hover {
-  background: rgba(255, 255, 255, 0.04);
-  transform: translateY(-4px);
+  background: rgba(0, 255, 255, 0.03);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 30px -10px rgba(0, 255, 255, 0.15);
+  border-color: rgba(0, 255, 255, 0.2);
 }
 
 .glass-card h3 {
@@ -162,6 +168,9 @@
   border-radius: 12px;
   padding: 2.5rem;
   overflow: hidden;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .pro-card::before {
@@ -172,7 +181,7 @@
   transform: translate(-50%, -50%);
   width: 400px;
   height: 400px;
-  background: radial-gradient(circle, rgba(255,255,255,0.06) 0%, transparent 60%);
+  background: radial-gradient(circle, rgba(0,255,255,0.08) 0%, transparent 60%);
   opacity: 0;
   transition: opacity 0.3s;
   pointer-events: none;
@@ -226,6 +235,52 @@
   padding: 1.5rem;
   font-weight: 600;
   color: #ccc;
+  animation: floatAnim 6s ease-in-out infinite;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+@keyframes floatAnim {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-8px); }
+  100% { transform: translateY(0px); }
+}
+
+.contact-card {
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 4rem 2rem;
+}
+.contact-email {
+  font-size: clamp(1.2rem, 4vw, 2.5rem);
+  color: #00ffff;
+  text-decoration: none;
+  font-weight: bold;
+  letter-spacing: 1px;
+  transition: text-shadow 0.3s ease, color 0.3s ease;
+  margin-bottom: 1.5rem;
+}
+.contact-email:hover {
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+  color: #fff;
+}
+.contact-alternate {
+  font-size: 0.95rem;
+  color: #888;
+  font-style: italic;
+}
+.contact-alternate a {
+  color: #aaa;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+.contact-alternate a:hover {
+  color: #fff;
 }
 
 .footer {

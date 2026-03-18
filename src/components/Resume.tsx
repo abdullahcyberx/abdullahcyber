@@ -1,5 +1,5 @@
 import React from 'react';
-import { Phone, Mail, Linkedin, Github } from 'lucide-react';
+import { Mail, Linkedin, Github } from 'lucide-react';
 
 export default function Resume() {
   return (
@@ -87,7 +87,6 @@ export default function Resume() {
         {/* Right Column */}
         <div style={{ flex: '1 1 250px', background: '#f4f4f4', padding: '2.5rem' }}>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '1.2rem', marginBottom: '2.5rem' }}>
-            <ContactItem icon={<Phone size={16} />} text="+92 322 6067821" />
             <ContactItem icon={<Mail size={16} />} text="abdullahcyberx@gmail.com" />
             <ContactItem icon={<Linkedin size={16} />} text="linkedin.com/in/hafizabdullahx" />
             <ContactItem icon={<Github size={16} />} text="github.com/abdullahcyberx" />
