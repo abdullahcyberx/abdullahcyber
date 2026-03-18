@@ -90,66 +90,24 @@ const HeroHeader = ({ isScrolled, handleSmoothScroll }: { isScrolled: boolean, h
     <>
       {/* Header */}
       <motion.header
-        style={{
-          position: "fixed",
-          top: 0,
-          left: 0,
-          width: "100%",
-          zIndex: 1000,
-          display: "flex",
-          justifyContent: "center", // center logo
-          alignItems: "center",
-          padding: isScrolled ? "0.8rem 2rem" : "1.5rem 2rem",
-          background: isScrolled ? "rgba(5,5,5,0.85)" : "transparent",
-          backdropFilter: isScrolled ? "blur(12px)" : "none",
-          borderBottom: isScrolled ? "1px solid rgba(255,255,255,0.05)" : "none",
-          transition: "all 0.3s ease-in-out",
-          flexDirection: "column",
-        }}
+        className={`main-header ${isScrolled ? 'scrolled' : ''}`}
       >
         {/* Logo / Name */}
         <motion.div
-          style={{
-            cursor: "pointer",
-            fontWeight: 500,
-            letterSpacing: "6px",
-            textTransform: "uppercase",
-            color: "#fff",
-            fontFamily: "'Poppins', sans-serif", // aesthetic font
-            fontSize: isScrolled ? "2rem" : "2.8rem",
-            marginBottom: "1rem",
-          }}
+          className="logo-text"
           onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
         >
           Muhammad Abdullah
         </motion.div>
 
-        {/* Navigation (optional desktop only) */}
-        <nav
-          style={{
-            display: "flex",
-            gap: "2rem",
-            justifyContent: "center",
-            marginBottom: "1rem",
-            flexWrap: "wrap",
-          }}
-        >
+        {/* Navigation */}
+        <nav className="nav-container">
           {navItems.map((item) => (
             <a
               key={item.id}
               href={`#${item.id}`}
               onClick={(e) => handleSmoothScroll(e, item.id)}
-              style={{
-                letterSpacing: "2px",
-                textTransform: "uppercase",
-                fontSize: "0.85rem",
-                color: "#fff",
-                fontFamily: "'Roboto', sans-serif",
-                transition: "color 0.2s",
-                textDecoration: "none"
-              }}
-              onMouseEnter={(e) => (e.currentTarget.style.color = "#0ff")}
-              onMouseLeave={(e) => (e.currentTarget.style.color = "#fff")}
+              className="nav-link-item"
             >
               {item.label}
             </a>
@@ -238,7 +196,7 @@ export default function App() {
     e.preventDefault();
     const targetElement = document.getElementById(targetId);
     if (targetElement) {
-      const headerOffset = 120; // Adjust for fixed header
+      const headerOffset = window.innerWidth <= 768 ? 90 : 100; // Adjust for fixed header
       const elementPosition = targetElement.getBoundingClientRect().top;
       const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
 
