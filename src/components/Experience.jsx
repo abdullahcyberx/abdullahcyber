@@ -41,13 +41,13 @@ const Experience = () => {
       title: "Web Red Team Analyst (WEB-RTA)",
       issuer: "Cyber WarFare",
       date: "January 2026",
-      id: "HV-CAPT-DVG92YR9"
+      id: "69cb8639257cd5f5"
     },
     {
       title: "Certified Associate Penetration Tester (CAPT)",
       issuer: "Hack Viser",
       date: "October 2025",
-      id: "69cb8639257cd5f5"
+      id: "HV-CAPT-DVG92YR9"
     }
   ];
 

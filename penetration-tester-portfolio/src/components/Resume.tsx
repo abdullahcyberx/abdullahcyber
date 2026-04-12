@@ -31,12 +31,12 @@ export default function Resume() {
           <Section title="CERTIFICATIONS">
             <ResumeItem 
               title="Web Red Team Analyst (WEB-RTA) – Cyber WarFare"
-              subtitle="Certification ID : HV-CAPT-DVG92YR9"
+              subtitle="Certification ID : 69cb8639257cd5f5"
               date="January 2026"
             />
             <ResumeItem 
               title="Certified Associate Penetration Tester (CAPT) – Hack Viser"
-              subtitle="Certification ID : 69cb8639257cd5f5"
+              subtitle="Certification ID : HV-CAPT-DVG92YR9"
               date="October 2025"
             />
           </Section>
