@@ -1,0 +1,5 @@
+Contact: mailto:abdullahcyberx@gmail.com
+Expires: 2027-07-10T23:59:59Z
+Preferred-Languages: en
+Canonical: https://abdullahcyber.dev/.well-known/security.txt
+Policy: https://abdullahcyber.dev/#ethical-scope
