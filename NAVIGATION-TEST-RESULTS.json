@@ -1,0 +1,307 @@
+{
+  "passed": true,
+  "results": [
+    {
+      "name": "mobile-390",
+      "viewport": {
+        "width": 390,
+        "height": 844
+      },
+      "data": {
+        "overflow": 0,
+        "keyboardWithinViewport": true,
+        "keyboard": {
+          "left": 12,
+          "right": 378,
+          "width": 366,
+          "display": "grid",
+          "transform": "none"
+        },
+        "nav": {
+          "passed": true,
+          "desktopLinks": 8,
+          "mobileItems": 3,
+          "commandItems": 9,
+          "keyboardKeys": 18
+        },
+        "ai": {
+          "passed": true,
+          "assertions": [
+            {
+              "name": "main certifications intent",
+              "passed": true
+            },
+            {
+              "name": "experience intent",
+              "passed": true
+            },
+            {
+              "name": "project intent",
+              "passed": true
+            },
+            {
+              "name": "private data guard",
+              "passed": true
+            },
+            {
+              "name": "unknown stays unknown",
+              "passed": true
+            },
+            {
+              "name": "contact intent",
+              "passed": true
+            }
+          ]
+        },
+        "sheetOpen": true,
+        "commandFilteredCount": 1,
+        "commandClosed": true,
+        "aiOpen": true,
+        "dockHidden": true,
+        "errors": [],
+        "passed": true
+      }
+    },
+    {
+      "name": "desktop-1280",
+      "viewport": {
+        "width": 1280,
+        "height": 800
+      },
+      "data": {
+        "overflow": 0,
+        "keyboardWithinViewport": true,
+        "keyboard": {
+          "left": 40.180908203125,
+          "right": 905.81591796875,
+          "width": 865.635009765625,
+          "display": "block",
+          "transform": "matrix3d(0.863515, -0.0652763, -0.0835499, 0, 0.106026, 0.531633, 0.680459, 0, 0, -0.788011, 0.615661, 0, 0, 0, 0, 1)"
+        },
+        "nav": {
+          "passed": true,
+          "desktopLinks": 8,
+          "mobileItems": 3,
+          "commandItems": 9,
+          "keyboardKeys": 18
+        },
+        "ai": {
+          "passed": true,
+          "assertions": [
+            {
+              "name": "main certifications intent",
+              "passed": true
+            },
+            {
+              "name": "experience intent",
+              "passed": true
+            },
+            {
+              "name": "project intent",
+              "passed": true
+            },
+            {
+              "name": "private data guard",
+              "passed": true
+            },
+            {
+              "name": "unknown stays unknown",
+              "passed": true
+            },
+            {
+              "name": "contact intent",
+              "passed": true
+            }
+          ]
+        },
+        "moreOpen": true,
+        "commandFilteredCount": 1,
+        "commandClosed": true,
+        "aiOpen": true,
+        "errors": [],
+        "passed": true
+      }
+    },
+    {
+      "name": "mobile-412",
+      "viewport": {
+        "width": 412,
+        "height": 915
+      },
+      "data": {
+        "overflow": 0,
+        "keyboardWithinViewport": true,
+        "keyboard": {
+          "left": 12,
+          "right": 400,
+          "width": 388,
+          "display": "grid",
+          "transform": "none"
+        },
+        "nav": {
+          "passed": true,
+          "desktopLinks": 8,
+          "mobileItems": 3,
+          "commandItems": 9,
+          "keyboardKeys": 18
+        },
+        "ai": {
+          "passed": true,
+          "assertions": [
+            {
+              "name": "main certifications intent",
+              "passed": true
+            },
+            {
+              "name": "experience intent",
+              "passed": true
+            },
+            {
+              "name": "project intent",
+              "passed": true
+            },
+            {
+              "name": "private data guard",
+              "passed": true
+            },
+            {
+              "name": "unknown stays unknown",
+              "passed": true
+            },
+            {
+              "name": "contact intent",
+              "passed": true
+            }
+          ]
+        },
+        "sheetOpen": true,
+        "commandFilteredCount": 1,
+        "commandClosed": true,
+        "aiOpen": true,
+        "dockHidden": true,
+        "errors": [],
+        "passed": true
+      }
+    },
+    {
+      "name": "tablet-1024",
+      "viewport": {
+        "width": 1024,
+        "height": 768
+      },
+      "data": {
+        "overflow": 0,
+        "keyboardWithinViewport": true,
+        "keyboard": {
+          "left": 116.1789779663086,
+          "right": 925.2267684936523,
+          "width": 809.0477905273438,
+          "display": "block",
+          "transform": "matrix3d(0.815508, -0.0527704, -0.067543, 0, 0.0857133, 0.502077, 0.642629, 0, 0, -0.788011, 0.615661, 0, 0, 0, 0, 1)"
+        },
+        "nav": {
+          "passed": true,
+          "desktopLinks": 8,
+          "mobileItems": 3,
+          "commandItems": 9,
+          "keyboardKeys": 18
+        },
+        "ai": {
+          "passed": true,
+          "assertions": [
+            {
+              "name": "main certifications intent",
+              "passed": true
+            },
+            {
+              "name": "experience intent",
+              "passed": true
+            },
+            {
+              "name": "project intent",
+              "passed": true
+            },
+            {
+              "name": "private data guard",
+              "passed": true
+            },
+            {
+              "name": "unknown stays unknown",
+              "passed": true
+            },
+            {
+              "name": "contact intent",
+              "passed": true
+            }
+          ]
+        },
+        "moreOpen": true,
+        "commandFilteredCount": 1,
+        "commandClosed": true,
+        "aiOpen": true,
+        "errors": [],
+        "passed": true
+      }
+    },
+    {
+      "name": "desktop-1440",
+      "viewport": {
+        "width": 1440,
+        "height": 1000
+      },
+      "data": {
+        "overflow": 0,
+        "keyboardWithinViewport": true,
+        "keyboard": {
+          "left": 9.075811386108398,
+          "right": 1080.250005722046,
+          "width": 1071.1741943359375,
+          "display": "block",
+          "transform": "matrix3d(0.987087, -0.0636596, -0.146994, 0, 0.156434, 0.580549, 0.799057, 0, 0.0344698, -0.811733, 0.58301, 0, 0, 0, 0, 1)"
+        },
+        "nav": {
+          "passed": true,
+          "desktopLinks": 8,
+          "mobileItems": 3,
+          "commandItems": 9,
+          "keyboardKeys": 18
+        },
+        "ai": {
+          "passed": true,
+          "assertions": [
+            {
+              "name": "main certifications intent",
+              "passed": true
+            },
+            {
+              "name": "experience intent",
+              "passed": true
+            },
+            {
+              "name": "project intent",
+              "passed": true
+            },
+            {
+              "name": "private data guard",
+              "passed": true
+            },
+            {
+              "name": "unknown stays unknown",
+              "passed": true
+            },
+            {
+              "name": "contact intent",
+              "passed": true
+            }
+          ]
+        },
+        "moreOpen": true,
+        "commandFilteredCount": 1,
+        "commandClosed": true,
+        "aiOpen": true,
+        "errors": [],
+        "passed": true
+      }
+    }
+  ]
+}

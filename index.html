@@ -660,35 +660,221 @@ html[data-quality="balanced"] .ai-panel { box-shadow: 0 20px 55px rgba(0,0,0,.56
   .ai-launcher { box-shadow: 0 12px 32px rgba(0,0,0,.5), 0 0 22px rgba(125,93,255,.16); }
 }
 
+
+
+/* =========================================================
+   COSMIC NAVIGATION — floating desktop bar + mobile dock
+   ========================================================= */
+html { scroll-padding-top: 104px; }
+body { padding-top: 92px; }
+main section[id], #achievements { scroll-margin-top: 104px; }
+.scroll-progress { position: fixed; inset: 0 0 auto; height: 2px; z-index: 2200; background: rgba(255,255,255,.035); pointer-events: none; }
+.scroll-progress span { display: block; width: 0; height: 100%; background: linear-gradient(90deg, var(--violet), var(--cyan), var(--pink)); box-shadow: 0 0 14px rgba(97,231,255,.65); transform-origin: left; }
+
+.site-header { position: fixed; top: 14px; left: 50%; transform: translateX(-50%); width: min(calc(100% - 32px), 1260px); height: 64px; margin: 0; padding: 0 10px 0 17px; border: 1px solid rgba(190,192,255,.17); border-radius: 19px; background: linear-gradient(135deg, rgba(18,20,47,.96), rgba(7,9,25,.94)); box-shadow: 0 18px 48px rgba(0,0,0,.38), inset 0 1px rgba(255,255,255,.045); z-index: 1200; isolation: isolate; }
+.site-header::before { content: ""; position: absolute; inset: -1px; border-radius: inherit; padding: 1px; background: linear-gradient(100deg, rgba(154,121,255,.36), rgba(97,231,255,.08) 45%, rgba(255,117,200,.2)); -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor; mask-composite: exclude; pointer-events: none; }
+.site-header .brand { min-width: 92px; font-size: 18px; z-index: 2; }
+.site-header .brand-orbit { width: 27px; height: 27px; }
+.site-header .brand-orbit::after { width: 37px; height: 12px; left: -6px; top: 6px; }
+.desktop-nav { gap: 6px; height: 100%; }
+.desktop-nav > a, .nav-more-toggle { height: 40px; display: inline-flex; align-items: center; border-radius: 11px; padding: 0 12px; color: #a8abc5; font-size: 12px; font-weight: 650; border: 0; background: transparent; cursor: pointer; transition: color .18s ease, background .18s ease, transform .18s ease; }
+.desktop-nav > a::after { display: none; }
+.desktop-nav > a:hover, .desktop-nav > a.active, .nav-more-toggle:hover, .nav-more-toggle.active, .nav-more-toggle[aria-expanded="true"] { color: #fff; background: rgba(255,255,255,.055); }
+.desktop-nav > a.active { box-shadow: inset 0 -2px var(--cyan); }
+.nav-more { position: relative; height: 40px; }
+.nav-more-toggle span { margin-left: 6px; color: var(--cyan); transition: transform .18s ease; }
+.nav-more-toggle[aria-expanded="true"] span { transform: rotate(180deg); }
+.nav-more-menu { position: absolute; top: calc(100% + 13px); right: -18px; width: 290px; padding: 9px; border: 1px solid rgba(190,192,255,.16); border-radius: 18px; background: #0d1027; box-shadow: 0 28px 75px rgba(0,0,0,.56); opacity: 0; visibility: hidden; pointer-events: none; transform: translate3d(0,-7px,0) scale(.985); transform-origin: top right; transition: opacity .17s ease, transform .17s ease, visibility .17s; }
+.nav-more-menu.open { opacity: 1; visibility: visible; pointer-events: auto; transform: translate3d(0,0,0) scale(1); }
+.nav-more-menu a { display: grid; grid-template-columns: 1fr; gap: 1px; padding: 10px 12px; border-radius: 11px; color: #dfe0f2; transition: background .16s ease, transform .16s ease; }
+.nav-more-menu a::after { display: none; }
+.nav-more-menu a:hover, .nav-more-menu a:focus-visible, .nav-more-menu a.active { background: rgba(154,121,255,.11); transform: translateX(2px); outline: none; }
+.nav-more-menu a span { font-size: 12px; font-weight: 720; }
+.nav-more-menu a small { color: #747896; font-size: 9px; }
+.nav-menu-divider { display: block; height: 1px; background: rgba(255,255,255,.07); margin: 7px 8px; }
+.desktop-actions { min-width: 332px; display: flex; align-items: center; justify-content: flex-end; gap: 7px; }
+.command-trigger, .nav-ai-trigger, .header-contact, .mobile-command-trigger { border: 1px solid rgba(255,255,255,.09); border-radius: 11px; min-height: 40px; display: inline-flex; align-items: center; justify-content: center; cursor: pointer; color: #ececf8; background: rgba(255,255,255,.035); transition: transform .18s ease, border-color .18s ease, background .18s ease; }
+.command-trigger { padding: 0 9px 0 12px; gap: 8px; font-size: 10px; }
+.command-trigger kbd { padding: 3px 6px; border: 1px solid rgba(255,255,255,.12); border-radius: 6px; color: #8286a4; font-size: 8px; background: rgba(0,0,0,.18); }
+.nav-ai-trigger { padding: 0 13px; font-size: 10px; color: #dcd7ff; border-color: rgba(154,121,255,.22); background: rgba(154,121,255,.075); }
+.header-contact { padding: 0 15px; font-size: 10px; font-weight: 760; color: #07101a; border-color: transparent; background: linear-gradient(135deg, var(--cyan), #c4f7ff); }
+.command-trigger:hover, .nav-ai-trigger:hover, .header-contact:hover { transform: translateY(-2px); }
+.command-trigger:hover { border-color: rgba(97,231,255,.3); }
+.nav-ai-trigger:hover { border-color: rgba(154,121,255,.48); background: rgba(154,121,255,.13); }
+.mobile-command-trigger, .mobile-dock, .mobile-more-sheet, .mobile-sheet-backdrop { display: none; }
+
+/* The AI is opened from navigation, so the duplicate floating orb is removed. */
+.ai-launcher { display: none !important; }
+.ai-panel { bottom: 0; }
+
+/* Command palette */
+.command-palette { width: min(calc(100% - 28px), 650px); max-height: min(76vh, 690px); padding: 0; color: var(--text); border: 1px solid rgba(183,156,255,.24); border-radius: 22px; background: #0b0e23; box-shadow: 0 42px 120px rgba(0,0,0,.72); overflow: hidden; }
+.command-palette::backdrop { background: rgba(2,3,12,.8); }
+.command-head { height: 66px; display: grid; grid-template-columns: 24px 1fr auto; align-items: center; gap: 12px; padding: 0 17px; border-bottom: 1px solid rgba(255,255,255,.075); }
+.command-head svg { width: 21px; color: var(--cyan); }
+.command-head input { width: 100%; border: 0; outline: 0; background: transparent; color: #fff; font-size: 15px; }
+.command-head input::placeholder { color: #6f738f; }
+.command-head kbd, .command-footer kbd { border: 1px solid rgba(255,255,255,.12); background: rgba(255,255,255,.04); color: #8a8da8; border-radius: 6px; padding: 3px 6px; font-size: 8px; }
+.command-body { padding: 13px; max-height: min(58vh, 520px); overflow: auto; }
+.command-body > p:first-child { margin: 4px 8px 9px; color: #696d88; font-size: 8px; letter-spacing: .17em; text-transform: uppercase; }
+.command-results { display: grid; gap: 4px; }
+.command-results > [hidden] { display: none !important; }
+.command-results > a, .command-results > button { width: 100%; border: 0; text-align: left; display: grid; grid-template-columns: 38px 1fr auto; align-items: center; gap: 10px; padding: 10px; border-radius: 12px; color: #e8e8f5; background: transparent; cursor: pointer; }
+.command-results > a:hover, .command-results > button:hover, .command-results > .command-selected { background: rgba(154,121,255,.115); outline: 1px solid rgba(154,121,255,.18); }
+.command-icon { width: 36px; height: 36px; display: grid; place-items: center; border-radius: 10px; color: var(--cyan); background: rgba(97,231,255,.06); border: 1px solid rgba(97,231,255,.1); font-size: 16px; }
+.command-results b { display: block; font-size: 12px; }
+.command-results small { display: block; margin-top: 2px; color: #737793; font-size: 9px; }
+.command-results em { color: #656984; font-size: 8px; font-style: normal; }
+.command-empty { padding: 28px 10px; text-align: center; color: #8588a2; font-size: 11px; }
+.command-footer { display: flex; gap: 17px; padding: 11px 17px; border-top: 1px solid rgba(255,255,255,.07); color: #6f728d; font-size: 8px; }
+.command-footer span { display: inline-flex; align-items: center; gap: 5px; }
+
+/* Compact desktop keyboard: preserve perspective on common 1280px screens. */
+@media (min-width: 1081px) and (max-width: 1350px) {
+  .keyboard-scene { overflow: hidden; }
+  .keyboard-board { width: 860px; max-width: none; padding: 34px; transform: rotateX(52deg) rotateZ(-7deg) scale(.87) !important; }
+}
+
+/* Tablet keyboard: retain the 3D look without clipping the viewport. */
+@media (min-width: 761px) and (max-width: 1080px) {
+  .keyboard-stage { width: min(calc(100% - 30px), 1040px); }
+  .keyboard-scene { min-height: 500px; overflow: hidden; }
+  .keyboard-board { width: 860px; max-width: none; padding: 32px; transform: rotateX(52deg) rotateZ(-6deg) scale(.82) !important; }
+}
+
+/* Mobile keyboard: real responsive grid, no clipped scaled desktop board. */
+@media (max-width: 760px) {
+  .keyboard-stage { width: min(calc(100% - 24px), 620px); margin-top: 0; gap: 18px; }
+  .keyboard-scene { min-height: 0; display: block; overflow: visible; perspective: none; }
+  .keyboard-board { width: 100%; max-width: 100%; display: grid; grid-template-columns: repeat(3, minmax(0,1fr)); gap: 10px; padding: 16px; border-radius: 23px; transform: none !important; transition: none !important; box-shadow: 0 25px 54px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.1), inset 0 -10px 25px rgba(0,0,0,.35); }
+  .key-row { display: contents; }
+  .skill-key, .skill-key.wide { width: auto; min-width: 0; height: 70px; padding: 10px 8px; transform: none; border-radius: 10px; box-shadow: 0 5px 0 #090a18, 0 8px 14px rgba(0,0,0,.38), inset 0 1px rgba(255,255,255,.14); touch-action: manipulation; }
+  .skill-key.space-key { grid-column: span 2; }
+  .skill-key:hover, .skill-key:focus-visible, .skill-key.active { transform: translateY(-2px); box-shadow: 0 7px 0 #090a18, 0 11px 18px rgba(0,0,0,.42), inset 0 1px rgba(255,255,255,.2), 0 0 20px rgba(140,102,255,.14); }
+  .skill-key:active { transform: translateY(2px); box-shadow: 0 2px 0 #090a18, 0 5px 9px rgba(0,0,0,.38); }
+  .skill-key span { font-size: clamp(7px, 2.25vw, 9px); letter-spacing: .045em; overflow-wrap: anywhere; }
+  .skill-key small { font-size: 7px; }
+  .skill-display { width: 100%; margin: 0; min-height: 260px; padding: 23px; }
+  .skill-display h3 { font-size: 29px; margin-top: 19px; }
+  .skill-prompt { margin-top: 25px; }
+}
+@media (max-width: 365px) {
+  .keyboard-board { grid-template-columns: repeat(2, minmax(0,1fr)); }
+  .skill-key.space-key { grid-column: span 2; }
+  .skill-key span { font-size: 8px; }
+}
+
+@media (max-width: 1080px) and (min-width: 861px) {
+  .site-header { width: calc(100% - 24px); }
+  .desktop-nav > a, .nav-more-toggle { padding-inline: 8px; }
+  .desktop-actions { min-width: auto; }
+  .command-trigger span { display: none; }
+  .nav-ai-trigger { padding-inline: 10px; }
+}
+
+@media (max-width: 860px) {
+  html { scroll-padding-top: 86px; }
+  body { padding-top: 78px; padding-bottom: calc(82px + env(safe-area-inset-bottom)); }
+  main section[id], #achievements { scroll-margin-top: 86px; }
+  .site-header { top: 9px; width: calc(100% - 20px); height: 57px; padding: 0 9px 0 14px; border-radius: 16px; }
+  .site-header .brand { min-width: 0; }
+  .desktop-nav, .desktop-actions, .menu-toggle { display: none !important; }
+  .mobile-command-trigger { display: inline-flex; width: 39px; min-height: 39px; font-size: 15px; }
+  .mobile-command-trigger:hover { border-color: rgba(97,231,255,.35); }
+
+  .mobile-dock { position: fixed; left: 50%; bottom: max(8px, env(safe-area-inset-bottom)); transform: translateX(-50%); z-index: 1300; width: min(calc(100% - 20px), 500px); height: 66px; padding: 6px; border: 1px solid rgba(190,192,255,.16); border-radius: 20px; background: linear-gradient(135deg, rgba(17,19,45,.98), rgba(6,8,23,.98)); box-shadow: 0 20px 55px rgba(0,0,0,.54), inset 0 1px rgba(255,255,255,.04); display: grid; grid-template-columns: repeat(5,1fr); gap: 2px; transition: opacity .18s ease, transform .18s ease, visibility .18s; }
+  .mobile-dock-item { min-width: 0; border: 0; border-radius: 14px; background: transparent; color: #777b98; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px; cursor: pointer; position: relative; transition: color .16s ease, background .16s ease, transform .16s ease; }
+  .mobile-dock-item svg { width: 20px; height: 20px; }
+  .mobile-dock-item span { font-size: 8px; font-weight: 700; letter-spacing: .02em; }
+  .mobile-dock-item.active, .mobile-dock-item[aria-expanded="true"] { color: #fff; background: rgba(154,121,255,.11); }
+  .mobile-dock-item.active::after { content: ""; position: absolute; bottom: 3px; width: 16px; height: 2px; border-radius: 3px; background: var(--cyan); box-shadow: 0 0 10px rgba(97,231,255,.7); }
+  .mobile-ai-dock { color: #c7bcff; }
+  .mobile-ai-dock svg { filter: drop-shadow(0 0 7px rgba(154,121,255,.34)); }
+
+  .mobile-sheet-backdrop { display: block; position: fixed; inset: 0; z-index: 1380; background: rgba(2,3,12,.72); opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .2s ease, visibility .2s; }
+  .mobile-sheet-backdrop.open { opacity: 1; visibility: visible; pointer-events: auto; }
+  .mobile-more-sheet { display: block; position: fixed; left: 8px; right: 8px; bottom: max(8px, env(safe-area-inset-bottom)); z-index: 1390; max-height: min(82svh, 720px); overflow: auto; padding: 11px 14px calc(18px + env(safe-area-inset-bottom)); border: 1px solid rgba(183,156,255,.22); border-radius: 25px; background: #0b0e23; box-shadow: 0 35px 100px rgba(0,0,0,.7); transform: translate3d(0,110%,0); visibility: hidden; transition: transform .24s cubic-bezier(.22,.75,.2,1), visibility .24s; }
+  .mobile-more-sheet.open { transform: translate3d(0,0,0); visibility: visible; }
+  .mobile-sheet-handle { width: 44px; height: 4px; margin: 1px auto 13px; border-radius: 4px; background: rgba(255,255,255,.17); }
+  .mobile-sheet-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 15px; padding: 4px 4px 14px; }
+  .mobile-sheet-head small { color: var(--cyan); font-size: 8px; letter-spacing: .16em; text-transform: uppercase; }
+  .mobile-sheet-head h2 { margin: 2px 0 0; font-size: 24px; letter-spacing: -.04em; }
+  .mobile-sheet-head button { width: 38px; height: 38px; border: 1px solid rgba(255,255,255,.1); border-radius: 12px; color: #fff; background: rgba(255,255,255,.035); font-size: 22px; cursor: pointer; }
+  .mobile-sheet-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 8px; }
+  .mobile-sheet-grid a { min-height: 92px; padding: 12px; border: 1px solid rgba(255,255,255,.075); border-radius: 15px; background: rgba(255,255,255,.025); display: flex; flex-direction: column; }
+  .mobile-sheet-grid a > span { color: var(--cyan); font-size: 8px; }
+  .mobile-sheet-grid b { margin-top: 9px; font-size: 12px; }
+  .mobile-sheet-grid small { color: #747892; font-size: 8px; line-height: 1.4; }
+  .mobile-sheet-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+  .mobile-sheet-actions a, .mobile-sheet-actions button { min-height: 44px; border: 1px solid rgba(154,121,255,.18); border-radius: 13px; color: #e8e6ff; background: rgba(154,121,255,.07); display: flex; align-items: center; justify-content: center; gap: 7px; font-size: 10px; cursor: pointer; }
+  .mobile-sheet-actions kbd { color: #8286a4; font-size: 7px; }
+  .mobile-sheet-social { display: flex; justify-content: center; gap: 22px; padding-top: 14px; }
+  .mobile-sheet-social a { color: #8387a2; font-size: 9px; }
+  body.sheet-open { overflow: hidden; }
+
+  .ai-assistant { right: 0; bottom: 0; }
+  .ai-panel { position: fixed; inset: max(8px, env(safe-area-inset-top)) 8px max(8px, env(safe-area-inset-bottom)) 8px; width: auto; height: auto; max-height: none; z-index: 1500; border-radius: 22px; }
+  body.ai-open { overflow: hidden; }
+  body.ai-open .mobile-dock { opacity: 0; visibility: hidden; pointer-events: none; transform: translate3d(-50%, 18px, 0); }
+  .command-palette { margin-top: 8vh; }
+}
+
+@media (max-width: 430px) {
+  .command-palette { width: calc(100% - 16px); border-radius: 19px; }
+  .command-head { height: 59px; padding-inline: 13px; }
+  .command-footer { justify-content: space-between; gap: 5px; padding-inline: 13px; }
+  .command-results > a, .command-results > button { grid-template-columns: 34px 1fr auto; padding: 9px 7px; }
+  .command-icon { width: 32px; height: 32px; }
+}
+
   </style>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
+  <div class="scroll-progress" aria-hidden="true"><span id="scroll-progress-bar"></span></div>
   <canvas id="starfield" aria-hidden="true"></canvas>
   <div class="noise" aria-hidden="true"></div>
   <div class="cursor-glow" aria-hidden="true"></div>
 
   <header class="site-header" id="top">
-    <a class="brand" href="#top" aria-label="Muhammad Abdullah home">
+    <a class="brand" href="#home" aria-label="Muhammad Abdullah home">
       <span class="brand-orbit" aria-hidden="true"><i></i></span>
       <span>MA<span class="brand-dot">.</span></span>
     </a>
-    <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="main-nav" aria-label="Open navigation">
-      <span></span><span></span>
-    </button>
-    <nav id="main-nav" class="nav-links" aria-label="Main navigation">
+
+    <nav id="main-nav" class="nav-links desktop-nav" aria-label="Main navigation">
+      <a href="#home">Home</a>
       <a href="#about">About</a>
       <a href="#experience">Experience</a>
-      <a href="#skills">Skills</a>
       <a href="#projects">Projects</a>
-      <a href="#credentials">Credentials</a>
-      <a href="#contact">Contact</a>
+      <div class="nav-more">
+        <button class="nav-more-toggle" id="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-more-menu">
+          More <span aria-hidden="true">⌄</span>
+        </button>
+        <div class="nav-more-menu" id="nav-more-menu" role="menu" aria-hidden="true">
+          <a href="#skills" role="menuitem"><span>Skills</span><small>Interactive keyboard</small></a>
+          <a href="#credentials" role="menuitem"><span>Certifications</span><small>Credentials & learning</small></a>
+          <a href="#education" role="menuitem"><span>Education</span><small>Riphah International University</small></a>
+          <a href="#achievements" role="menuitem"><span>Achievements</span><small>CTFs & milestones</small></a>
+          <span class="nav-menu-divider" aria-hidden="true"></span>
+          <a href="assets/Muhammad-Abdullah-CV.pdf" download role="menuitem"><span>Download CV</span><small>PDF résumé</small></a>
+          <a href="https://github.com/abdullahcyberx" target="_blank" rel="me noreferrer" role="menuitem"><span>GitHub</span><small>Open profile ↗</small></a>
+          <a href="https://www.linkedin.com/in/hafizabdullahx" target="_blank" rel="me noreferrer" role="menuitem"><span>LinkedIn</span><small>Connect ↗</small></a>
+        </div>
+      </div>
     </nav>
-    <a class="header-cta" href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV <span aria-hidden="true">↗</span></a>
+
+    <div class="desktop-actions">
+      <button class="command-trigger" id="command-trigger" type="button" aria-label="Open quick navigation"><span>Explore</span><kbd>Ctrl K</kbd></button>
+      <button class="nav-ai-trigger" type="button" data-ai-open>Ask Shehzada’s AI</button>
+      <a class="header-contact" href="#contact">Contact</a>
+    </div>
+
+    <button class="mobile-command-trigger" id="mobile-command-trigger" type="button" aria-label="Open quick navigation">⌘</button>
   </header>
 
   <main id="main">
-    <section class="hero section-shell" aria-labelledby="hero-title">
+    <section id="home" class="hero section-shell" aria-labelledby="hero-title">
       <div class="hero-copy reveal">
         <div class="status-pill"><span class="status-dot"></span> Pakistan · Open to cybersecurity opportunities</div>
         <p class="eyebrow">Cyber Security at Riphah · Web pentesting · CTF</p>
@@ -839,7 +1025,7 @@ html[data-quality="balanced"] .ai-panel { box-shadow: 0 20px 55px rgba(0,0,0,.56
         <div class="section-heading reveal">
           <p class="eyebrow">03 / Skills constellation</p>
           <h2>Every key unlocks a<br><span>security capability.</span></h2>
-          <p class="section-intro">Hover or press a key to explore the toolkit behind my security work.</p>
+          <p class="section-intro">Tap, hover or press a key to explore the toolkit behind my security work.</p>
         </div>
       </div>
       <div class="keyboard-stage reveal">
@@ -878,7 +1064,7 @@ html[data-quality="balanced"] .ai-panel { box-shadow: 0 20px 55px rgba(0,0,0,.56
           <h3 id="skill-title">Security Mindset</h3>
           <p id="skill-description">Understanding application logic, questioning trust boundaries and combining tools with structured reasoning.</p>
           <div class="skill-level"><span id="skill-level-label">Primary approach</span><i><b id="skill-level-bar" style="width:92%"></b></i></div>
-          <div class="skill-prompt"><kbd>PRESS</kbd><span>any key to inspect</span></div>
+          <div class="skill-prompt"><kbd>SELECT</kbd><span>tap or press any key to inspect</span></div>
         </aside>
       </div>
     </section>
@@ -989,7 +1175,7 @@ html[data-quality="balanced"] .ai-panel { box-shadow: 0 20px 55px rgba(0,0,0,.56
             </div>
           </details>
         </div>
-        <div class="achievement-orbit reveal">
+        <div id="achievements" class="achievement-orbit reveal">
           <div class="orbit-label">ACHIEVEMENTS</div>
           <div class="achievement-core"><strong>2×</strong><span>CTF<br>runner-up</span></div>
           <div class="achievement-ring ring-a"><span>Riphah CTF</span></div>
@@ -1000,7 +1186,7 @@ html[data-quality="balanced"] .ai-panel { box-shadow: 0 20px 55px rgba(0,0,0,.56
       </div>
     </section>
 
-    <section class="education-strip section-pad">
+    <section id="education" class="education-strip section-pad">
       <div class="section-shell education-grid">
         <div class="education-main reveal">
           <p class="eyebrow">06 / Education</p>
@@ -1046,6 +1232,67 @@ html[data-quality="balanced"] .ai-panel { box-shadow: 0 20px 55px rgba(0,0,0,.56
     </div>
     <div class="footer-bottom"><span>© <span id="year"></span> Muhammad Abdullah · abdullahcyber.dev</span><a href="#top">Back to orbit ↑</a></div>
   </footer>
+
+  <nav class="mobile-dock" aria-label="Mobile navigation">
+    <a class="mobile-dock-item" href="#home" data-mobile-section="home" aria-label="Home">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 11 8-7 8 7v8a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Home</span>
+    </a>
+    <a class="mobile-dock-item" href="#about" data-mobile-section="about" aria-label="About">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M5.5 20c.7-4 2.8-6 6.5-6s5.8 2 6.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>About</span>
+    </a>
+    <a class="mobile-dock-item" href="#projects" data-mobile-section="projects" aria-label="Projects">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5h16v11H4v-11Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 7.5V5h8v2.5M8 12h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Projects</span>
+    </a>
+    <button class="mobile-dock-item mobile-ai-dock" type="button" data-ai-open aria-label="Open Shehzada’s AI">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.2 4.5h9.6A3.2 3.2 0 0 1 20 7.7v8.1a3.2 3.2 0 0 1-3.2 3.2h-5.1l-3.9 2v-2H7.2A3.2 3.2 0 0 1 4 15.8V7.7a3.2 3.2 0 0 1 3.2-3.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>AI</span>
+    </button>
+    <button class="mobile-dock-item" id="mobile-more-trigger" type="button" aria-expanded="false" aria-controls="mobile-more-sheet" aria-label="Open more navigation">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg><span>More</span>
+    </button>
+  </nav>
+
+  <div class="mobile-sheet-backdrop" id="mobile-sheet-backdrop" aria-hidden="true"></div>
+  <section class="mobile-more-sheet" id="mobile-more-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-sheet-title" aria-hidden="true">
+    <div class="mobile-sheet-handle" aria-hidden="true"></div>
+    <div class="mobile-sheet-head"><div><small>Mission control</small><h2 id="mobile-sheet-title">Explore portfolio</h2></div><button id="mobile-sheet-close" type="button" aria-label="Close more navigation">×</button></div>
+    <div class="mobile-sheet-grid">
+      <a href="#experience"><span>01</span><b>Experience</b><small>Internships & CTF work</small></a>
+      <a href="#skills"><span>02</span><b>Skills</b><small>Interactive toolkit</small></a>
+      <a href="#credentials"><span>03</span><b>Certifications</b><small>Main & additional credentials</small></a>
+      <a href="#education"><span>04</span><b>Education</b><small>Riphah International University</small></a>
+      <a href="#achievements"><span>05</span><b>Achievements</b><small>CTFs & milestones</small></a>
+      <a href="#contact"><span>06</span><b>Contact</b><small>Start a conversation</small></a>
+    </div>
+    <div class="mobile-sheet-actions">
+      <a href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
+      <button type="button" data-command-open>Quick search <kbd>Ctrl K</kbd></button>
+    </div>
+    <div class="mobile-sheet-social"><a href="https://github.com/abdullahcyberx" target="_blank" rel="me noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/hafizabdullahx" target="_blank" rel="me noreferrer">LinkedIn ↗</a></div>
+  </section>
+
+  <dialog class="command-palette" id="command-palette" aria-labelledby="command-title">
+    <div class="command-head">
+      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="11" cy="11" r="6.5" stroke="currentColor" stroke-width="1.6"/><path d="m16 16 4 4" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <input id="command-search" type="search" autocomplete="off" placeholder="Search sections, links or actions…" aria-label="Search portfolio commands" />
+      <kbd>ESC</kbd>
+    </div>
+    <div class="command-body">
+      <p id="command-title">Quick navigation</p>
+      <div class="command-results" id="command-results">
+        <a href="#home" data-command-item data-keywords="home start hero top"><span class="command-icon">⌂</span><span><b>Home</b><small>Return to the cosmic hero</small></span><em>H</em></a>
+        <a href="#about" data-command-item data-keywords="about profile biography muhammad"><span class="command-icon">◎</span><span><b>About Muhammad</b><small>Profile and security focus</small></span><em>A</em></a>
+        <a href="#experience" data-command-item data-keywords="experience internships work inara digital empowerment"><span class="command-icon">◫</span><span><b>Experience</b><small>Internships and CTF activity</small></span><em>E</em></a>
+        <a href="#projects" data-command-item data-keywords="projects phishing honeypot ctf case studies"><span class="command-icon">◇</span><span><b>Projects</b><small>Practical security work</small></span><em>P</em></a>
+        <a href="#skills" data-command-item data-keywords="skills keyboard tools burp nmap linux"><span class="command-icon">⌨</span><span><b>Skills constellation</b><small>Explore the interactive keyboard</small></span><em>S</em></a>
+        <a href="#credentials" data-command-item data-keywords="certifications credentials web rta capt certificates"><span class="command-icon">✦</span><span><b>Certifications</b><small>Main and additional learning</small></span><em>C</em></a>
+        <button type="button" data-command-item data-ai-open data-keywords="ai chatbot shehzada assistant ask"><span class="command-icon">✺</span><span><b>Ask Shehzada’s AI</b><small>Facts-only portfolio assistant</small></span><em>AI</em></button>
+        <a href="assets/Muhammad-Abdullah-CV.pdf" download data-command-item data-keywords="cv resume download pdf"><span class="command-icon">↓</span><span><b>Download CV</b><small>Get Muhammad’s résumé</small></span><em>PDF</em></a>
+        <a href="#contact" data-command-item data-keywords="contact email opportunity hire"><span class="command-icon">↗</span><span><b>Contact</b><small>Discuss an opportunity</small></span><em>M</em></a>
+      </div>
+      <p class="command-empty" id="command-empty" hidden>No matching destination. Try “projects”, “AI” or “CV”.</p>
+    </div>
+    <div class="command-footer"><span><kbd>↑</kbd><kbd>↓</kbd> Navigate</span><span><kbd>Enter</kbd> Open</span><span><kbd>Esc</kbd> Close</span></div>
+  </dialog>
 
   <div class="ai-assistant" id="ai-assistant">
     <button class="ai-launcher" id="ai-launcher" type="button" aria-expanded="false" aria-controls="ai-panel" aria-label="Open Shehzada’s AI portfolio assistant">
@@ -1283,7 +1530,7 @@ html[data-quality="balanced"] .ai-panel { box-shadow: 0 20px 55px rgba(0,0,0,.56
       const y = (event.clientY - rect.top) / rect.height - .5;
       return `rotateX(${54 - y * 4}deg) rotateZ(${-9 + x * 2.4}deg) rotateY(${2 + x * 4}deg) translate3d(0,0,0)`;
     },
-    760
+    1351
   );
 
   document.querySelectorAll('.tilt-card').forEach((card) => {
@@ -1819,6 +2066,7 @@ ${message}`);
     panel.classList.add('open');
     panel.setAttribute('aria-hidden', 'false');
     launcher.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('ai-open');
     unread?.classList.remove('show');
     if (!state.greeted) {
       state.greeted = true;
@@ -1833,6 +2081,7 @@ ${message}`);
     panel.classList.remove('open');
     panel.setAttribute('aria-hidden', 'true');
     launcher.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('ai-open');
     launcher.focus({ preventScroll: true });
   };
 
@@ -2105,5 +2354,201 @@ ${message}`);
 })();
 
   </script>
+
+  <script>
+(() => {
+  'use strict';
+
+  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const progressBar = document.getElementById('scroll-progress-bar');
+  let scrollFrame = 0;
+  const updateProgress = () => {
+    scrollFrame = 0;
+    const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
+    const progress = Math.min(1, Math.max(0, window.scrollY / max));
+    if (progressBar) progressBar.style.transform = `scaleX(${progress})`;
+  };
+  window.addEventListener('scroll', () => {
+    if (!scrollFrame) scrollFrame = requestAnimationFrame(updateProgress);
+  }, { passive: true });
+  updateProgress();
+
+  const moreToggle = document.getElementById('nav-more-toggle');
+  const moreMenu = document.getElementById('nav-more-menu');
+  const closeDesktopMore = () => {
+    moreToggle?.setAttribute('aria-expanded', 'false');
+    moreMenu?.setAttribute('aria-hidden', 'true');
+    moreMenu?.classList.remove('open');
+  };
+  const openDesktopMore = () => {
+    moreToggle?.setAttribute('aria-expanded', 'true');
+    moreMenu?.setAttribute('aria-hidden', 'false');
+    moreMenu?.classList.add('open');
+  };
+  moreToggle?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    moreMenu?.classList.contains('open') ? closeDesktopMore() : openDesktopMore();
+  });
+  moreMenu?.addEventListener('click', (event) => {
+    if (event.target.closest('a')) closeDesktopMore();
+  });
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('.nav-more')) closeDesktopMore();
+  });
+
+  const sheet = document.getElementById('mobile-more-sheet');
+  const sheetBackdrop = document.getElementById('mobile-sheet-backdrop');
+  const sheetTrigger = document.getElementById('mobile-more-trigger');
+  const sheetClose = document.getElementById('mobile-sheet-close');
+  let sheetReturnFocus = null;
+  const closeSheet = () => {
+    sheet?.classList.remove('open');
+    sheetBackdrop?.classList.remove('open');
+    sheet?.setAttribute('aria-hidden', 'true');
+    sheetBackdrop?.setAttribute('aria-hidden', 'true');
+    sheetTrigger?.setAttribute('aria-expanded', 'false');
+    document.body.classList.remove('sheet-open');
+    sheetReturnFocus?.focus?.();
+  };
+  const openSheet = () => {
+    sheetReturnFocus = document.activeElement;
+    sheet?.classList.add('open');
+    sheetBackdrop?.classList.add('open');
+    sheet?.setAttribute('aria-hidden', 'false');
+    sheetBackdrop?.setAttribute('aria-hidden', 'false');
+    sheetTrigger?.setAttribute('aria-expanded', 'true');
+    document.body.classList.add('sheet-open');
+    window.setTimeout(() => sheetClose?.focus(), reducedMotion ? 0 : 220);
+  };
+  sheetTrigger?.addEventListener('click', () => sheet?.classList.contains('open') ? closeSheet() : openSheet());
+  sheetClose?.addEventListener('click', closeSheet);
+  sheetBackdrop?.addEventListener('click', closeSheet);
+  sheet?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeSheet));
+
+  const commandDialog = document.getElementById('command-palette');
+  const commandSearch = document.getElementById('command-search');
+  const commandItems = [...document.querySelectorAll('[data-command-item]')];
+  const commandEmpty = document.getElementById('command-empty');
+  let commandIndex = 0;
+  let commandReturnFocus = null;
+  const visibleCommandItems = () => commandItems.filter((item) => !item.hidden);
+  const selectCommand = (index) => {
+    const visible = visibleCommandItems();
+    if (!visible.length) return;
+    commandIndex = (index + visible.length) % visible.length;
+    commandItems.forEach((item) => item.classList.remove('command-selected'));
+    visible[commandIndex].classList.add('command-selected');
+    visible[commandIndex].scrollIntoView({ block: 'nearest' });
+  };
+  const filterCommands = () => {
+    const term = (commandSearch?.value || '').trim().toLowerCase();
+    commandItems.forEach((item) => {
+      const haystack = `${item.textContent} ${item.dataset.keywords || ''}`.toLowerCase();
+      item.hidden = Boolean(term && !haystack.includes(term));
+    });
+    const visible = visibleCommandItems();
+    if (commandEmpty) commandEmpty.hidden = visible.length > 0;
+    commandIndex = 0;
+    selectCommand(0);
+  };
+  const openCommand = () => {
+    closeDesktopMore();
+    if (sheet?.classList.contains('open')) closeSheet();
+    commandReturnFocus = document.activeElement;
+    if (typeof commandDialog?.showModal === 'function') commandDialog.showModal();
+    else commandDialog?.setAttribute('open', '');
+    if (commandSearch) commandSearch.value = '';
+    filterCommands();
+    window.setTimeout(() => commandSearch?.focus(), reducedMotion ? 0 : 80);
+  };
+  const closeCommand = () => {
+    if (commandDialog?.open && typeof commandDialog.close === 'function') commandDialog.close();
+    else commandDialog?.removeAttribute('open');
+    commandReturnFocus?.focus?.();
+  };
+  document.getElementById('command-trigger')?.addEventListener('click', openCommand);
+  document.getElementById('mobile-command-trigger')?.addEventListener('click', openCommand);
+  document.querySelectorAll('[data-command-open]').forEach((button) => button.addEventListener('click', openCommand));
+  commandSearch?.addEventListener('input', filterCommands);
+  commandDialog?.addEventListener('click', (event) => {
+    const rect = commandDialog.getBoundingClientRect();
+    const outside = event.clientX < rect.left || event.clientX > rect.right || event.clientY < rect.top || event.clientY > rect.bottom;
+    if (outside) closeCommand();
+  });
+  commandDialog?.addEventListener('keydown', (event) => {
+    const visible = visibleCommandItems();
+    if (event.key === 'Escape') { event.preventDefault(); closeCommand(); return; }
+    if (event.key === 'ArrowDown') { event.preventDefault(); selectCommand(commandIndex + 1); }
+    if (event.key === 'ArrowUp') { event.preventDefault(); selectCommand(commandIndex - 1); }
+    if (event.key === 'Enter' && document.activeElement === commandSearch && visible[commandIndex]) {
+      event.preventDefault(); visible[commandIndex].click();
+    }
+  });
+  commandDialog?.addEventListener('cancel', (event) => { event.preventDefault(); closeCommand(); });
+  commandItems.forEach((item) => item.addEventListener('click', () => {
+    if (!item.hasAttribute('data-ai-open')) closeCommand();
+  }));
+
+  const openAI = () => {
+    closeDesktopMore();
+    if (sheet?.classList.contains('open')) closeSheet();
+    if (commandDialog?.open) closeCommand();
+    if (window.ShehzadasAI?.open) window.ShehzadasAI.open();
+    else document.getElementById('ai-launcher')?.click();
+  };
+  document.querySelectorAll('[data-ai-open]').forEach((button) => button.addEventListener('click', (event) => {
+    event.preventDefault();
+    openAI();
+  }));
+
+  document.addEventListener('keydown', (event) => {
+    if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'k') {
+      event.preventDefault();
+      commandDialog?.open ? closeCommand() : openCommand();
+      return;
+    }
+    if (event.key === 'Escape') {
+      if (sheet?.classList.contains('open')) closeSheet();
+      else if (moreMenu?.classList.contains('open')) closeDesktopMore();
+    }
+  });
+
+  const desktopLinks = [...document.querySelectorAll('.desktop-nav > a, .nav-more-menu a[href^="#"]')];
+  const mobileItems = [...document.querySelectorAll('[data-mobile-section]')];
+  const observedSections = [...document.querySelectorAll('main section[id]')];
+  const moreSectionIds = new Set(['skills','credentials','education','achievements','contact']);
+  const updateActiveNavigation = (id) => {
+    desktopLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${id}`));
+    moreToggle?.classList.toggle('active', moreSectionIds.has(id));
+    mobileItems.forEach((item) => item.classList.toggle('active', item.dataset.mobileSection === id));
+    if (!['home','about','projects'].includes(id)) sheetTrigger?.classList.add('active');
+    else sheetTrigger?.classList.remove('active');
+  };
+  if ('IntersectionObserver' in window) {
+    const observer = new IntersectionObserver((entries) => {
+      const active = entries.filter((entry) => entry.isIntersecting).sort((a,b) => b.intersectionRatio - a.intersectionRatio)[0];
+      if (active) updateActiveNavigation(active.target.id);
+    }, { threshold: [.12,.28,.48], rootMargin: '-18% 0px -62% 0px' });
+    observedSections.forEach((section) => observer.observe(section));
+  }
+  updateActiveNavigation(location.hash.replace('#','') || 'home');
+
+  window.NavigationUX = {
+    openCommand,
+    closeCommand,
+    openSheet,
+    closeSheet,
+    openAI,
+    runSelfTest: () => ({
+      passed: Boolean(document.querySelector('.desktop-nav') && document.querySelector('.mobile-dock') && commandDialog && document.querySelector('.keyboard-board')),
+      desktopLinks: desktopLinks.length,
+      mobileItems: mobileItems.length,
+      commandItems: commandItems.length,
+      keyboardKeys: document.querySelectorAll('.skill-key').length
+    })
+  };
+})();
+  </script>
+
 </body>
 </html>
