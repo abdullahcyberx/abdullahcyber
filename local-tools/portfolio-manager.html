@@ -9,26 +9,45 @@
       --primary: #4F65F1; --primary-hover: #3b4ebd; --danger: #f14f4f;
       --border: #2A2D53;
     }
+    * { box-sizing: border-box; }
     body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; }
-    aside { width: 250px; background: var(--surface); border-right: 1px solid var(--border); padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    aside { width: 250px; background: var(--surface); border-right: 1px solid var(--border); padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; overflow-y: auto; }
     aside h2 { font-size: 1.1rem; margin: 0 0 1rem 0; color: #fff; }
     aside button { background: none; border: none; color: var(--text); text-align: left; padding: 0.5rem; cursor: pointer; border-radius: 4px; }
     aside button:hover, aside button.active { background: var(--border); }
-    main { flex: 1; padding: 2rem; overflow-y: auto; }
+    main { flex: 1; padding: 2rem; overflow-y: auto; position: relative; }
     h1 { margin-top: 0; }
+    .header-actions { display: flex; justify-content: space-between; align-items: center; margin-bottom: 1rem; }
     .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
     .form-group label { font-size: 0.9rem; color: var(--muted); }
-    input, textarea, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 4px; font-family: inherit; }
-    button.btn { background: var(--primary); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+    input, textarea, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 4px; font-family: inherit; width: 100%; }
+    button.btn { background: var(--primary); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; }
     button.btn:hover { background: var(--primary-hover); }
     button.btn-danger { background: var(--danger); }
+    button.btn-outline { background: transparent; border: 1px solid var(--border); }
+    button.btn-outline:hover { background: var(--border); }
+    button.btn-sm { padding: 0.25rem 0.5rem; font-size: 0.8rem; }
     .list-item { background: var(--surface); border: 1px solid var(--border); padding: 1rem; margin-bottom: 1rem; border-radius: 4px; }
-    .actions { margin-top: 1rem; display: flex; gap: 1rem; }
+    .list-item-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1rem; }
+    .list-item-header h3 { margin: 0; font-size: 1.1rem; }
+    .actions { display: flex; gap: 0.5rem; flex-wrap: wrap; }
     .file-input { display: none; }
     .drag-area { border: 2px dashed var(--border); padding: 2rem; text-align: center; border-radius: 8px; margin-bottom: 2rem; cursor: pointer; }
+    
+    .editor-modal { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg); padding: 2rem; z-index: 10; display: none; flex-direction: column; }
+    .editor-modal.active { display: flex; }
+    .editor-scroll { flex: 1; overflow-y: auto; padding-right: 1rem; margin-bottom: 1rem; }
+    .editor-footer { display: flex; gap: 1rem; justify-content: flex-end; padding-top: 1rem; border-top: 1px solid var(--border); }
+    
+    .toolbar { display: flex; gap: 1rem; margin-bottom: 1rem; }
+    .badge { display: inline-block; padding: 0.2rem 0.4rem; background: var(--primary); font-size: 0.7rem; border-radius: 4px; margin-left: 0.5rem; }
+    
+    #unsaved-banner { display: none; background: #eab308; color: #000; padding: 0.5rem 1rem; text-align: center; position: absolute; top: 0; left: 0; right: 0; z-index: 20; font-weight: bold; }
   </style>
 </head>
 <body>
+  <div id="unsaved-banner">You have unsaved changes. Remember to export!</div>
+  
   <aside>
     <h2>Portfolio Manager</h2>
     <button class="tab-btn active" onclick="switchTab('import')">Import / Export</button>
@@ -42,6 +61,7 @@
     <button class="tab-btn" onclick="switchTab('seo')">SEO</button>
     <button class="tab-btn" onclick="switchTab('ai')">AI Settings</button>
   </aside>
+  
   <main>
     <div id="import" class="tab-content">
       <h1>Import / Export</h1>
@@ -53,65 +73,184 @@
       <div class="actions">
         <button class="btn" onclick="exportBackup()">Download Combined Backup</button>
         <button class="btn" onclick="exportIndividual()">Download Individual JSONs</button>
+        <button class="btn btn-outline" onclick="resetChanges()">Reset Unsaved Changes</button>
       </div>
-      <p id="loaded-status"></p>
-    </div>
-    
-    <div id="profile" class="tab-content" style="display:none;">
-      <h1>Profile</h1>
-      <div id="profile-editor"></div>
-      <button class="btn" onclick="saveProfile()">Save Changes to Memory</button>
+      <pre id="loaded-status" style="margin-top:2rem;color:var(--muted);font-size:0.8rem;"></pre>
     </div>
 
-    <!-- Other tabs will just list items -->
-    <div id="experience" class="tab-content" style="display:none;">
-      <h1>Experience</h1>
-      <div id="experience-list"></div>
-      <button class="btn" onclick="addExperience()">Add Experience</button>
-    </div>
-    <div id="projects" class="tab-content" style="display:none;">
-      <h1>Projects</h1><div id="projects-list"></div><button class="btn" onclick="addProject()">Add Project</button>
-    </div>
-    <div id="skills" class="tab-content" style="display:none;">
-      <h1>Skills</h1><div id="skills-list"></div><button class="btn" onclick="addSkill()">Add Skill</button>
-    </div>
-    <div id="certificates" class="tab-content" style="display:none;">
-      <h1>Certificates</h1><div id="certificates-list"></div><button class="btn" onclick="addCertificate()">Add Certificate</button>
-      <p style="margin-top:1rem;font-size:0.9rem;color:var(--muted)">Certificate files must be copied into <code>public/assets/certificates/</code> manually.</p>
-    </div>
-    <div id="achievements" class="tab-content" style="display:none;">
-      <h1>Achievements</h1><div id="achievements-list"></div><button class="btn" onclick="addAchievement()">Add Achievement</button>
-    </div>
-    <div id="education" class="tab-content" style="display:none;">
-      <h1>Education</h1><div id="education-list"></div>
-    </div>
-    <div id="seo" class="tab-content" style="display:none;">
-      <h1>SEO Settings</h1><div id="seo-list"></div>
-    </div>
-    <div id="ai" class="tab-content" style="display:none;">
-      <h1>Shehzada's AI Settings</h1><div id="ai-list"></div>
+    <!-- Dynamic Tabs will be rendered here -->
+    <div id="dynamic-content"></div>
+
+    <!-- Item Editor Modal -->
+    <div id="item-editor" class="editor-modal">
+      <h2 id="editor-title">Edit Item</h2>
+      <div class="editor-scroll" id="editor-fields"></div>
+      <div class="editor-footer">
+        <button class="btn btn-outline" onclick="closeEditor()">Cancel</button>
+        <button class="btn" onclick="saveEditor()">Save to Memory</button>
+      </div>
     </div>
   </main>
 
   <script>
-    let contentStore = {
-      profile: {}, experience: [], projects: [], skills: [], certificates: [], achievements: [], education: [], seo: {}, ai: {}
+    const schemas = {
+      profile: {
+        type: 'object',
+        fields: [
+          { key: 'fullName', label: 'Full Name', type: 'text' },
+          { key: 'professionalTitle', label: 'Professional Title', type: 'text' },
+          { key: 'heroHeading', label: 'Hero Heading (Line 1)', type: 'text' },
+          { key: 'heroAccent', label: 'Hero Accent (Line 2)', type: 'text' },
+          { key: 'heroIntroduction', label: 'Hero Introduction', type: 'textarea' },
+          { key: 'aboutText', label: 'About Text (Array of paragraphs)', type: 'array' },
+          { key: 'location', label: 'Location', type: 'text' },
+          { key: 'availabilityStatus', label: 'Availability', type: 'text' },
+          { key: 'email', label: 'Email', type: 'text' },
+          { key: 'githubUrl', label: 'GitHub URL', type: 'text' },
+          { key: 'linkedinUrl', label: 'LinkedIn URL', type: 'text' },
+          { key: 'cvPath', label: 'CV Path', type: 'text' },
+          { key: 'ethicalDisclaimer', label: 'Ethical Disclaimer', type: 'textarea' }
+        ]
+      },
+      experience: {
+        type: 'array', titleKey: 'role', subtitleKey: 'company',
+        fields: [
+          { key: 'id', label: 'ID', type: 'text' },
+          { key: 'company', label: 'Company', type: 'text' },
+          { key: 'role', label: 'Role', type: 'text' },
+          { key: 'location', label: 'Location', type: 'text' },
+          { key: 'workType', label: 'Work Type', type: 'text' },
+          { key: 'startDate', label: 'Start Date', type: 'text' },
+          { key: 'endDate', label: 'End Date', type: 'text' },
+          { key: 'currentStatus', label: 'Current Status', type: 'checkbox' },
+          { key: 'description', label: 'Description', type: 'textarea' },
+          { key: 'responsibilities', label: 'Responsibilities', type: 'array' },
+          { key: 'displayOrder', label: 'Display Order', type: 'number' }
+        ]
+      },
+      projects: {
+        type: 'array', titleKey: 'title', subtitleKey: 'category',
+        fields: [
+          { key: 'id', label: 'ID', type: 'text' },
+          { key: 'slug', label: 'Slug', type: 'text' },
+          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'summary', label: 'Summary', type: 'textarea' },
+          { key: 'category', label: 'Category', type: 'text' },
+          { key: 'tools', label: 'Tools', type: 'array' },
+          { key: 'image', label: 'Image Class', type: 'text' },
+          { key: 'repositoryUrl', label: 'Repository URL', type: 'text' },
+          { key: 'featured', label: 'Featured', type: 'checkbox' },
+          { key: 'displayOrder', label: 'Display Order', type: 'number' }
+        ]
+      },
+      skills: {
+        type: 'array', titleKey: 'name', subtitleKey: 'category',
+        fields: [
+          { key: 'id', label: 'ID', type: 'text' },
+          { key: 'name', label: 'Name', type: 'text' },
+          { key: 'category', label: 'Category', type: 'text' },
+          { key: 'icon', label: 'Icon Label', type: 'text' },
+          { key: 'keyboardPosition', label: 'Keyboard Position', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' },
+          { key: 'proficiencyValue', label: 'Proficiency (0-100)', type: 'number' },
+          { key: 'featured', label: 'Featured', type: 'checkbox' },
+          { key: 'displayOrder', label: 'Display Order', type: 'number' },
+          { key: 'skillKey', label: 'Skill Key', type: 'text' }
+        ]
+      },
+      certificates: {
+        type: 'array', titleKey: 'title', subtitleKey: 'issuer',
+        fields: [
+          { key: 'id', label: 'ID', type: 'text' },
+          { key: 'slug', label: 'Slug', type: 'text' },
+          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'issuer', label: 'Issuer', type: 'text' },
+          { key: 'issueDate', label: 'Issue Date', type: 'text' },
+          { key: 'credentialId', label: 'Credential ID', type: 'text' },
+          { key: 'verificationUrl', label: 'Verification URL', type: 'text' },
+          { key: 'certificateFile', label: 'Certificate File Path', type: 'text' },
+          { key: 'icon', label: 'Icon Text (1-3 chars)', type: 'text' },
+          { key: 'featured', label: 'Featured', type: 'checkbox' },
+          { key: 'displayOrder', label: 'Display Order', type: 'number' }
+        ]
+      },
+      achievements: {
+        type: 'array', titleKey: 'title', subtitleKey: 'organization',
+        fields: [
+          { key: 'id', label: 'ID', type: 'text' },
+          { key: 'title', label: 'Title', type: 'text' },
+          { key: 'organization', label: 'Organization', type: 'text' },
+          { key: 'date', label: 'Date', type: 'text' },
+          { key: 'description', label: 'Description', type: 'text' },
+          { key: 'displayOrder', label: 'Display Order', type: 'number' },
+          { key: 'isBadge', label: 'Is Badge', type: 'checkbox' }
+        ]
+      },
+      education: {
+        type: 'array', titleKey: 'degree', subtitleKey: 'institution',
+        fields: [
+          { key: 'id', label: 'ID', type: 'text' },
+          { key: 'institution', label: 'Institution', type: 'text' },
+          { key: 'degree', label: 'Degree', type: 'text' },
+          { key: 'expectedCompletion', label: 'Expected Completion', type: 'text' },
+          { key: 'description', label: 'Description', type: 'textarea' }
+        ]
+      },
+      seo: {
+        type: 'object',
+        fields: [
+          { key: 'siteUrl', label: 'Site URL', type: 'text' },
+          { key: 'canonicalUrl', label: 'Canonical URL', type: 'text' },
+          { key: 'title', label: 'Meta Title', type: 'text' },
+          { key: 'description', label: 'Meta Description', type: 'textarea' },
+          { key: 'keywords', label: 'Keywords', type: 'textarea' }
+        ]
+      },
+      ai: {
+        type: 'object',
+        fields: [
+          { key: 'assistantName', label: 'Assistant Name', type: 'text' },
+          { key: 'greeting', label: 'Greeting', type: 'text' },
+          { key: 'fallbackAnswer', label: 'Fallback Answer', type: 'textarea' },
+          { key: 'suggestedQuestions', label: 'Suggested Questions (Array)', type: 'array' },
+          { key: 'privacyMessage', label: 'Privacy Message', type: 'textarea' }
+        ]
+      }
     };
-    let unsavedChanges = false;
+
+    let contentStore = {};
+    let initialStoreStr = "{}";
+    let currentTab = 'import';
+    let editingState = { tab: null, index: null, item: null };
 
     window.addEventListener('beforeunload', (e) => {
-      if (unsavedChanges) {
+      if (checkUnsaved()) {
         e.preventDefault();
         e.returnValue = '';
       }
     });
 
+    function checkUnsaved() {
+      const isUnsaved = JSON.stringify(contentStore) !== initialStoreStr && Object.keys(contentStore).length > 0;
+      document.getElementById('unsaved-banner').style.display = isUnsaved ? 'block' : 'none';
+      return isUnsaved;
+    }
+
     function switchTab(tabId) {
       document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
       document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(tabId).style.display = 'block';
+      const contentDiv = document.getElementById('dynamic-content');
+      
+      if (tabId === 'import') {
+        document.getElementById('import').style.display = 'block';
+        contentDiv.innerHTML = '';
+      } else {
+        renderTabContent(tabId);
+      }
+      
       event.target.classList.add('active');
-      renderTab(tabId);
+      currentTab = tabId;
+      document.getElementById('item-editor').classList.remove('active');
     }
 
     function handleFiles(files) {
@@ -123,11 +262,12 @@
             const key = file.name.replace('.json', '');
             if (key === 'portfolio-content-backup') {
               contentStore = { ...contentStore, ...data };
-            } else if (contentStore.hasOwnProperty(key)) {
+            } else if (schemas[key]) {
               contentStore[key] = data;
             }
             document.getElementById('loaded-status').innerText += `Loaded ${file.name}\n`;
-            unsavedChanges = false;
+            initialStoreStr = JSON.stringify(contentStore);
+            checkUnsaved();
           } catch (err) {
             alert('Failed to parse ' + file.name);
           }
@@ -144,75 +284,270 @@
       document.body.appendChild(el);
       el.click();
       document.body.removeChild(el);
-      unsavedChanges = false;
     }
 
     function exportBackup() {
       triggerDownload('portfolio-content-backup.json', JSON.stringify(contentStore, null, 2));
+      initialStoreStr = JSON.stringify(contentStore);
+      checkUnsaved();
     }
 
     function exportIndividual() {
       Object.keys(contentStore).forEach(key => {
-        if(Object.keys(contentStore[key]).length > 0) {
+        if(contentStore[key]) {
           triggerDownload(`${key}.json`, JSON.stringify(contentStore[key], null, 2));
         }
       });
+      initialStoreStr = JSON.stringify(contentStore);
+      checkUnsaved();
     }
 
-    function createField(label, value, type="text", key) {
-      return `
-        <div class="form-group">
-          <label>${label}</label>
-          ${type === 'textarea' ? `<textarea data-key="${key}" rows="4">${value || ''}</textarea>` 
-            : type === 'checkbox' ? `<input type="checkbox" data-key="${key}" ${value ? 'checked' : ''}>`
-            : `<input type="text" data-key="${key}" value="${value || ''}">`}
-        </div>
-      `;
-    }
-
-    function renderTab(tab) {
-      // Basic rendering logic for arrays
-      if (['experience', 'projects', 'skills', 'certificates', 'achievements', 'education'].includes(tab)) {
-        const list = document.getElementById(`${tab}-list`);
-        list.innerHTML = contentStore[tab].map((item, idx) => `
-          <div class="list-item">
-            <h3>${item.title || item.name || item.company || item.institution || item.id}</h3>
-            <button class="btn" onclick="editItem('${tab}', ${idx})">Edit</button>
-            <button class="btn btn-danger" onclick="deleteItem('${tab}', ${idx})">Delete</button>
-          </div>
-        `).join('');
-      } else if (tab === 'profile') {
-        const p = contentStore.profile;
-        document.getElementById('profile-editor').innerHTML = 
-          createField('Full Name', p.fullName, 'text', 'fullName') +
-          createField('Title', p.professionalTitle, 'text', 'professionalTitle') +
-          createField('Hero Intro', p.heroIntroduction, 'textarea', 'heroIntroduction') +
-          createField('About Text', p.aboutText, 'textarea', 'aboutText');
+    function resetChanges() {
+      if(confirm('Reset all unsaved changes?')) {
+        contentStore = JSON.parse(initialStoreStr);
+        document.getElementById('loaded-status').innerText += "Changes reset to last save.\n";
+        checkUnsaved();
       }
     }
 
-    function saveProfile() {
-      document.querySelectorAll('#profile-editor [data-key]').forEach(el => {
-        contentStore.profile[el.dataset.key] = el.value;
+    function escapeHtml(unsafe) {
+      if(typeof unsafe !== 'string') return '';
+      return unsafe.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#039;");
+    }
+
+    function renderTabContent(tab) {
+      const schema = schemas[tab];
+      const data = contentStore[tab];
+      const container = document.getElementById('dynamic-content');
+      
+      if (!data) {
+        container.innerHTML = `<h1>${tab.charAt(0).toUpperCase() + tab.slice(1)}</h1><p>No data loaded. Import JSON first.</p>`;
+        return;
+      }
+
+      if (schema.type === 'object') {
+        container.innerHTML = `
+          <div class="header-actions">
+            <h1>${tab.charAt(0).toUpperCase() + tab.slice(1)}</h1>
+          </div>
+          <div class="list-item">
+            ${renderFields(schema.fields, data, tab)}
+            <div style="margin-top:1rem;">
+              <button class="btn" onclick="saveObject('${tab}')">Save Changes</button>
+            </div>
+          </div>
+        `;
+      } else if (schema.type === 'array') {
+        // Build list UI
+        container.innerHTML = `
+          <div class="header-actions">
+            <h1>${tab.charAt(0).toUpperCase() + tab.slice(1)}</h1>
+            <button class="btn" onclick="openEditor('${tab}', null)">Add New</button>
+          </div>
+          <div class="toolbar">
+            <input type="text" id="search-${tab}" placeholder="Search..." oninput="filterList('${tab}')" style="width:200px;">
+            ${schema.fields.some(f => f.key === 'featured') ? `<label style="display:flex;align-items:center;gap:0.5rem;"><input type="checkbox" id="filter-feat-${tab}" onchange="filterList('${tab}')"> Featured only</label>` : ''}
+          </div>
+          <div id="list-container-${tab}"></div>
+        `;
+        renderListItems(tab);
+      }
+    }
+
+    function renderListItems(tab) {
+      const schema = schemas[tab];
+      const data = contentStore[tab];
+      const search = document.getElementById(`search-${tab}`)?.value.toLowerCase() || '';
+      const filterFeat = document.getElementById(`filter-feat-${tab}`)?.checked || false;
+      
+      const listContainer = document.getElementById(`list-container-${tab}`);
+      if (!listContainer) return;
+
+      listContainer.innerHTML = data.map((item, idx) => {
+        const title = escapeHtml(item[schema.titleKey] || item.id || `Item ${idx}`);
+        const subtitle = item[schema.subtitleKey] ? escapeHtml(item[schema.subtitleKey]) : '';
+        const isFeatured = item.featured === true;
+        
+        // filtering
+        if (filterFeat && !isFeatured) return '';
+        if (search && !title.toLowerCase().includes(search) && !subtitle.toLowerCase().includes(search)) return '';
+
+        return `
+          <div class="list-item">
+            <div class="list-item-header">
+              <div>
+                <h3>${title} ${isFeatured ? '<span class="badge">Featured</span>' : ''}</h3>
+                <span style="color:var(--muted);font-size:0.9rem;">${subtitle}</span>
+              </div>
+              <div class="actions">
+                <button class="btn btn-sm" onclick="moveItem('${tab}', ${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>↑</button>
+                <button class="btn btn-sm" onclick="moveItem('${tab}', ${idx}, 1)" ${idx === data.length-1 ? 'disabled' : ''}>↓</button>
+              </div>
+            </div>
+            <div class="actions">
+              <button class="btn btn-outline btn-sm" onclick="openEditor('${tab}', ${idx})">Edit</button>
+              <button class="btn btn-outline btn-sm" onclick="duplicateItem('${tab}', ${idx})">Duplicate</button>
+              ${schema.fields.some(f=>f.key==='featured') ? `<button class="btn btn-outline btn-sm" onclick="toggleFeatured('${tab}', ${idx})">${isFeatured ? 'Unfeature' : 'Feature'}</button>` : ''}
+              <button class="btn btn-danger btn-sm" onclick="deleteItem('${tab}', ${idx})">Delete</button>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function filterList(tab) {
+      renderListItems(tab);
+    }
+
+    function renderFields(fields, data, prefix) {
+      return fields.map(f => {
+        const val = data[f.key] !== undefined ? data[f.key] : '';
+        const id = `${prefix}-${f.key}`;
+        
+        if (f.type === 'text' || f.type === 'number') {
+          return `<div class="form-group"><label>${f.label}</label><input type="${f.type}" id="${id}" value="${escapeHtml(val.toString())}"></div>`;
+        } else if (f.type === 'textarea') {
+          return `<div class="form-group"><label>${f.label}</label><textarea id="${id}" rows="4">${escapeHtml(val.toString())}</textarea></div>`;
+        } else if (f.type === 'checkbox') {
+          return `<div class="form-group" style="flex-direction:row;align-items:center;"><input type="checkbox" id="${id}" ${val ? 'checked' : ''} style="width:auto;"><label for="${id}">${f.label}</label></div>`;
+        } else if (f.type === 'array') {
+          const arrVal = Array.isArray(val) ? val.join('\n') : '';
+          return `<div class="form-group"><label>${f.label} (One per line)</label><textarea id="${id}" rows="4">${escapeHtml(arrVal)}</textarea></div>`;
+        }
+        return '';
+      }).join('');
+    }
+
+    function saveObject(tab) {
+      const schema = schemas[tab];
+      schema.fields.forEach(f => {
+        const el = document.getElementById(`${tab}-${f.key}`);
+        if (f.type === 'checkbox') {
+          contentStore[tab][f.key] = el.checked;
+        } else if (f.type === 'number') {
+          contentStore[tab][f.key] = Number(el.value);
+        } else if (f.type === 'array') {
+          contentStore[tab][f.key] = el.value.split('\n').map(s=>s.trim()).filter(Boolean);
+        } else {
+          contentStore[tab][f.key] = el.value;
+        }
       });
-      unsavedChanges = true;
+      checkUnsaved();
       alert('Saved to memory!');
     }
 
-    function deleteItem(tab, idx) {
-      if(confirm('Are you sure?')) {
-        contentStore[tab].splice(idx, 1);
-        unsavedChanges = true;
-        renderTab(tab);
-      }
+    function openEditor(tab, idx) {
+      editingState = { tab, index: idx, item: idx !== null ? JSON.parse(JSON.stringify(contentStore[tab][idx])) : {} };
+      document.getElementById('editor-title').innerText = idx !== null ? `Edit ${tab}` : `Add New ${tab}`;
+      document.getElementById('editor-fields').innerHTML = renderFields(schemas[tab].fields, editingState.item, 'edit');
+      document.getElementById('item-editor').classList.add('active');
     }
 
-    // Simplified additions to prevent overly long code
-    function addExperience() { contentStore.experience.push({ id: 'new-exp', company: 'New Company', role: '', location: '', responsibilities: [], displayOrder: 99 }); renderTab('experience'); unsavedChanges = true; }
-    function addProject() { contentStore.projects.push({ id: 'new-proj', title: 'New Project', slug: 'new', tools: [], displayOrder: 99 }); renderTab('projects'); unsavedChanges = true; }
-    function addSkill() { contentStore.skills.push({ id: 'new-skill', name: 'New Skill', proficiencyValue: 50, featured: true, displayOrder: 99 }); renderTab('skills'); unsavedChanges = true; }
-    function addCertificate() { contentStore.certificates.push({ id: 'new-cert', title: 'New Certificate', slug: 'new-cert', issuer: '', issueDate: '', certificateFile: '/assets/certificates/new.pdf', featured: false, displayOrder: 99 }); renderTab('certificates'); unsavedChanges = true; }
-    function addAchievement() { contentStore.achievements.push({ id: 'new-ach', title: 'New Achievement', displayOrder: 99 }); renderTab('achievements'); unsavedChanges = true; }
+    function closeEditor() {
+      document.getElementById('item-editor').classList.remove('active');
+      editingState = { tab: null, index: null, item: null };
+    }
+
+    function validateExtension(url) {
+      if(!url) return true;
+      const ext = url.split('.').pop().toLowerCase();
+      return ['pdf', 'png', 'jpg', 'jpeg', 'webp', 'avif'].includes(ext);
+    }
+    
+    function validateUrl(str) {
+      if(!str) return true;
+      try { new URL(str); return true; } catch(e) { return str.startsWith('/'); }
+    }
+
+    function saveEditor() {
+      const tab = editingState.tab;
+      const schema = schemas[tab];
+      let newItem = {};
+      
+      let validationError = null;
+      
+      schema.fields.forEach(f => {
+        const el = document.getElementById(`edit-${f.key}`);
+        if (f.type === 'checkbox') {
+          newItem[f.key] = el.checked;
+        } else if (f.type === 'number') {
+          newItem[f.key] = Number(el.value);
+        } else if (f.type === 'array') {
+          newItem[f.key] = el.value.split('\n').map(s=>s.trim()).filter(Boolean);
+        } else {
+          newItem[f.key] = el.value;
+          
+          if (f.key === 'certificateFile' && el.value && !validateExtension(el.value)) {
+            validationError = 'Invalid certificate extension. Allowed: pdf, png, jpg, jpeg, webp, avif';
+          }
+          if (f.key.toLowerCase().includes('url') && el.value && !validateUrl(el.value)) {
+            validationError = 'Invalid URL format.';
+          }
+        }
+      });
+      
+      if (validationError) {
+        alert(validationError);
+        return;
+      }
+      
+      if (editingState.index !== null) {
+        contentStore[tab][editingState.index] = newItem;
+      } else {
+        if (newItem.displayOrder === undefined) newItem.displayOrder = 99;
+        if (!newItem.id) newItem.id = `new-${Date.now()}`;
+        contentStore[tab].push(newItem);
+      }
+      
+      // Sort if it has displayOrder
+      if (schema.fields.some(f => f.key === 'displayOrder')) {
+        contentStore[tab].sort((a,b) => (a.displayOrder || 99) - (b.displayOrder || 99));
+      }
+      
+      closeEditor();
+      renderListItems(tab);
+      checkUnsaved();
+    }
+
+    function deleteItem(tab, idx) {
+      if(confirm('Are you sure you want to delete this item?')) {
+        contentStore[tab].splice(idx, 1);
+        renderListItems(tab);
+        checkUnsaved();
+      }
+    }
+    
+    function duplicateItem(tab, idx) {
+      const clone = JSON.parse(JSON.stringify(contentStore[tab][idx]));
+      clone.id = `${clone.id}-copy`;
+      contentStore[tab].splice(idx + 1, 0, clone);
+      renderListItems(tab);
+      checkUnsaved();
+    }
+    
+    function toggleFeatured(tab, idx) {
+      contentStore[tab][idx].featured = !contentStore[tab][idx].featured;
+      renderListItems(tab);
+      checkUnsaved();
+    }
+
+    function moveItem(tab, idx, dir) {
+      if (idx + dir < 0 || idx + dir >= contentStore[tab].length) return;
+      
+      // Swap display orders to keep them logical
+      const currentOrder = contentStore[tab][idx].displayOrder || idx;
+      const targetOrder = contentStore[tab][idx+dir].displayOrder || (idx+dir);
+      
+      contentStore[tab][idx].displayOrder = targetOrder;
+      contentStore[tab][idx+dir].displayOrder = currentOrder;
+      
+      const temp = contentStore[tab][idx];
+      contentStore[tab][idx] = contentStore[tab][idx+dir];
+      contentStore[tab][idx+dir] = temp;
+      
+      renderListItems(tab);
+      checkUnsaved();
+    }
   </script>
 </body>
 </html>

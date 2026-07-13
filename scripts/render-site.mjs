@@ -44,7 +44,7 @@ try {
   // Basic replacements
   html = html.replace('{{ profile.location }}', escapeHtml(profile.location));
   html = html.replace('{{ profile.availabilityStatus }}', escapeHtml(profile.availabilityStatus));
-  html = html.replace('{{ profile.heroHeading }}', profile.heroHeading); // Contains tags
+  html = html.replace('{{ profile.heroHeading }}', `${escapeHtml(profile.heroHeading)}<br><span>${escapeHtml(profile.heroAccent)}</span>`);
   html = html.replace('{{ profile.professionalTitle }}', escapeHtml(profile.professionalTitle));
   html = html.replace('{{ profile.heroIntroduction }}', escapeHtml(profile.heroIntroduction));
   html = html.replace('{{ profile.mainCtaLabels.explore }}', escapeHtml(profile.mainCtaLabels.explore));
@@ -53,7 +53,12 @@ try {
   html = html.replace('{{ profile.githubUrl }}', escapeHtml(profile.githubUrl));
   html = html.replace('{{ profile.linkedinUrl }}', escapeHtml(profile.linkedinUrl));
   html = html.replace(/\{\{ profile.cvPath \}\}/g, escapeHtml(profile.cvPath));
-  html = html.replace('{{ profile.aboutText }}', profile.aboutText); // Contains tags
+  
+  const aboutHtml = Array.isArray(profile.aboutText) 
+    ? profile.aboutText.map((p, i) => `<p${i === 0 ? ' class="lead"' : ''}>${escapeHtml(p)}</p>`).join('')
+    : `<p>${escapeHtml(profile.aboutText)}</p>`;
+  html = html.replace('{{ profile.aboutText }}', aboutHtml);
+  
   html = html.replace('{{ profile.ethicalDisclaimer }}', escapeHtml(profile.ethicalDisclaimer || ''));
 
   // SEO replacements
@@ -160,42 +165,42 @@ try {
   html = html.replace('<!-- TEMPLATE: EDUCATION -->', eduHtml);
 
   // SCHEMA.ORG
-  const schemaOrg = `
-  <script type="application/ld+json">
-  {
+  const schemaObj = {
     "@context": "https://schema.org",
     "@graph": [
       {
         "@type": "WebSite",
-        "@id": "${seo.canonicalUrl}#website",
-        "url": "${seo.canonicalUrl}",
-        "name": "${escapeHtml(seo.title)}",
+        "@id": `${seo.canonicalUrl}#website`,
+        "url": seo.canonicalUrl,
+        "name": seo.title,
         "inLanguage": "en-PK"
       },
       {
         "@type": "ProfilePage",
-        "@id": "${seo.canonicalUrl}#profilepage",
-        "url": "${seo.canonicalUrl}",
-        "name": "${escapeHtml(seo.title)}",
-        "isPartOf": { "@id": "${seo.canonicalUrl}#website" },
-        "mainEntity": { "@id": "${seo.canonicalUrl}#person" }
+        "@id": `${seo.canonicalUrl}#profilepage`,
+        "url": seo.canonicalUrl,
+        "name": seo.title,
+        "isPartOf": { "@id": `${seo.canonicalUrl}#website` },
+        "mainEntity": { "@id": `${seo.canonicalUrl}#person` }
       },
       {
         "@type": "Person",
-        "@id": "${seo.canonicalUrl}#person",
-        "name": "${escapeHtml(profile.fullName)}",
-        "url": "${seo.canonicalUrl}",
-        "email": "mailto:${escapeHtml(profile.email)}",
-        "jobTitle": "${escapeHtml(profile.professionalTitle)}",
-        "description": "${escapeHtml(seo.description)}",
+        "@id": `${seo.canonicalUrl}#person`,
+        "name": profile.fullName,
+        "url": seo.canonicalUrl,
+        "email": `mailto:${profile.email}`,
+        "jobTitle": profile.professionalTitle,
+        "description": seo.description,
         "sameAs": [
-          "${escapeHtml(profile.githubUrl)}",
-          "${escapeHtml(profile.linkedinUrl)}"
+          profile.githubUrl,
+          profile.linkedinUrl
         ]
       }
     ]
-  }
-  </script>`;
+  };
+  
+  const safeSchema = escapeJson(JSON.stringify(schemaObj));
+  const schemaOrg = `\n  <script type="application/ld+json">\n  ${safeSchema}\n  </script>`;
   html = html.replace('<!-- TEMPLATE: SCHEMA_ORG -->', schemaOrg);
 
   // AI PAYLOAD
