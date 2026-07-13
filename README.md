@@ -1,24 +1,50 @@
 # Abdullah Cyber Portfolio
 
-Production portfolio for **Muhammad Abdullah** at **https://abdullahcyber.dev/**.
+This is a pure static Vite portfolio for Muhammad Abdullah. It is designed to be easily editable without any backend, CMS, or public admin panel. All content is driven by clean JSON files.
 
-## Highlights
+## Updating Content
 
-- Cosmic, responsive cybersecurity portfolio
-- Smooth performance-focused animations
-- Floating cosmic desktop navigation with a compact More menu
-- Mobile bottom navigation dock with a More bottom sheet
-- Searchable `Ctrl + K` command palette
-- Responsive touch-friendly skills keyboard for mobile and tablet
-- Shehzada's AI portfolio assistant
-- Experience, projects, certifications, CTF achievements, and contact details
-- SEO metadata, structured data, sitemap, robots.txt, Open Graph image, and canonical URLs
-- Cloudflare Pages headers, redirects, custom 404 page, and security.txt
+Normal updates require editing the JSON files located in `content/*.json`. 
+An AI coding assistant or a human can safely update certificates, projects, experience, skills, achievements, education, and profile information by modifying these files.
 
-## Cloudflare Pages
+1. **Content**: Edit JSON files in `content/`
+2. **Assets**: Place new images, PDFs, and icons in `public/assets/`
+3. **Schemas**: Refer to `content/README.md` or the schemas in `schemas/` for documentation on supported fields.
 
-Use the repository root as the static output directory. No build command or package installation is required.
+**No design changes, CSS modifications, or JavaScript edits are required for standard content updates.**
 
-## Local preview
+## Local Development
 
-Open `index.html` directly, or serve this folder with a local static server.
+You need Node.js (v22.23.1 recommended).
+
+```bash
+# Install dependencies
+npm ci
+
+# Start the local development server
+npm run dev
+```
+
+## Building and Verifying
+
+To ensure your content is valid, secure, and ready for production:
+
+```bash
+# Full verification (Validates JSON, checks security, builds site, runs content and E2E tests)
+npm run verify
+
+# Build only
+npm run build
+```
+
+## Deployment
+
+This portfolio automatically deploys to Cloudflare Pages when changes are pushed to GitHub.
+
+## Documentation
+
+- `AGENTS.md`: Strict rules and instructions for AI assistants modifying the portfolio.
+- `CONTENT-UPDATE-GUIDE.md`: Simple guide for human editors.
+- `AI-UPDATE-EXAMPLES.md`: Examples of prompts you can use to ask an AI to update your site.
+- `SECURITY.md`: Security policies.
+- `CLOUDFLARE-PAGES-SETUP.md`: Cloudflare configuration instructions.

@@ -1,0 +1,23 @@
+{
+  "assistantName": "Shehzada's AI",
+  "greeting": "Hello. I am Shehzada's AI, Muhammad Abdullah's verified portfolio assistant.",
+  "fallbackAnswer": "I do not have enough verified information to answer that question. My knowledge is limited to Muhammad Abdullah's portfolio.",
+  "suggestedQuestions": [
+    "What is Muhammad's focus?",
+    "Tell me about his certifications.",
+    "What CTF experience does he have?"
+  ],
+  "customAnswers": {},
+  "recruiterBriefingLabels": {
+    "title": "Recruiter Briefing",
+    "summary": "Generating a quick overview of Muhammad's capabilities..."
+  },
+  "scanLabels": {
+    "title": "Evidence Scan",
+    "summary": "Scanning portfolio for security artifacts..."
+  },
+  "ctfChallengeData": {
+    "flag": "FLAG{think_beyond_tools}"
+  },
+  "privacyMessage": "Answers are grounded only in this portfolio. Voice processing, when used, is handled by your browser."
+}

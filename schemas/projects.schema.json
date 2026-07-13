@@ -1,0 +1,23 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "array",
+  "items": {
+    "type": "object",
+    "properties": {
+      "id": { "type": "string" },
+      "slug": { "type": "string" },
+      "title": { "type": "string" },
+      "summary": { "type": "string" },
+      "fullDescription": { "type": "string" },
+      "category": { "type": "string" },
+      "tools": { "type": "array", "items": { "type": "string" } },
+      "date": { "type": "string" },
+      "image": { "type": "string" },
+      "repositoryUrl": { "type": "string" },
+      "liveUrl": { "type": "string" },
+      "featured": { "type": "boolean" },
+      "displayOrder": { "type": "number" }
+    },
+    "required": ["id", "title"]
+  }
+}

@@ -3,3 +3,22 @@ Thumbs.db
 .vscode/
 .idea/
 *.log
+node_modules/
+dist/
+.wrangler/
+playwright-report/
+test-results/
+coverage/
+.cache/
+.tina/
+tina/__generated__/
+portable-node/
+node-v22.23.1-win-x64/
+node-v22.23.1-win-x64.zip
+.local-node/
+*.env
+.env*
+
+private keys/
+tokens/
+temporary backups/

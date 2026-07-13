@@ -1,0 +1,56 @@
+[
+  {
+    "id": "exp-1",
+    "company": "Self-employed",
+    "role": "CTF Organizer & Player",
+    "location": "Remote",
+    "workType": "Current",
+    "startDate": "2025",
+    "endDate": "Present",
+    "currentStatus": true,
+    "description": "Organizing and solving capture-the-flag challenges with an emphasis on offensive and defensive cybersecurity techniques.",
+    "responsibilities": [
+      "CTF design",
+      "Web exploitation",
+      "Problem solving",
+      "Team collaboration"
+    ],
+    "displayOrder": 1
+  },
+  {
+    "id": "exp-2",
+    "company": "Inara Technologies",
+    "role": "Cyber Security Intern",
+    "location": "On-site",
+    "workType": "Internship",
+    "startDate": "Jan 2026",
+    "endDate": "Mar 2026",
+    "currentStatus": false,
+    "description": "Completed practical training across Linux administration, networking, Docker, security principles, access control, firewalls, IDS, malware analysis and web vulnerability testing.",
+    "responsibilities": [
+      "Linux",
+      "Networking",
+      "Docker",
+      "SQL injection",
+      "XSS"
+    ],
+    "displayOrder": 2
+  },
+  {
+    "id": "exp-3",
+    "company": "Digital Empowerment Network",
+    "role": "Cyber Security Intern",
+    "location": "Remote",
+    "workType": "Internship",
+    "startDate": "Jul 2025",
+    "endDate": "Sep 2025",
+    "currentStatus": false,
+    "description": "Conducted penetration testing and vulnerability assessments in simulated attack environments, identifying weaknesses and recommending improvements.",
+    "responsibilities": [
+      "Vulnerability assessment",
+      "Reporting",
+      "Simulated attacks"
+    ],
+    "displayOrder": 3
+  }
+]
