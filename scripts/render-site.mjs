@@ -156,10 +156,11 @@ try {
 
   // EDUCATION
   const edu = education[0];
+  const safeDegree = escapeHtml(edu.degree).replace(' of ', ' of<br><span>');
   const eduHtml = `
     <p class="eyebrow">06 / Education</p>
     <span class="education-year">${escapeHtml(edu.expectedCompletion)}</span>
-    <h2>${edu.degree.replace(' of ', ' of<br><span>')}</span></h2>
+    <h2>${safeDegree}</span></h2>
     <p>${escapeHtml(edu.institution)}<br>Expected completion: ${escapeHtml(edu.expectedCompletion)}</p>
   `;
   html = html.replace('<!-- TEMPLATE: EDUCATION -->', eduHtml);

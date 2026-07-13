@@ -15,7 +15,8 @@
     "preview": "vite preview",
     "scan:secrets": "node scripts/scan-secrets.mjs",
     "test:content-update": "node scripts/test-content-update.mjs",
-    "test": "npm run validate && npm run security && npm run build && npm run test:content-update && npm run scan:secrets"
+    "test:e2e": "playwright test",
+    "test": "npm run validate && npm run security && npm run build && npm run test:content-update && npm run scan:secrets && npm run test:e2e"
   },
   "devDependencies": {
     "@playwright/test": "^1.61.1",

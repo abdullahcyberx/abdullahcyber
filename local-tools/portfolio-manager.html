@@ -319,37 +319,83 @@
       const schema = schemas[tab];
       const data = contentStore[tab];
       const container = document.getElementById('dynamic-content');
+      container.innerHTML = '';
       
       if (!data) {
-        container.innerHTML = `<h1>${tab.charAt(0).toUpperCase() + tab.slice(1)}</h1><p>No data loaded. Import JSON first.</p>`;
+        const h1 = document.createElement('h1');
+        h1.textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
+        const p = document.createElement('p');
+        p.textContent = 'No data loaded. Import JSON first.';
+        container.appendChild(h1);
+        container.appendChild(p);
         return;
       }
 
       if (schema.type === 'object') {
-        container.innerHTML = `
-          <div class="header-actions">
-            <h1>${tab.charAt(0).toUpperCase() + tab.slice(1)}</h1>
-          </div>
-          <div class="list-item">
-            ${renderFields(schema.fields, data, tab)}
-            <div style="margin-top:1rem;">
-              <button class="btn" onclick="saveObject('${tab}')">Save Changes</button>
-            </div>
-          </div>
-        `;
+        const header = document.createElement('div');
+        header.className = 'header-actions';
+        const h1 = document.createElement('h1');
+        h1.textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
+        header.appendChild(h1);
+        container.appendChild(header);
+
+        const listItem = document.createElement('div');
+        listItem.className = 'list-item';
+        
+        renderFields(schema.fields, data, tab, listItem);
+        
+        const saveDiv = document.createElement('div');
+        saveDiv.style.marginTop = '1rem';
+        const saveBtn = document.createElement('button');
+        saveBtn.className = 'btn';
+        saveBtn.textContent = 'Save Changes';
+        saveBtn.onclick = () => saveObject(tab);
+        saveDiv.appendChild(saveBtn);
+        listItem.appendChild(saveDiv);
+        
+        container.appendChild(listItem);
       } else if (schema.type === 'array') {
-        // Build list UI
-        container.innerHTML = `
-          <div class="header-actions">
-            <h1>${tab.charAt(0).toUpperCase() + tab.slice(1)}</h1>
-            <button class="btn" onclick="openEditor('${tab}', null)">Add New</button>
-          </div>
-          <div class="toolbar">
-            <input type="text" id="search-${tab}" placeholder="Search..." oninput="filterList('${tab}')" style="width:200px;">
-            ${schema.fields.some(f => f.key === 'featured') ? `<label style="display:flex;align-items:center;gap:0.5rem;"><input type="checkbox" id="filter-feat-${tab}" onchange="filterList('${tab}')"> Featured only</label>` : ''}
-          </div>
-          <div id="list-container-${tab}"></div>
-        `;
+        const header = document.createElement('div');
+        header.className = 'header-actions';
+        const h1 = document.createElement('h1');
+        h1.textContent = tab.charAt(0).toUpperCase() + tab.slice(1);
+        const addBtn = document.createElement('button');
+        addBtn.className = 'btn';
+        addBtn.textContent = 'Add New';
+        addBtn.onclick = () => openEditor(tab, null);
+        header.appendChild(h1);
+        header.appendChild(addBtn);
+        container.appendChild(header);
+
+        const toolbar = document.createElement('div');
+        toolbar.className = 'toolbar';
+        const searchInput = document.createElement('input');
+        searchInput.type = 'text';
+        searchInput.id = `search-${tab}`;
+        searchInput.placeholder = 'Search...';
+        searchInput.style.width = '200px';
+        searchInput.oninput = () => filterList(tab);
+        toolbar.appendChild(searchInput);
+
+        if (schema.fields.some(f => f.key === 'featured')) {
+          const label = document.createElement('label');
+          label.style.display = 'flex';
+          label.style.alignItems = 'center';
+          label.style.gap = '0.5rem';
+          const chk = document.createElement('input');
+          chk.type = 'checkbox';
+          chk.id = `filter-feat-${tab}`;
+          chk.onchange = () => filterList(tab);
+          label.appendChild(chk);
+          label.appendChild(document.createTextNode(' Featured only'));
+          toolbar.appendChild(label);
+        }
+        container.appendChild(toolbar);
+
+        const listContainer = document.createElement('div');
+        listContainer.id = `list-container-${tab}`;
+        container.appendChild(listContainer);
+
         renderListItems(tab);
       }
     }
@@ -357,65 +403,153 @@
     function renderListItems(tab) {
       const schema = schemas[tab];
       const data = contentStore[tab];
-      const search = document.getElementById(`search-${tab}`)?.value.toLowerCase() || '';
-      const filterFeat = document.getElementById(`filter-feat-${tab}`)?.checked || false;
+      const searchEl = document.getElementById(`search-${tab}`);
+      const search = searchEl ? searchEl.value.toLowerCase() : '';
+      const filterFeatEl = document.getElementById(`filter-feat-${tab}`);
+      const filterFeat = filterFeatEl ? filterFeatEl.checked : false;
       
       const listContainer = document.getElementById(`list-container-${tab}`);
       if (!listContainer) return;
+      listContainer.innerHTML = '';
 
-      listContainer.innerHTML = data.map((item, idx) => {
-        const title = escapeHtml(item[schema.titleKey] || item.id || `Item ${idx}`);
-        const subtitle = item[schema.subtitleKey] ? escapeHtml(item[schema.subtitleKey]) : '';
+      data.forEach((item, idx) => {
+        const titleText = item[schema.titleKey] || item.id || `Item ${idx}`;
+        const subtitleText = item[schema.subtitleKey] || '';
         const isFeatured = item.featured === true;
         
-        // filtering
-        if (filterFeat && !isFeatured) return '';
-        if (search && !title.toLowerCase().includes(search) && !subtitle.toLowerCase().includes(search)) return '';
+        if (filterFeat && !isFeatured) return;
+        if (search && !titleText.toLowerCase().includes(search) && !subtitleText.toLowerCase().includes(search)) return;
 
-        return `
-          <div class="list-item">
-            <div class="list-item-header">
-              <div>
-                <h3>${title} ${isFeatured ? '<span class="badge">Featured</span>' : ''}</h3>
-                <span style="color:var(--muted);font-size:0.9rem;">${subtitle}</span>
-              </div>
-              <div class="actions">
-                <button class="btn btn-sm" onclick="moveItem('${tab}', ${idx}, -1)" ${idx === 0 ? 'disabled' : ''}>↑</button>
-                <button class="btn btn-sm" onclick="moveItem('${tab}', ${idx}, 1)" ${idx === data.length-1 ? 'disabled' : ''}>↓</button>
-              </div>
-            </div>
-            <div class="actions">
-              <button class="btn btn-outline btn-sm" onclick="openEditor('${tab}', ${idx})">Edit</button>
-              <button class="btn btn-outline btn-sm" onclick="duplicateItem('${tab}', ${idx})">Duplicate</button>
-              ${schema.fields.some(f=>f.key==='featured') ? `<button class="btn btn-outline btn-sm" onclick="toggleFeatured('${tab}', ${idx})">${isFeatured ? 'Unfeature' : 'Feature'}</button>` : ''}
-              <button class="btn btn-danger btn-sm" onclick="deleteItem('${tab}', ${idx})">Delete</button>
-            </div>
-          </div>
-        `;
-      }).join('');
+        const div = document.createElement('div');
+        div.className = 'list-item';
+        
+        const headerDiv = document.createElement('div');
+        headerDiv.className = 'list-item-header';
+        
+        const titleDiv = document.createElement('div');
+        const h3 = document.createElement('h3');
+        h3.textContent = titleText + (isFeatured ? ' ' : '');
+        if (isFeatured) {
+          const badge = document.createElement('span');
+          badge.className = 'badge';
+          badge.textContent = 'Featured';
+          h3.appendChild(badge);
+        }
+        const subSpan = document.createElement('span');
+        subSpan.style.color = 'var(--muted)';
+        subSpan.style.fontSize = '0.9rem';
+        subSpan.textContent = subtitleText;
+        titleDiv.appendChild(h3);
+        titleDiv.appendChild(subSpan);
+        headerDiv.appendChild(titleDiv);
+
+        const moveActions = document.createElement('div');
+        moveActions.className = 'actions';
+        const btnUp = document.createElement('button');
+        btnUp.className = 'btn btn-sm';
+        btnUp.textContent = '↑';
+        btnUp.disabled = (idx === 0);
+        btnUp.onclick = () => moveItem(tab, idx, -1);
+        const btnDown = document.createElement('button');
+        btnDown.className = 'btn btn-sm';
+        btnDown.textContent = '↓';
+        btnDown.disabled = (idx === data.length - 1);
+        btnDown.onclick = () => moveItem(tab, idx, 1);
+        moveActions.appendChild(btnUp);
+        moveActions.appendChild(btnDown);
+        headerDiv.appendChild(moveActions);
+        div.appendChild(headerDiv);
+
+        const actionsDiv = document.createElement('div');
+        actionsDiv.className = 'actions';
+        
+        const btnEdit = document.createElement('button');
+        btnEdit.className = 'btn btn-outline btn-sm';
+        btnEdit.textContent = 'Edit';
+        btnEdit.onclick = () => openEditor(tab, idx);
+        actionsDiv.appendChild(btnEdit);
+        
+        const btnDup = document.createElement('button');
+        btnDup.className = 'btn btn-outline btn-sm';
+        btnDup.textContent = 'Duplicate';
+        btnDup.onclick = () => duplicateItem(tab, idx);
+        actionsDiv.appendChild(btnDup);
+
+        if (schema.fields.some(f => f.key === 'featured')) {
+          const btnFeat = document.createElement('button');
+          btnFeat.className = 'btn btn-outline btn-sm';
+          btnFeat.textContent = isFeatured ? 'Unfeature' : 'Feature';
+          btnFeat.onclick = () => toggleFeatured(tab, idx);
+          actionsDiv.appendChild(btnFeat);
+        }
+
+        const btnDel = document.createElement('button');
+        btnDel.className = 'btn btn-danger btn-sm';
+        btnDel.textContent = 'Delete';
+        btnDel.onclick = () => deleteItem(tab, idx);
+        actionsDiv.appendChild(btnDel);
+
+        div.appendChild(actionsDiv);
+        listContainer.appendChild(div);
+      });
     }
 
     function filterList(tab) {
       renderListItems(tab);
     }
 
-    function renderFields(fields, data, prefix) {
-      return fields.map(f => {
+    function renderFields(fields, data, prefix, container) {
+      fields.forEach(f => {
         const val = data[f.key] !== undefined ? data[f.key] : '';
         const id = `${prefix}-${f.key}`;
         
+        const group = document.createElement('div');
+        group.className = 'form-group';
+        
         if (f.type === 'text' || f.type === 'number') {
-          return `<div class="form-group"><label>${f.label}</label><input type="${f.type}" id="${id}" value="${escapeHtml(val.toString())}"></div>`;
+          const label = document.createElement('label');
+          label.textContent = f.label;
+          const input = document.createElement('input');
+          input.type = f.type;
+          input.id = id;
+          input.value = val;
+          group.appendChild(label);
+          group.appendChild(input);
         } else if (f.type === 'textarea') {
-          return `<div class="form-group"><label>${f.label}</label><textarea id="${id}" rows="4">${escapeHtml(val.toString())}</textarea></div>`;
+          const label = document.createElement('label');
+          label.textContent = f.label;
+          const input = document.createElement('textarea');
+          input.id = id;
+          input.rows = 4;
+          input.value = val;
+          group.appendChild(label);
+          group.appendChild(input);
         } else if (f.type === 'checkbox') {
-          return `<div class="form-group" style="flex-direction:row;align-items:center;"><input type="checkbox" id="${id}" ${val ? 'checked' : ''} style="width:auto;"><label for="${id}">${f.label}</label></div>`;
+          group.style.flexDirection = 'row';
+          group.style.alignItems = 'center';
+          const input = document.createElement('input');
+          input.type = 'checkbox';
+          input.id = id;
+          input.checked = !!val;
+          input.style.width = 'auto';
+          const label = document.createElement('label');
+          label.htmlFor = id;
+          label.textContent = f.label;
+          group.appendChild(input);
+          group.appendChild(label);
         } else if (f.type === 'array') {
-          const arrVal = Array.isArray(val) ? val.join('\n') : '';
-          return `<div class="form-group"><label>${f.label} (One per line)</label><textarea id="${id}" rows="4">${escapeHtml(arrVal)}</textarea></div>`;
+          const label = document.createElement('label');
+          label.textContent = f.label + ' (One per line)';
+          const input = document.createElement('textarea');
+          input.id = id;
+          input.rows = 4;
+          input.value = Array.isArray(val) ? val.join('\n') : '';
+          group.appendChild(label);
+          group.appendChild(input);
         }
-        return '';
-      }).join('');
+        
+        container.appendChild(group);
+      });
     }
 
     function saveObject(tab) {
@@ -438,8 +572,10 @@
 
     function openEditor(tab, idx) {
       editingState = { tab, index: idx, item: idx !== null ? JSON.parse(JSON.stringify(contentStore[tab][idx])) : {} };
-      document.getElementById('editor-title').innerText = idx !== null ? `Edit ${tab}` : `Add New ${tab}`;
-      document.getElementById('editor-fields').innerHTML = renderFields(schemas[tab].fields, editingState.item, 'edit');
+      document.getElementById('editor-title').textContent = idx !== null ? `Edit ${tab}` : `Add New ${tab}`;
+      const fieldsContainer = document.getElementById('editor-fields');
+      fieldsContainer.innerHTML = '';
+      renderFields(schemas[tab].fields, editingState.item, 'edit', fieldsContainer);
       document.getElementById('item-editor').classList.add('active');
     }
 
