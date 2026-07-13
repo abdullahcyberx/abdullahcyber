@@ -32,7 +32,7 @@ test.describe('Portfolio Smoke Tests', () => {
 
     if (isMobile) {
       // Mobile header actions
-      const mobileActions = page.locator('.mobile-actions');
+      const mobileActions = page.locator('#mobile-menu-trigger');
       await expect(mobileActions).toBeVisible();
 
       // Ensure old mobile dock is gone
@@ -45,11 +45,11 @@ test.describe('Portfolio Smoke Tests', () => {
     }
 
     // Skills keyboard
-    const keyboard = page.locator('#keyboard-board');
+    const keyboard = page.locator('.skills-keyboard');
     await expect(keyboard).toBeVisible();
 
     // Shehzada's AI
-    const aiTrigger = isMobile ? page.locator('.mobile-ai-trigger') : page.locator('.nav-ai-icon');
+    const aiTrigger = page.locator('.ai-trigger');
     await expect(aiTrigger).toBeVisible();
     
     // Project Modals
@@ -63,7 +63,7 @@ test.describe('Portfolio Smoke Tests', () => {
     await page.goto('/');
     
     // Certificates
-    const certLinks = page.locator('.cert-card, .mini-cert');
+    const certLinks = page.locator('.cert-card a, .supp-cert-row a');
     const count = await certLinks.count();
     
     for (let i = 0; i < count; i++) {

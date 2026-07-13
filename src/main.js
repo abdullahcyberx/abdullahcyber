@@ -1076,3 +1076,86 @@ ${message}`);
     })
   };
 })();
+  /* Editorial Redesign Observers */
+  const observer = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        entry.target.classList.add('entered');
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: '0px 0px -50px 0px', threshold: 0.1 });
+
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+  /* Desktop hover logic for projects */
+  const projectRows = document.querySelectorAll('.project-row');
+  const hoverPreview = document.getElementById('hover-preview');
+  if (hoverPreview && window.matchMedia('(hover: hover) and (min-width: 768px)').matches) {
+    const img = hoverPreview.querySelector('img');
+    let hoverTimeout;
+    
+    projectRows.forEach(row => {
+      row.addEventListener('pointerenter', (e) => {
+        const imageSrc = row.getAttribute('data-image');
+        if (imageSrc) {
+          img.src = imageSrc;
+          hoverPreview.style.display = 'block';
+          // Small delay for fade-in effect
+          clearTimeout(hoverTimeout);
+          hoverTimeout = setTimeout(() => {
+            hoverPreview.style.opacity = '1';
+            hoverPreview.style.transform = 'scale(1) translate(-50%, -50%)';
+          }, 10);
+        }
+      });
+      
+      row.addEventListener('pointermove', (e) => {
+        hoverPreview.style.left = e.clientX + 50 + 'px';
+        hoverPreview.style.top = e.clientY + 'px';
+        // adjust transform so it is centered on the right of cursor
+        hoverPreview.style.transform = 'translate(0, -50%) scale(1)';
+      });
+      
+      row.addEventListener('pointerleave', () => {
+        clearTimeout(hoverTimeout);
+        hoverPreview.style.opacity = '0';
+        hoverPreview.style.transform = 'scale(0.95)';
+        setTimeout(() => {
+          if(hoverPreview.style.opacity === '0') hoverPreview.style.display = 'none';
+        }, 280);
+      });
+    });
+  }
+
+  /* Scrolled Header */
+  const header = document.querySelector('.site-header');
+  window.addEventListener('scroll', () => {
+    if (window.scrollY > 50) {
+      header.classList.add('scrolled');
+    } else {
+      header.classList.remove('scrolled');
+    }
+  }, { passive: true });
+
+  /* Mobile Menu */
+  const mobileMenuToggle = document.getElementById('mobile-menu-trigger');
+  const mobileMenuClose = document.getElementById('mobile-menu-close');
+  const mobileMenu = document.getElementById('mobile-menu');
+  
+  if (mobileMenuToggle && mobileMenuClose && mobileMenu) {
+    mobileMenuToggle.addEventListener('click', () => {
+      mobileMenu.classList.add('open');
+      document.body.classList.add('menu-open');
+    });
+    mobileMenuClose.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    });
+    mobileMenu.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => {
+        mobileMenu.classList.remove('open');
+        document.body.classList.remove('menu-open');
+      });
+    });
+  }

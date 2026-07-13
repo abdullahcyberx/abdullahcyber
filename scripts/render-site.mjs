@@ -42,50 +42,48 @@ try {
   const ai = loadJson('ai.json');
 
   // Basic replacements
-  html = html.replace('{{ profile.location }}', escapeHtml(profile.location));
-  html = html.replace('{{ profile.availabilityStatus }}', escapeHtml(profile.availabilityStatus));
+  html = html.replaceAll('{{ profile.location }}', escapeHtml(profile.location));
+  html = html.replaceAll('{{ profile.availabilityStatus }}', escapeHtml(profile.availabilityStatus));
   html = html.replaceAll('{{ profile.heroHeading }}', escapeHtml(profile.heroHeading));
   html = html.replaceAll('{{ profile.heroAccent }}', escapeHtml(profile.heroAccent));
-  html = html.replace('{{ profile.professionalTitle }}', escapeHtml(profile.professionalTitle));
-  html = html.replace('{{ profile.heroIntroduction }}', escapeHtml(profile.heroIntroduction));
-  html = html.replace('{{ profile.mainCtaLabels.explore }}', escapeHtml(profile.mainCtaLabels.explore));
-  html = html.replace(/\{\{ profile.email \}\}/g, escapeHtml(profile.email));
-  html = html.replace('{{ profile.mainCtaLabels.contact }}', escapeHtml(profile.mainCtaLabels.contact));
-  html = html.replace('{{ profile.githubUrl }}', escapeHtml(profile.githubUrl));
-  html = html.replace('{{ profile.linkedinUrl }}', escapeHtml(profile.linkedinUrl));
-  html = html.replace(/\{\{ profile.cvPath \}\}/g, escapeHtml(profile.cvPath));
+  html = html.replaceAll('{{ profile.professionalTitle }}', escapeHtml(profile.professionalTitle));
+  html = html.replaceAll('{{ profile.heroIntroduction }}', escapeHtml(profile.heroIntroduction));
+  html = html.replaceAll('{{ profile.mainCtaLabels.explore }}', escapeHtml(profile.mainCtaLabels.explore));
+  html = html.replaceAll(/\{\{ profile.email \}\}/g, escapeHtml(profile.email));
+  html = html.replaceAll('{{ profile.mainCtaLabels.contact }}', escapeHtml(profile.mainCtaLabels.contact));
+  html = html.replaceAll('{{ profile.githubUrl }}', escapeHtml(profile.githubUrl));
+  html = html.replaceAll('{{ profile.linkedinUrl }}', escapeHtml(profile.linkedinUrl));
+  html = html.replaceAll(/\{\{ profile.cvPath \}\}/g, escapeHtml(profile.cvPath));
   
   const aboutHtml = Array.isArray(profile.aboutText) 
     ? profile.aboutText.map((p, i) => `<p${i === 0 ? ' class="lead"' : ''}>${escapeHtml(p)}</p>`).join('')
     : `<p>${escapeHtml(profile.aboutText)}</p>`;
-  html = html.replace('{{ profile.aboutText }}', aboutHtml);
+  html = html.replaceAll('{{ profile.aboutText }}', aboutHtml);
   
-  html = html.replace('{{ profile.ethicalDisclaimer }}', escapeHtml(profile.ethicalDisclaimer || ''));
+  html = html.replaceAll('{{ profile.ethicalDisclaimer }}', escapeHtml(profile.ethicalDisclaimer || ''));
 
   // SEO replacements
-  html = html.replace('{{ seo.title }}', escapeHtml(seo.title));
-  html = html.replace('{{ seo.description }}', escapeHtml(seo.description));
-  html = html.replace('{{ seo.keywords }}', escapeHtml(seo.keywords));
-  html = html.replace('{{ seo.openGraph.title }}', escapeHtml(seo.openGraph.title));
-  html = html.replace('{{ seo.openGraph.description }}', escapeHtml(seo.openGraph.description));
-  html = html.replace('{{ seo.twitter.title }}', escapeHtml(seo.twitter.title));
-  html = html.replace('{{ seo.twitter.description }}', escapeHtml(seo.twitter.description));
+  html = html.replaceAll('{{ seo.title }}', escapeHtml(seo.title));
+  html = html.replaceAll('{{ seo.description }}', escapeHtml(seo.description));
+  html = html.replaceAll('{{ seo.keywords }}', escapeHtml(seo.keywords));
+  html = html.replaceAll('{{ seo.openGraph.title }}', escapeHtml(seo.openGraph.title));
+  html = html.replaceAll('{{ seo.openGraph.description }}', escapeHtml(seo.openGraph.description));
+  html = html.replaceAll('{{ seo.twitter.title }}', escapeHtml(seo.twitter.title));
+  html = html.replaceAll('{{ seo.twitter.description }}', escapeHtml(seo.twitter.description));
 
   // EXPERIENCE
   const expHtml = experience.map(exp => `
-    <article class="timeline-item reveal">
-      <div class="timeline-date"><span>${escapeHtml(exp.startDate)} — ${escapeHtml(exp.endDate)}</span><i></i></div>
-      <div class="timeline-card">
-        <div class="timeline-head">
-          <div><p>${escapeHtml(exp.company)} · ${escapeHtml(exp.location)}</p><h3>${escapeHtml(exp.role)}</h3></div>
-          <span class="tag">${escapeHtml(exp.workType)}</span>
-        </div>
+    <article class="timeline-row fade-in-up reveal">
+      <div class="timeline-year">${escapeHtml(exp.startDate)} — ${escapeHtml(exp.endDate)}</div>
+      <div class="timeline-content">
+        <h3 class="timeline-role">${escapeHtml(exp.role)}</h3>
+        <div class="timeline-company">${escapeHtml(exp.company)}</div>
         <p>${escapeHtml(exp.description)}</p>
-        <ul class="chip-list">${exp.responsibilities.map(r => `<li>${escapeHtml(r)}</li>`).join('')}</ul>
+        ${exp.responsibilities && exp.responsibilities.length ? `<ul>${exp.responsibilities.map(r => `<li>${escapeHtml(r)}</li>`).join('')}</ul>` : ''}
       </div>
     </article>
   `).join('');
-  html = html.replace('<!-- TEMPLATE: EXPERIENCE -->', expHtml);
+  html = html.replaceAll('<!-- TEMPLATE: EXPERIENCE -->', expHtml);
 
   // SKILLS
   const skillHtml = skills.map((s, idx) => {
@@ -107,64 +105,68 @@ try {
     <div class="key-row key-row-three">${row3}</div>
     <div class="key-row key-row-four">${row4}</div>
   `;
-  html = html.replace('<!-- TEMPLATE: SKILLS -->', fullKeyboard);
+  html = html.replaceAll('<!-- TEMPLATE: SKILLS -->', fullKeyboard);
 
   // PROJECTS
   const projHtml = projects.map((p, idx) => `
-    <article class="project-card ${p.featured ? 'project-featured' : ''} tilt-card reveal" tabindex="0">
-      <div class="project-art ${escapeHtml(p.image)}" aria-hidden="true">
-        <div class="project-number">0${idx+1}</div>
-      </div>
+    <li class="project-row fade-in-up reveal" data-image="${escapeHtml(p.image)}">
+      <div class="project-number">0${idx+1}</div>
       <div class="project-content">
-        <div class="project-meta"><span>${escapeHtml(p.category)}</span></div>
-        <h3>${escapeHtml(p.title)}</h3>
-        <p>${escapeHtml(p.summary)}</p>
-        <ul class="chip-list">${p.tools.map(t => `<li>${escapeHtml(t)}</li>`).join('')}</ul>
-        ${p.repositoryUrl ? `<a class="project-link" href="${escapeHtml(p.repositoryUrl)}" target="_blank" rel="noreferrer">Visit Repository <span>↗</span></a>` : `<button class="project-link" type="button" data-modal="${escapeHtml(p.slug)}">Open case study <span>↗</span></button>`}
+        <h3 class="project-title">${escapeHtml(p.title)}</h3>
+        <div class="project-tools">${p.tools.map(t => escapeHtml(t)).join(' · ')}</div>
+        <p class="project-desc">${escapeHtml(p.summary)}</p>
+        ${p.repositoryUrl ? `<a class="project-link" href="${escapeHtml(p.repositoryUrl)}" target="_blank" rel="noreferrer">Visit Repository <span>↗</span></a>` : `<button class="project-link" type="button" data-modal="${escapeHtml(p.slug)}">View case study <span>↗</span></button>`}
       </div>
-    </article>
+    </li>
   `).join('');
-  html = html.replace('<!-- TEMPLATE: PROJECTS -->', projHtml);
+  html = html.replaceAll('<!-- TEMPLATE: PROJECTS -->', projHtml);
 
   // CERTIFICATES
   const featuredCerts = certificates.filter(c => c.featured);
   const supportCerts = certificates.filter(c => !c.featured);
 
   const featCertHtml = featuredCerts.map(c => `
-    <a class="cert-card primary-cert reveal" href="${escapeHtml(c.certificateFile)}" target="_blank" rel="noreferrer" aria-label="Open ${escapeHtml(c.title)}">
-      <div class="cert-icon">${escapeHtml(c.icon || c.title.charAt(0))}</div>
-      <div><p>${escapeHtml(c.issueDate)}</p><h3>${escapeHtml(c.title)}</h3><span>${escapeHtml(c.issuer)} ${c.credentialId ? '· ID: ' + escapeHtml(c.credentialId) : ''}</span></div>
-      <i aria-hidden="true">↗</i>
-    </a>
+    <div class="cert-card fade-in-up reveal">
+      <h3 class="cert-title">${escapeHtml(c.title)}</h3>
+      <div class="cert-meta">
+        <span>${escapeHtml(c.issuer)}</span>
+        <span>${escapeHtml(c.issueDate)}</span>
+      </div>
+      <a class="project-link" href="${escapeHtml(c.certificateFile)}" target="_blank" rel="noreferrer" aria-label="Open ${escapeHtml(c.title)}">View credential <span>↗</span></a>
+    </div>
   `).join('');
-  html = html.replace('<!-- TEMPLATE: FEATURED_CERTIFICATES -->', featCertHtml);
+  html = html.replaceAll('<!-- TEMPLATE: FEATURED_CERTIFICATES -->', featCertHtml);
 
   const suppCertHtml = supportCerts.map(c => `
-    <a class="mini-cert" href="${escapeHtml(c.certificateFile)}" target="_blank" rel="noreferrer"><span class="mini-cert-icon">${escapeHtml(c.icon || c.title.charAt(0))}</span><span class="mini-cert-copy"><h4>${escapeHtml(c.title)}</h4><p>${escapeHtml(c.issuer)} · ${escapeHtml(c.issueDate)}</p></span><span class="mini-cert-arrow">↗</span></a>
+    <li class="supp-cert-row">
+      <span class="supp-cert-title"><a href="${escapeHtml(c.certificateFile)}" target="_blank" rel="noreferrer">${escapeHtml(c.title)}</a></span>
+      <span class="supp-cert-issuer">${escapeHtml(c.issuer)}</span>
+      <span class="supp-cert-date">${escapeHtml(c.issueDate)}</span>
+    </li>
   `).join('');
-  html = html.replace('<!-- TEMPLATE: SUPPORTING_CERTIFICATES -->', suppCertHtml);
+  html = html.replaceAll('<!-- TEMPLATE: SUPPORTING_CERTIFICATES -->', `<ul>${suppCertHtml}</ul>`);
 
   // ACHIEVEMENTS
-  const achHtml = `
-    <div class="orbit-label">ACHIEVEMENTS</div>
-    <div class="achievement-core"><strong>${achievements.filter(a=>!a.isBadge).length}×</strong><span>CTF<br>runner-up</span></div>
-    ${achievements.map((a, i) => {
-      if (!a.isBadge) return `<div class="achievement-ring ring-${i===0?'a':'b'}"><span>${escapeHtml(a.title)}</span></div>`;
-      return `<div class="achievement-badge badge-${i===2?'a':'b'}">${escapeHtml(a.title)}</div>`;
-    }).join('')}
-  `;
-  html = html.replace('<!-- TEMPLATE: ACHIEVEMENTS -->', achHtml);
+  const achHtml = `<ul>
+    ${achievements.map((a, i) => `<li>
+      <strong>${escapeHtml(a.title)}</strong> — ${escapeHtml(a.organization)}
+      <p>${escapeHtml(a.description)}</p>
+    </li>`).join('')}
+  </ul>`;
+  html = html.replaceAll('<!-- TEMPLATE: ACHIEVEMENTS -->', achHtml);
 
   // EDUCATION
   const edu = education[0];
   const safeDegree = escapeHtml(edu.degree).replace(' of ', ' of<br><span>');
   const eduHtml = `
-    <p class="eyebrow">06 / Education</p>
-    <span class="education-year">${escapeHtml(edu.expectedCompletion)}</span>
-    <h2>${safeDegree}</span></h2>
-    <p>${escapeHtml(edu.institution)}<br>Expected completion: ${escapeHtml(edu.expectedCompletion)}</p>
+    <div class="education-block">
+      <h3>${escapeHtml(edu.degree)}</h3>
+      <p class="edu-inst">${escapeHtml(edu.institution)}</p>
+      <p class="edu-date">Expected completion: ${escapeHtml(edu.expectedCompletion)}</p>
+      <p class="edu-desc">${escapeHtml(edu.description)}</p>
+    </div>
   `;
-  html = html.replace('<!-- TEMPLATE: EDUCATION -->', eduHtml);
+  html = html.replaceAll('<!-- TEMPLATE: EDUCATION -->', eduHtml);
 
   // SCHEMA.ORG
   const schemaObj = {
@@ -203,7 +205,7 @@ try {
   
   const safeSchema = escapeJson(JSON.stringify(schemaObj));
   const schemaOrg = `\n  <script type="application/ld+json">\n  ${safeSchema}\n  </script>`;
-  html = html.replace('<!-- TEMPLATE: SCHEMA_ORG -->', schemaOrg);
+  html = html.replaceAll('<!-- TEMPLATE: SCHEMA_ORG -->', schemaOrg);
 
   // AI PAYLOAD
   const aiPayload = {
@@ -219,7 +221,7 @@ try {
     }
   };
   const safeAiPayload = escapeJson(JSON.stringify(aiPayload));
-  html = html.replace('<!-- TEMPLATE: AI_PAYLOAD -->', safeAiPayload);
+  html = html.replaceAll('<!-- TEMPLATE: AI_PAYLOAD -->', safeAiPayload);
 
   const unresolvedTokens = html.match(/\{\{\s*[^}]+\s*\}\}/g);
   if (unresolvedTokens?.length) {
