@@ -18,15 +18,23 @@ test.describe('Portfolio Smoke Tests', () => {
       return document.documentElement.scrollWidth > document.documentElement.clientWidth;
     });
     expect(overflow).toBeFalsy();
+
+    // Check for unresolved template variables
+    const html = await page.content();
+    expect(html).not.toMatch(/\{\{\s*[^}]+\s*\}\}/);
   });
 
   test('Check navigation and interactive elements', async ({ page, isMobile }) => {
     await page.goto('/');
 
     if (isMobile) {
-      // Mobile dock
-      const dock = page.locator('.mobile-dock');
-      await expect(dock).toBeVisible();
+      // Mobile header actions
+      const mobileActions = page.locator('.mobile-actions');
+      await expect(mobileActions).toBeVisible();
+
+      // Ensure old mobile dock is gone
+      const oldDock = page.locator('.mobile-dock');
+      await expect(oldDock).toHaveCount(0);
     } else {
       // Desktop nav
       const desktopNav = page.locator('.desktop-nav');
@@ -38,7 +46,7 @@ test.describe('Portfolio Smoke Tests', () => {
     await expect(keyboard).toBeVisible();
 
     // Shehzada's AI
-    const aiTrigger = isMobile ? page.locator('.mobile-ai-dock') : page.locator('.nav-ai-trigger');
+    const aiTrigger = isMobile ? page.locator('.mobile-ai-trigger') : page.locator('.nav-ai-icon');
     await expect(aiTrigger).toBeVisible();
     
     // Project Modals

@@ -44,7 +44,8 @@ try {
   // Basic replacements
   html = html.replace('{{ profile.location }}', escapeHtml(profile.location));
   html = html.replace('{{ profile.availabilityStatus }}', escapeHtml(profile.availabilityStatus));
-  html = html.replace('{{ profile.heroHeading }}', `${escapeHtml(profile.heroHeading)}<br><span>${escapeHtml(profile.heroAccent)}</span>`);
+  html = html.replace('{{ profile.heroHeading }}', escapeHtml(profile.heroHeading));
+  html = html.replace('{{ profile.heroAccent }}', escapeHtml(profile.heroAccent));
   html = html.replace('{{ profile.professionalTitle }}', escapeHtml(profile.professionalTitle));
   html = html.replace('{{ profile.heroIntroduction }}', escapeHtml(profile.heroIntroduction));
   html = html.replace('{{ profile.mainCtaLabels.explore }}', escapeHtml(profile.mainCtaLabels.explore));
