@@ -18,6 +18,10 @@ test.describe('Portfolio Smoke Tests', () => {
       return document.documentElement.scrollWidth > document.documentElement.clientWidth;
     });
     expect(overflow).toBeFalsy();
+
+    // Check for unresolved template variables
+    const html = await page.content();
+    expect(html).not.toMatch(/\{\{\s*[^}]+\s*\}\}/);
   });
 
   test('Check navigation and interactive elements', async ({ page, isMobile }) => {
@@ -27,6 +31,10 @@ test.describe('Portfolio Smoke Tests', () => {
       // Mobile header actions
       const mobileActions = page.locator('.mobile-actions');
       await expect(mobileActions).toBeVisible();
+
+      // Ensure old mobile dock is gone
+      const oldDock = page.locator('.mobile-dock');
+      await expect(oldDock).toHaveCount(0);
     } else {
       // Desktop nav
       const desktopNav = page.locator('.desktop-nav');

@@ -895,7 +895,7 @@ ${message}`);
     if (progressBar) progressBar.style.transform = `scaleX(${progress})`;
 
     if (siteHeader) {
-      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+      if (currentScrollY > lastScrollY && currentScrollY > 100 && window.innerWidth > 860) {
         siteHeader.classList.add('nav-hidden');
       } else {
         siteHeader.classList.remove('nav-hidden');
@@ -931,7 +931,7 @@ ${message}`);
     if (!event.target.closest('.nav-more')) closeDesktopMore();
   });
 
-  const sheet = document.getElementById('mobile-more-sheet');
+  const sheet = document.getElementById('mobile-sheet');
   const sheetBackdrop = document.getElementById('mobile-sheet-backdrop');
   const sheetTrigger = document.getElementById('mobile-menu-trigger');
   let sheetReturnFocus = null;
@@ -1068,7 +1068,7 @@ ${message}`);
     closeSheet,
     openAI,
     runSelfTest: () => ({
-      passed: Boolean(document.querySelector('.desktop-nav') && document.querySelector('.mobile-dock') && commandDialog && document.querySelector('.keyboard-board')),
+      passed: Boolean(document.querySelector('.desktop-nav') && document.querySelector('.mobile-actions') && commandDialog && document.querySelector('.keyboard-board')),
       desktopLinks: desktopLinks.length,
       mobileItems: mobileItems.length,
       commandItems: commandItems.length,
