@@ -41,9 +41,10 @@ The portfolio has been completely overhauled from a "cosmic dashboard" theme int
 
 ## 4. Performance & Reliability
 
-- **DOM Reduction**: By removing the complex `.cosmic-core` nodes and its associated `rafPointerEffect` tracking logic in `main.js`, the layout calculations and painting workload have been drastically reduced.
+- **Performance**: 
+  - Designed to target smooth performance by replacing continuous layout-thrashing animations with simple transform/opacity transitions.
 - **Accessibility**: 
-  - Contrast ratios pass WCAG AA standards.
-  - Interactive elements (modals, AI toggle, new mobile menu) correctly update ARIA states and manage focus.
+  - Designed with accessible contrast.
+  - Keyboard interactions tested (including focus traps and skip links).
+  - No failed local resources observed in Playwright.
   - Full support for `prefers-reduced-motion: reduce`, ensuring all fades and transforms are instantly resolved for users with vestibular disorders.
-- **Validation**: Playwright end-to-end tests were updated to target the new `.skills-keyboard`, `#mobile-menu-trigger`, and `.cert-card a` elements, confirming 100% test passage.

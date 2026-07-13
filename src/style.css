@@ -1,7 +1,5 @@
 /* Editorial Dark Portfolio */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@400;500;600;700&display=swap');
-
 :root {
   --bg: #08090b;
   --bg-elevated: #0d0f12;
@@ -16,19 +14,23 @@
   --border-soft: rgba(255, 255, 255, 0.07);
   --success: #79d7a5;
 
-  --font-heading: 'Space Grotesk', system-ui, sans-serif;
-  --font-body: 'Inter', system-ui, sans-serif;
+  --font-heading:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  --font-body:
+    system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
 
   --ease-out: cubic-bezier(0.22, 1, 0.36, 1);
   --ease-standard: cubic-bezier(0.4, 0, 0.2, 1);
   --motion-fast: 180ms;
   --motion-medium: 280ms;
   --motion-reveal: 650ms;
-  
+
   --max-width: 1400px;
 }
 
-*, *::before, *::after {
+*,
+*::before,
+*::after {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -47,14 +49,23 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   background-color: var(--bg);
-  background-image: radial-gradient(circle at 50% 0%, rgba(255,255,255,0.015) 0%, transparent 60%);
+  background-image: radial-gradient(
+    circle at 50% 0%,
+    rgba(255, 255, 255, 0.015) 0%,
+    transparent 60%
+  );
   min-height: 100vh;
   position: relative;
   overflow-x: hidden;
 }
 
 /* Typography */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--font-heading);
   color: var(--text-primary);
   font-weight: 600;
@@ -68,7 +79,8 @@ a {
   transition: color var(--motion-fast) var(--ease-out);
 }
 
-a:hover, a:focus-visible {
+a:hover,
+a:focus-visible {
   color: var(--text-primary);
 }
 
@@ -86,11 +98,33 @@ ul {
   list-style: none;
 }
 
+/* Accessibility */
+.skip-link {
+  position: fixed;
+  top: 12px;
+  left: 12px;
+  z-index: 10000;
+  padding: 10px 14px;
+  border-radius: 6px;
+  background: var(--text-primary);
+  color: var(--bg);
+  font-weight: 600;
+  transform: translateY(calc(-100% - 24px));
+  transition: transform var(--motion-fast) var(--ease-out);
+}
+
+.skip-link:focus,
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
 /* Animations */
 .fade-in-up {
   opacity: 0;
   transform: translateY(24px);
-  transition: opacity var(--motion-reveal) var(--ease-out), transform var(--motion-reveal) var(--ease-out);
+  transition:
+    opacity var(--motion-reveal) var(--ease-out),
+    transform var(--motion-reveal) var(--ease-out);
   will-change: opacity, transform;
 }
 
@@ -100,7 +134,9 @@ ul {
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after {
+  *,
+  *::before,
+  *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
@@ -134,7 +170,9 @@ section {
   width: 100%;
   height: 72px;
   z-index: 1000;
-  transition: background var(--motion-medium) var(--ease-out), border-color var(--motion-medium) var(--ease-out);
+  transition:
+    background var(--motion-medium) var(--ease-out),
+    border-color var(--motion-medium) var(--ease-out);
   border-bottom: 1px solid transparent;
 }
 
@@ -217,7 +255,10 @@ section {
   opacity: 0;
   visibility: hidden;
   transform: translateY(10px);
-  transition: opacity var(--motion-medium) var(--ease-out), transform var(--motion-medium) var(--ease-out), visibility var(--motion-medium);
+  transition:
+    opacity var(--motion-medium) var(--ease-out),
+    transform var(--motion-medium) var(--ease-out),
+    visibility var(--motion-medium);
 }
 
 .mobile-menu.open {
@@ -283,7 +324,7 @@ body.menu-open {
 }
 
 .hero-context::before {
-  content: '';
+  content: "";
   width: 24px;
   height: 1px;
   background: var(--accent);
@@ -456,8 +497,10 @@ body.menu-open {
   overflow: hidden;
   opacity: 0;
   transform: scale(0.95);
-  transition: opacity var(--motion-medium) var(--ease-out), transform var(--motion-medium) var(--ease-out);
-  box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+  transition:
+    opacity var(--motion-medium) var(--ease-out),
+    transform var(--motion-medium) var(--ease-out);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   display: none;
 }
 
@@ -580,21 +623,21 @@ footer {
     grid-template-columns: 5fr 5fr;
     gap: 10%;
   }
-  
+
   .project-row {
     grid-template-columns: 80px 1fr;
     align-items: start;
   }
-  
+
   .about-grid {
     grid-template-columns: 6fr 4fr;
     gap: 80px;
   }
-  
+
   .timeline-row {
     grid-template-columns: 120px 1fr 1fr;
   }
-  
+
   .cert-list {
     grid-template-columns: 1fr 1fr;
     display: grid;
@@ -619,6 +662,170 @@ footer {
   }
 }
 
+\n/* Project Arts */\n.project-art {
+  width: 100%;
+  height: 100%;
+}
+\n.phishing-art {
+  background: linear-gradient(135deg, #111318 0%, #2a1b4d 100%);
+}
+\n.honeypot-art {
+  background: linear-gradient(135deg, #0d0f12 0%, #1a3c40 100%);
+}
+\n.ctf-art {
+  background: linear-gradient(135deg, #111318 0%, #4d1b1b 100%);
+}
+\n
+/* Project Modal */
+.modal-dialog {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: var(--surface);
+  color: var(--text-primary);
+  border: 1px solid var(--border);
+  padding: 2rem;
+  border-radius: 12px;
+  z-index: 2000;
+  width: 90%;
+  max-width: 600px;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--motion-fast) var(--ease-out);
+}
+.modal-dialog[open] {
+  opacity: 1;
+  pointer-events: auto;
+}
+.modal-dialog::backdrop {
+  background: rgba(8, 9, 11, 0.85);
+  backdrop-filter: blur(4px);
+}
+.modal-close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  cursor: pointer;
+  font-size: 1.5rem;
+}
+.modal-close:hover {
+  color: var(--text-primary);
+}
 
+/* AI Assistant */
+.ai-assistant {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 350px;
+  max-width: calc(100vw - 2rem);
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  transform: translateY(20px);
+  opacity: 0;
+  pointer-events: none;
+  transition: all var(--motion-fast) var(--ease-out);
+}
+.ai-assistant.open {
+  transform: translateY(0);
+  opacity: 1;
+  pointer-events: auto;
+}
+.ai-header {
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-soft);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.ai-messages {
+  padding: 1rem;
+  height: 300px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+.ai-message {
+  padding: 0.75rem;
+  border-radius: 8px;
+  font-size: 0.9rem;
+  max-width: 85%;
+}
+.ai-ai {
+  background: var(--surface-soft);
+  align-self: flex-start;
+}
+.ai-user {
+  background: var(--accent-soft);
+  color: var(--accent);
+  align-self: flex-end;
+}
+.ai-input-area {
+  padding: 1rem;
+  border-top: 1px solid var(--border-soft);
+}
+.ai-input-area form {
+  display: flex;
+  gap: 0.5rem;
+}
+.ai-input-area input {
+  flex: 1;
+  padding: 0.5rem;
+  background: var(--bg);
+  border: 1px solid var(--border);
+  color: var(--text-primary);
+  border-radius: 4px;
+}
+.ai-suggestions {
+  display: flex;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  overflow-x: auto;
+}
+.ai-chip {
+  background: var(--surface-soft);
+  border: 1px solid var(--border-soft);
+  color: var(--text-secondary);
+  padding: 0.25rem 0.5rem;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  white-space: nowrap;
+}
+.ai-chip:hover {
+  background: var(--border);
+  color: var(--text-primary);
+}
 
-
+/* Quiet AI toggle per user request */
+.ai-toggle {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  z-index: 1999;
+  background: transparent;
+  border: 1px solid var(--border-soft);
+  color: var(--text-muted);
+  padding: 0.5rem 1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  transition: all var(--motion-fast);
+}
+.ai-toggle:hover {
+  color: var(--text-primary);
+  border-color: var(--border);
+  background: var(--surface);
+}
