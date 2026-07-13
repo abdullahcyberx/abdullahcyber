@@ -22,6 +22,9 @@ test.describe('Portfolio Smoke Tests', () => {
     // Check for unresolved template variables
     const html = await page.content();
     expect(html).not.toMatch(/\{\{\s*[^}]+\s*\}\}/);
+
+    await expect(page.locator(".hero-name-primary")).toHaveText("Muhammad");
+    await expect(page.locator(".hero-name-accent")).toHaveText("Abdullah");
   });
 
   test('Check navigation and interactive elements', async ({ page, isMobile }) => {
