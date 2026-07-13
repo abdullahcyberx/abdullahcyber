@@ -46,102 +46,83 @@
   <div class="cursor-glow" aria-hidden="true"></div>
 
   <header class="site-header" id="top">
-    <a class="brand" href="#home" aria-label="Muhammad Abdullah home">
-      <span class="brand-orbit" aria-hidden="true"><i></i></span>
-      <span>MA<span class="brand-dot">.</span></span>
-    </a>
+    <a class="brand" href="#home" aria-label="Muhammad Abdullah home">MA.</a>
 
     <nav id="main-nav" class="nav-links desktop-nav" aria-label="Main navigation">
       <a href="#home">Home</a>
       <a href="#about">About</a>
-      <a href="#experience">Experience</a>
       <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
       <div class="nav-more">
         <button class="nav-more-toggle" id="nav-more-toggle" type="button" aria-expanded="false" aria-controls="nav-more-menu">
           More <span aria-hidden="true">⌄</span>
         </button>
         <div class="nav-more-menu" id="nav-more-menu" role="menu" aria-hidden="true">
-          <a href="#skills" role="menuitem"><span>Skills</span><small>Interactive keyboard</small></a>
-          <a href="#credentials" role="menuitem"><span>Certifications</span><small>Credentials & learning</small></a>
-          <a href="#education" role="menuitem"><span>Education</span><small>Riphah International University</small></a>
-          <a href="#achievements" role="menuitem"><span>Achievements</span><small>CTFs & milestones</small></a>
+          <a href="#skills" role="menuitem"><span>Skills</span></a>
+          <a href="#credentials" role="menuitem"><span>Certifications</span></a>
+          <a href="#achievements" role="menuitem"><span>Achievements</span></a>
+          <a href="#education" role="menuitem"><span>Education</span></a>
           <span class="nav-menu-divider" aria-hidden="true"></span>
-          <a href="assets/Muhammad-Abdullah-CV.pdf" download role="menuitem"><span>Download CV</span><small>PDF résumé</small></a>
-          <a href="https://github.com/abdullahcyberx" target="_blank" rel="me noreferrer" role="menuitem"><span>GitHub</span><small>Open profile ↗</small></a>
-          <a href="https://www.linkedin.com/in/hafizabdullahx" target="_blank" rel="me noreferrer" role="menuitem"><span>LinkedIn</span><small>Connect ↗</small></a>
+          <a href="assets/Muhammad-Abdullah-CV.pdf" download role="menuitem"><span>Download CV</span></a>
+          <a href="https://github.com/abdullahcyberx" target="_blank" rel="me noreferrer" role="menuitem"><span>GitHub</span></a>
+          <a href="https://www.linkedin.com/in/hafizabdullahx" target="_blank" rel="me noreferrer" role="menuitem"><span>LinkedIn</span></a>
         </div>
       </div>
+      <button class="nav-ai-icon" type="button" data-ai-open aria-label="Ask Shehzada’s AI" title="Ask Shehzada’s AI">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.2 4.5h9.6A3.2 3.2 0 0 1 20 7.7v8.1a3.2 3.2 0 0 1-3.2 3.2h-5.1l-3.9 2v-2H7.2A3.2 3.2 0 0 1 4 15.8V7.7a3.2 3.2 0 0 1 3.2-3.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <a class="header-contact button-primary" href="#contact">Contact</a>
     </nav>
 
-    <div class="desktop-actions">
-      <button class="command-trigger" id="command-trigger" type="button" aria-label="Open quick navigation"><span>Explore</span><kbd>Ctrl K</kbd></button>
-      <button class="nav-ai-trigger" type="button" data-ai-open>Ask Shehzada’s AI</button>
-      <a class="header-contact" href="#contact">Contact</a>
+    <div class="mobile-actions">
+      <button class="mobile-ai-trigger" type="button" data-ai-open aria-label="Open Shehzada’s AI">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.2 4.5h9.6A3.2 3.2 0 0 1 20 7.7v8.1a3.2 3.2 0 0 1-3.2 3.2h-5.1l-3.9 2v-2H7.2A3.2 3.2 0 0 1 4 15.8V7.7a3.2 3.2 0 0 1 3.2-3.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
+      <button class="mobile-menu-trigger" id="mobile-menu-trigger" type="button" aria-expanded="false" aria-controls="mobile-more-sheet" aria-label="Open menu">
+        <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h16" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg>
+      </button>
     </div>
-
-    <button class="mobile-command-trigger" id="mobile-command-trigger" type="button" aria-label="Open quick navigation">⌘</button>
   </header>
 
   <main id="main">
     <section id="home" class="hero section-shell" aria-labelledby="hero-title">
-      <div class="hero-copy reveal">
-        <div class="status-pill"><span class="status-dot"></span> {{ profile.location }} · {{ profile.availabilityStatus }}</div>
-        <p class="eyebrow">Cyber Security at Riphah · Web pentesting · CTF</p>
-        <h1 id="hero-title">{{ profile.heroHeading }}</h1>
-        <div class="role-line">
-          <span class="role-prefix">I am a</span>
-          <span id="typed-role" class="typed-role">{{ profile.professionalTitle }}</span>
-          <span class="typing-caret" aria-hidden="true"></span>
-        </div>
-        <p class="hero-description">{{ profile.heroIntroduction }}</p>
+      <div class="hero-copy">
+        <div class="status-pill"><span class="status-dot"></span> {{ profile.availabilityStatus }}</div>
+        <h1 id="hero-title">{{ profile.heroHeading }}<br/>{{ profile.heroAccent }}</h1>
+        <p class="hero-statement">Web penetration tester exploring how applications break — and how to secure them.</p>
+        <p class="hero-description">Cyber Security student at Riphah International University, building practical experience through labs, internships and CTFs.</p>
         <div class="hero-actions">
-          <a class="button button-primary magnetic" href="#projects">{{ profile.mainCtaLabels.explore }} <span aria-hidden="true">↓</span></a>
-          <a class="button button-ghost magnetic" href="mailto:{{ profile.email }}">{{ profile.mainCtaLabels.contact }}</a>
+          <a class="button button-primary" href="#projects">View selected work</a>
+          <a class="button button-ghost" href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
         </div>
         <div class="hero-links" aria-label="Social links">
-          <a href="{{ profile.githubUrl }}" target="_blank" rel="me noreferrer">GitHub <span>↗</span></a>
-          <a href="{{ profile.linkedinUrl }}" target="_blank" rel="me noreferrer">LinkedIn <span>↗</span></a>
-          <a href="mailto:{{ profile.email }}">Email <span>↗</span></a>
+          <a href="{{ profile.githubUrl }}" target="_blank" rel="me noreferrer">GitHub</a>
+          <a href="{{ profile.linkedinUrl }}" target="_blank" rel="me noreferrer">LinkedIn</a>
+          <a href="mailto:{{ profile.email }}">Email</a>
         </div>
       </div>
 
-      <div class="hero-visual reveal" aria-label="Interactive cosmic security visualization">
-        <div class="visual-frame" id="visual-frame">
-          <div class="planet-system" aria-hidden="true">
-            <div class="orbit orbit-one"><span class="satellite"></span></div>
-            <div class="orbit orbit-two"><span class="satellite satellite-two"></span></div>
-            <div class="planet">
-              <div class="planet-glow"></div>
-              <div class="planet-grid"></div>
-              <div class="planet-core">SEC</div>
-            </div>
-            <div class="floating-tag tag-one">WEB</div>
-            <div class="floating-tag tag-two">CTF</div>
-            <div class="floating-tag tag-three">OSINT</div>
+      <div class="hero-visual" aria-hidden="true">
+        <div class="cosmic-core">
+          <div class="core-planet"></div>
+          <div class="core-ring core-ring-1"></div>
+          <div class="core-ring core-ring-2"></div>
+          <div class="radar-sweep"></div>
+          <div class="core-status">
+            <b>SECURITY CORE</b>
+            <span>Scan status: active</span>
+            <span>Attack surface: mapped</span>
+            <span>Signal integrity: stable</span>
           </div>
-          <div class="terminal-card" aria-hidden="true">
-            <div class="terminal-top"><span></span><span></span><span></span><b>security_scan.sh</b></div>
-            <div class="terminal-body">
-              <p><em>$</em> nmap -sV target.local</p>
-              <p class="terminal-muted">Scanning exposed services...</p>
-              <p><span class="terminal-ok">✓</span> 80/tcp web service</p>
-              <p><span class="terminal-ok">✓</span> 443/tcp encrypted</p>
-              <p class="terminal-cyan">→ assessing application logic</p>
-              <p><span class="terminal-caret"></span></p>
-            </div>
-          </div>
-          <div class="visual-caption"><span>Move your pointer</span><b>Interactive field</b></div>
+          <div class="scan-line"></div>
         </div>
       </div>
-
-      <div class="scroll-cue" aria-hidden="true"><span></span> Scroll to enter orbit</div>
     </section>
 
     <section class="trust-strip" aria-label="Portfolio highlights">
-      <div><strong>02</strong><span>Cybersecurity<br>internships</span></div>
+      <div><strong>02</strong><span>Internships</span></div>
       <div><strong>02</strong><span>CTF runner-up<br>placements</span></div>
-      <div><strong>02</strong><span>Primary<br>certifications</span></div>
-      <div><strong>100+</strong><span>Words per minute<br>typing speed</span></div>
+      <div><strong>02</strong><span>Main<br>certifications</span></div>
     </section>
 
     <section id="about" class="about section-shell section-pad">
@@ -304,42 +285,24 @@
     <div class="footer-bottom"><span>© <span id="year"></span> Muhammad Abdullah · abdullahcyber.dev</span><a href="#top">Back to orbit ↑</a></div>
   </footer>
 
-  <nav class="mobile-dock" aria-label="Mobile navigation">
-    <a class="mobile-dock-item" href="#home" data-mobile-section="home" aria-label="Home">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="m4 11 8-7 8 7v8a1 1 0 0 1-1 1h-5v-6h-4v6H5a1 1 0 0 1-1-1v-8Z" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"/></svg><span>Home</span>
-    </a>
-    <a class="mobile-dock-item" href="#about" data-mobile-section="about" aria-label="About">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="12" cy="8" r="3" stroke="currentColor" stroke-width="1.6"/><path d="M5.5 20c.7-4 2.8-6 6.5-6s5.8 2 6.5 6" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>About</span>
-    </a>
-    <a class="mobile-dock-item" href="#projects" data-mobile-section="projects" aria-label="Projects">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M4 7.5h16v11H4v-11Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 7.5V5h8v2.5M8 12h8" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>Projects</span>
-    </a>
-    <button class="mobile-dock-item mobile-ai-dock" type="button" data-ai-open aria-label="Open Shehzada’s AI">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><path d="M7.2 4.5h9.6A3.2 3.2 0 0 1 20 7.7v8.1a3.2 3.2 0 0 1-3.2 3.2h-5.1l-3.9 2v-2H7.2A3.2 3.2 0 0 1 4 15.8V7.7a3.2 3.2 0 0 1 3.2-3.2Z" stroke="currentColor" stroke-width="1.6"/><path d="M8 10h8M8 14h5" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><span>AI</span>
-    </button>
-    <button class="mobile-dock-item" id="mobile-more-trigger" type="button" aria-expanded="false" aria-controls="mobile-more-sheet" aria-label="Open more navigation">
-      <svg viewBox="0 0 24 24" fill="none" aria-hidden="true"><circle cx="5" cy="12" r="1.4" fill="currentColor"/><circle cx="12" cy="12" r="1.4" fill="currentColor"/><circle cx="19" cy="12" r="1.4" fill="currentColor"/></svg><span>More</span>
-    </button>
-  </nav>
-
   <div class="mobile-sheet-backdrop" id="mobile-sheet-backdrop" aria-hidden="true"></div>
-  <section class="mobile-more-sheet" id="mobile-more-sheet" role="dialog" aria-modal="true" aria-labelledby="mobile-sheet-title" aria-hidden="true">
+  <nav class="mobile-sheet" id="mobile-more-sheet" role="dialog" aria-modal="true" aria-label="Mobile navigation" aria-hidden="true">
     <div class="mobile-sheet-handle" aria-hidden="true"></div>
-    <div class="mobile-sheet-head"><div><small>Mission control</small><h2 id="mobile-sheet-title">Explore portfolio</h2></div><button id="mobile-sheet-close" type="button" aria-label="Close more navigation">×</button></div>
-    <div class="mobile-sheet-grid">
-      <a href="#experience"><span>01</span><b>Experience</b><small>Internships & CTF work</small></a>
-      <a href="#skills"><span>02</span><b>Skills</b><small>Interactive toolkit</small></a>
-      <a href="#credentials"><span>03</span><b>Certifications</b><small>Main & additional credentials</small></a>
-      <a href="#education"><span>04</span><b>Education</b><small>Riphah International University</small></a>
-      <a href="#achievements"><span>05</span><b>Achievements</b><small>CTFs & milestones</small></a>
-      <a href="#contact"><span>06</span><b>Contact</b><small>Start a conversation</small></a>
+    <div class="mobile-sheet-links">
+      <a href="#home">Home</a>
+      <a href="#about">About</a>
+      <a href="#projects">Projects</a>
+      <a href="#experience">Experience</a>
+      <a href="#skills">Skills</a>
+      <a href="#credentials">Certifications</a>
+      <a href="#achievements">Achievements</a>
+      <a href="#education">Education</a>
+      <a href="#contact">Contact</a>
     </div>
     <div class="mobile-sheet-actions">
-      <a href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
-      <button type="button" data-command-open>Quick search <kbd>Ctrl K</kbd></button>
+      <a class="button button-primary" href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
     </div>
-    <div class="mobile-sheet-social"><a href="https://github.com/abdullahcyberx" target="_blank" rel="me noreferrer">GitHub ↗</a><a href="https://www.linkedin.com/in/hafizabdullahx" target="_blank" rel="me noreferrer">LinkedIn ↗</a></div>
-  </section>
+  </nav>
 
   <dialog class="command-palette" id="command-palette" aria-labelledby="command-title">
     <div class="command-head">
@@ -421,10 +384,6 @@
       <div><span>Ethics & scope</span><p id="modal-ethics"></p></div>
     </div>
   </dialog>
-
-  <!-- Scripts embedded so animations work even when this HTML file is opened by itself. -->
-  <script type="module" src="/src/main.js"></script>
-  <script type="module" src="/src/main.js"></script>
 
   <script type="module" src="/src/main.js"></script>
 

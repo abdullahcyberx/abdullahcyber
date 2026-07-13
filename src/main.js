@@ -414,7 +414,7 @@ ${message}`);
   if (year) year.textContent = String(new Date().getFullYear());
 })();
 
-  
+
 
 
 (() => {
@@ -460,7 +460,7 @@ ${message}`);
     return (node.textContent || '').replace(/\s+/g, ' ').trim();
   };
 
-  
+
   const aiData = JSON.parse(document.getElementById('ai-data')?.textContent || '{}');
   const knowledge = (aiData.customAnswers || []).map((a, i) => ({
     id: 'dynamic-' + i,
@@ -471,7 +471,7 @@ ${message}`);
   }));
 
 
-  
+
   const canned = {
     greeting: '<p>Hello — I’m <strong>Shehzada’s AI</strong>, Muhammad’s portfolio assistant.</p><p>I answer from verified portfolio facts only.</p>',
     thanks: '<p>You’re welcome. I can also prepare a recruiter briefing, guide you to supporting evidence or launch the mini CTF challenge.</p>',
@@ -876,7 +876,7 @@ ${message}`);
   };
 })();
 
-  
+
 
 
 (() => {
@@ -884,12 +884,24 @@ ${message}`);
 
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const progressBar = document.getElementById('scroll-progress-bar');
+  const siteHeader = document.querySelector('.site-header');
   let scrollFrame = 0;
+  let lastScrollY = window.scrollY || 0;
   const updateProgress = () => {
     scrollFrame = 0;
+    const currentScrollY = window.scrollY || 0;
     const max = Math.max(document.documentElement.scrollHeight - window.innerHeight, 1);
-    const progress = Math.min(1, Math.max(0, window.scrollY / max));
+    const progress = Math.min(1, Math.max(0, currentScrollY / max));
     if (progressBar) progressBar.style.transform = `scaleX(${progress})`;
+
+    if (siteHeader) {
+      if (currentScrollY > lastScrollY && currentScrollY > 100) {
+        siteHeader.classList.add('nav-hidden');
+      } else {
+        siteHeader.classList.remove('nav-hidden');
+      }
+    }
+    lastScrollY = currentScrollY;
   };
   window.addEventListener('scroll', () => {
     if (!scrollFrame) scrollFrame = requestAnimationFrame(updateProgress);
@@ -921,12 +933,11 @@ ${message}`);
 
   const sheet = document.getElementById('mobile-more-sheet');
   const sheetBackdrop = document.getElementById('mobile-sheet-backdrop');
-  const sheetTrigger = document.getElementById('mobile-more-trigger');
-  const sheetClose = document.getElementById('mobile-sheet-close');
+  const sheetTrigger = document.getElementById('mobile-menu-trigger');
   let sheetReturnFocus = null;
   const closeSheet = () => {
-    sheet?.classList.remove('open');
-    sheetBackdrop?.classList.remove('open');
+    sheet?.classList.remove('active', 'open');
+    sheetBackdrop?.classList.remove('active', 'open');
     sheet?.setAttribute('aria-hidden', 'true');
     sheetBackdrop?.setAttribute('aria-hidden', 'true');
     sheetTrigger?.setAttribute('aria-expanded', 'false');
@@ -935,16 +946,14 @@ ${message}`);
   };
   const openSheet = () => {
     sheetReturnFocus = document.activeElement;
-    sheet?.classList.add('open');
-    sheetBackdrop?.classList.add('open');
+    sheet?.classList.add('active', 'open');
+    sheetBackdrop?.classList.add('active', 'open');
     sheet?.setAttribute('aria-hidden', 'false');
     sheetBackdrop?.setAttribute('aria-hidden', 'false');
     sheetTrigger?.setAttribute('aria-expanded', 'true');
     document.body.classList.add('sheet-open');
-    window.setTimeout(() => sheetClose?.focus(), reducedMotion ? 0 : 220);
   };
   sheetTrigger?.addEventListener('click', () => sheet?.classList.contains('open') ? closeSheet() : openSheet());
-  sheetClose?.addEventListener('click', closeSheet);
   sheetBackdrop?.addEventListener('click', closeSheet);
   sheet?.querySelectorAll('a').forEach((link) => link.addEventListener('click', closeSheet));
 
@@ -1037,15 +1046,11 @@ ${message}`);
   });
 
   const desktopLinks = [...document.querySelectorAll('.desktop-nav > a, .nav-more-menu a[href^="#"]')];
-  const mobileItems = [...document.querySelectorAll('[data-mobile-section]')];
+  const mobileItems = [...document.querySelectorAll('.mobile-sheet-links a')];
   const observedSections = [...document.querySelectorAll('main section[id]')];
-  const moreSectionIds = new Set(['skills','credentials','education','achievements','contact']);
   const updateActiveNavigation = (id) => {
     desktopLinks.forEach((link) => link.classList.toggle('active', link.getAttribute('href') === `#${id}`));
-    moreToggle?.classList.toggle('active', moreSectionIds.has(id));
-    mobileItems.forEach((item) => item.classList.toggle('active', item.dataset.mobileSection === id));
-    if (!['home','about','projects'].includes(id)) sheetTrigger?.classList.add('active');
-    else sheetTrigger?.classList.remove('active');
+    mobileItems.forEach((item) => item.classList.toggle('active', item.getAttribute('href') === `#${id}`));
   };
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver((entries) => {
