@@ -44,8 +44,8 @@ try {
   // Basic replacements
   html = html.replace('{{ profile.location }}', escapeHtml(profile.location));
   html = html.replace('{{ profile.availabilityStatus }}', escapeHtml(profile.availabilityStatus));
-  html = html.replace('{{ profile.heroHeading }}', escapeHtml(profile.heroHeading));
-  html = html.replace('{{ profile.heroAccent }}', escapeHtml(profile.heroAccent));
+  html = html.replaceAll('{{ profile.heroHeading }}', escapeHtml(profile.heroHeading));
+  html = html.replaceAll('{{ profile.heroAccent }}', escapeHtml(profile.heroAccent));
   html = html.replace('{{ profile.professionalTitle }}', escapeHtml(profile.professionalTitle));
   html = html.replace('{{ profile.heroIntroduction }}', escapeHtml(profile.heroIntroduction));
   html = html.replace('{{ profile.mainCtaLabels.explore }}', escapeHtml(profile.mainCtaLabels.explore));
@@ -220,6 +220,15 @@ try {
   };
   const safeAiPayload = escapeJson(JSON.stringify(aiPayload));
   html = html.replace('<!-- TEMPLATE: AI_PAYLOAD -->', safeAiPayload);
+
+  const unresolvedTokens = html.match(/\{\{\s*[^}]+\s*\}\}/g);
+  if (unresolvedTokens?.length) {
+    throw new Error(
+      `Unresolved template tokens: ${[
+        ...new Set(unresolvedTokens)
+      ].join(", ")}`
+    );
+  }
 
   fs.writeFileSync(outHtml, html);
   console.log('Site rendered successfully to root index.html.');
