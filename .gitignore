@@ -18,3 +18,7 @@ node-v22.23.1-win-x64.zip
 .local-node/
 *.env
 .env*
+
+private keys/
+tokens/
+temporary backups/

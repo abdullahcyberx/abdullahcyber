@@ -7,8 +7,8 @@
   <meta name="color-scheme" content="dark" />
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
   <meta name="author" content="Muhammad Abdullah" />
-  <meta name="description" content="Muhammad Abdullah (Abdullah Cyber) is a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing and CTFs." />
-  <meta name="keywords" content="Muhammad Abdullah, Abdullah Cyber, cyber security Riphah, cyber security in Pakistan, penetration tester Pakistan, web penetration testing, cybersecurity portfolio, CTF Pakistan" />
+  <meta name="description" content="{{ seo.description }}" />
+  <meta name="keywords" content="{{ seo.keywords }}" />
   <meta name="geo.region" content="PK" />
   <link rel="canonical" href="https://abdullahcyber.dev/" />
   <link rel="manifest" href="site.webmanifest" />
@@ -18,8 +18,8 @@
   <meta property="og:type" content="profile" />
   <meta property="og:site_name" content="Abdullah Cyber" />
   <meta property="og:url" content="https://abdullahcyber.dev/" />
-  <meta property="og:title" content="Abdullah Cyber | Muhammad Abdullah — Cyber Security Pakistan" />
-  <meta property="og:description" content="Cyber Security student at Riphah International University, Pakistan. Explore Muhammad Abdullah’s web penetration-testing projects, CTF achievements and credentials." />
+  <meta property="og:title" content="{{ seo.openGraph.title }}" />
+  <meta property="og:description" content="{{ seo.openGraph.description }}" />
   <meta property="og:image" content="https://abdullahcyber.dev/assets/abdullah-cyber-og.png" />
   <meta property="og:image:width" content="1200" />
   <meta property="og:image:height" content="630" />
@@ -27,83 +27,16 @@
   <meta property="profile:first_name" content="Muhammad" />
   <meta property="profile:last_name" content="Abdullah" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Abdullah Cyber | Muhammad Abdullah — Cyber Security Pakistan" />
-  <meta name="twitter:description" content="Riphah Cyber Security student in Pakistan focused on web penetration testing, CTFs and practical security projects." />
+  <meta name="twitter:title" content="{{ seo.twitter.title }}" />
+  <meta name="twitter:description" content="{{ seo.twitter.description }}" />
   <meta name="twitter:image" content="https://abdullahcyber.dev/assets/abdullah-cyber-og.png" />
-  <title>Abdullah Cyber | Muhammad Abdullah — Cyber Security Pakistan</title>
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@graph": [
-      {
-        "@type": "WebSite",
-        "@id": "https://abdullahcyber.dev/#website",
-        "url": "https://abdullahcyber.dev/",
-        "name": "Abdullah Cyber",
-        "alternateName": "Muhammad Abdullah Cyber Security Portfolio",
-        "inLanguage": "en-PK"
-      },
-      {
-        "@type": "ProfilePage",
-        "@id": "https://abdullahcyber.dev/#profilepage",
-        "url": "https://abdullahcyber.dev/",
-        "name": "Muhammad Abdullah — Cyber Security Portfolio",
-        "isPartOf": { "@id": "https://abdullahcyber.dev/#website" },
-        "dateModified": "2026-07-10",
-        "mainEntity": { "@id": "https://abdullahcyber.dev/#person" }
-      },
-      {
-        "@type": "Person",
-        "@id": "https://abdullahcyber.dev/#person",
-        "name": "Muhammad Abdullah",
-        "alternateName": ["Abdullah Cyber", "abdullahcyberx"],
-        "url": "https://abdullahcyber.dev/",
-        "image": "https://abdullahcyber.dev/assets/abdullah-cyber-og.png",
-        "email": "mailto:abdullahcyberx@gmail.com",
-        "jobTitle": "Penetration Tester",
-        "description": "Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing, vulnerability assessment and CTF practice.",
-        "homeLocation": { "@type": "Country", "name": "Pakistan" },
-        "affiliation": {
-          "@type": "CollegeOrUniversity",
-          "name": "Riphah International University"
-        },
-        "sameAs": [
-          "https://github.com/abdullahcyberx",
-          "https://www.linkedin.com/in/hafizabdullahx"
-        ],
-        "knowsAbout": [
-          "Web Penetration Testing",
-          "Web Application Security",
-          "Vulnerability Assessment",
-          "Burp Suite",
-          "Nmap",
-          "Wireshark",
-          "Linux",
-          "Docker",
-          "Capture the Flag competitions",
-          "Phishing Awareness",
-          "SSH Honeypots"
-        ],
-        "hasCredential": [
-          {
-            "@type": "EducationalOccupationalCredential",
-            "name": "Web Red Team Analyst (WEB-RTA)",
-            "credentialCategory": "Professional certification",
-            "recognizedBy": { "@type": "Organization", "name": "Cyber WarFare" }
-          },
-          {
-            "@type": "EducationalOccupationalCredential",
-            "name": "Certified Associate Penetration Tester (CAPT)",
-            "credentialCategory": "Professional certification",
-            "recognizedBy": { "@type": "Organization", "name": "Hack Viser" }
-          }
-        ]
-      }
-    ]
-  }
-  </script>
+  <title>{{ seo.title }}</title>
+  <!-- TEMPLATE: SCHEMA_ORG -->
   <!-- Styles embedded so the portfolio works even when this HTML file is opened by itself. -->
   <link rel="stylesheet" href="/src/style.css" />
+  <script type="application/json" id="ai-data">
+    <!-- TEMPLATE: AI_PAYLOAD -->
+  </script>
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to content</a>
@@ -152,23 +85,23 @@
   <main id="main">
     <section id="home" class="hero section-shell" aria-labelledby="hero-title">
       <div class="hero-copy reveal">
-        <div class="status-pill"><span class="status-dot"></span> Pakistan · Open to cybersecurity opportunities</div>
+        <div class="status-pill"><span class="status-dot"></span> {{ profile.location }} · {{ profile.availabilityStatus }}</div>
         <p class="eyebrow">Cyber Security at Riphah · Web pentesting · CTF</p>
-        <h1 id="hero-title">Muhammad<br><span>Abdullah</span></h1>
+        <h1 id="hero-title">{{ profile.heroHeading }}</h1>
         <div class="role-line">
           <span class="role-prefix">I am a</span>
-          <span id="typed-role" class="typed-role">Penetration Tester</span>
+          <span id="typed-role" class="typed-role">{{ profile.professionalTitle }}</span>
           <span class="typing-caret" aria-hidden="true"></span>
         </div>
-        <p class="hero-description">I’m Muhammad Abdullah, also known online as Abdullah Cyber—a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing, practical labs and CTF challenges.</p>
+        <p class="hero-description">{{ profile.heroIntroduction }}</p>
         <div class="hero-actions">
-          <a class="button button-primary magnetic" href="#projects">Explore my work <span aria-hidden="true">↓</span></a>
-          <a class="button button-ghost magnetic" href="mailto:abdullahcyberx@gmail.com">Start a conversation</a>
+          <a class="button button-primary magnetic" href="#projects">{{ profile.mainCtaLabels.explore }} <span aria-hidden="true">↓</span></a>
+          <a class="button button-ghost magnetic" href="mailto:{{ profile.email }}">{{ profile.mainCtaLabels.contact }}</a>
         </div>
         <div class="hero-links" aria-label="Social links">
-          <a href="https://github.com/abdullahcyberx" target="_blank" rel="me noreferrer">GitHub <span>↗</span></a>
-          <a href="https://www.linkedin.com/in/hafizabdullahx" target="_blank" rel="me noreferrer">LinkedIn <span>↗</span></a>
-          <a href="mailto:abdullahcyberx@gmail.com">Email <span>↗</span></a>
+          <a href="{{ profile.githubUrl }}" target="_blank" rel="me noreferrer">GitHub <span>↗</span></a>
+          <a href="{{ profile.linkedinUrl }}" target="_blank" rel="me noreferrer">LinkedIn <span>↗</span></a>
+          <a href="mailto:{{ profile.email }}">Email <span>↗</span></a>
         </div>
       </div>
 
@@ -218,13 +151,8 @@
       </div>
       <div class="about-grid">
         <div class="about-copy reveal">
-          <p class="lead">I focus on web penetration testing—understanding how applications behave, questioning their trust boundaries and finding weaknesses before attackers do.</p>
-          <p>As a Bachelor of Cyber Security student at Riphah International University, I am building practical experience in Pakistan through authorized assessments, security labs, internships and CTF events.</p>
-          <p>My learning is practical: I combine Linux, networking and Docker fundamentals with vulnerability testing, security controls and CTF problem-solving. I am continuously improving through labs, projects and collaborative security events.</p>
-          <div class="about-quote">
-            <span aria-hidden="true">“</span>
-            <p>Security is not only about tools. It starts with understanding what an application assumes—and what happens when those assumptions break.</p>
-          </div>
+          {{ profile.aboutText }}
+        </div>
         </div>
         <div class="identity-panel reveal">
           <div class="identity-grid" aria-hidden="true"></div>
@@ -242,7 +170,7 @@
             <div><dt>Based in</dt><dd>Pakistan</dd></div>
             <div><dt>Education</dt><dd>BS Cyber Security · Riphah</dd></div>
           </dl>
-          <a href="assets/Muhammad-Abdullah-CV.pdf" target="_blank">View full résumé <span>↗</span></a>
+          <a href="{{ profile.cvPath }}" target="_blank">View full résumé <span>↗</span></a>
         </div>
       </div>
       <aside class="profile-context reveal" aria-labelledby="pakistan-profile-title">
@@ -260,39 +188,7 @@
         <h2>Learning by doing.<br><span>Testing by thinking.</span></h2>
       </div>
       <div class="timeline">
-        <article class="timeline-item reveal">
-          <div class="timeline-date"><span>2025 — Present</span><i></i></div>
-          <div class="timeline-card">
-            <div class="timeline-head">
-              <div><p>Self-employed · Remote</p><h3>CTF Organizer & Player</h3></div>
-              <span class="tag">Current</span>
-            </div>
-            <p>Organizing and solving capture-the-flag challenges with an emphasis on offensive and defensive cybersecurity techniques.</p>
-            <ul class="chip-list"><li>CTF design</li><li>Web exploitation</li><li>Problem solving</li><li>Team collaboration</li></ul>
-          </div>
-        </article>
-        <article class="timeline-item reveal">
-          <div class="timeline-date"><span>Jan — Mar 2026</span><i></i></div>
-          <div class="timeline-card">
-            <div class="timeline-head">
-              <div><p>Inara Technologies · On-site</p><h3>Cyber Security Intern</h3></div>
-              <span class="tag">Internship</span>
-            </div>
-            <p>Completed practical training across Linux administration, networking, Docker, security principles, access control, firewalls, IDS, malware analysis and web vulnerability testing.</p>
-            <ul class="chip-list"><li>Linux</li><li>Networking</li><li>Docker</li><li>SQL injection</li><li>XSS</li></ul>
-          </div>
-        </article>
-        <article class="timeline-item reveal">
-          <div class="timeline-date"><span>Jul — Sep 2025</span><i></i></div>
-          <div class="timeline-card">
-            <div class="timeline-head">
-              <div><p>Digital Empowerment Network · Remote</p><h3>Cyber Security Intern</h3></div>
-              <span class="tag">Internship</span>
-            </div>
-            <p>Conducted penetration testing and vulnerability assessments in simulated attack environments, identifying weaknesses and recommending improvements.</p>
-            <ul class="chip-list"><li>Vulnerability assessment</li><li>Reporting</li><li>Simulated attacks</li></ul>
-          </div>
-        </article>
+        <!-- TEMPLATE: EXPERIENCE -->
       </div>
     </section>
 
@@ -307,33 +203,9 @@
       <div class="keyboard-stage reveal">
         <div class="keyboard-scene" id="keyboard-scene">
           <div class="keyboard-board" id="keyboard-board" role="list" aria-label="Interactive cybersecurity skills keyboard">
-            <div class="key-row key-row-one">
-              <button class="skill-key" data-skill="burp" role="listitem"><span>BURP</span><small>01</small></button>
-              <button class="skill-key" data-skill="nmap" role="listitem"><span>NMAP</span><small>02</small></button>
-              <button class="skill-key" data-skill="gobuster" role="listitem"><span>GOBUSTER</span><small>03</small></button>
-              <button class="skill-key" data-skill="wireshark" role="listitem"><span>WIRESHARK</span><small>04</small></button>
-              <button class="skill-key wide" data-skill="web" role="listitem"><span>WEB TESTING</span><small>05</small></button>
-            </div>
-            <div class="key-row key-row-two">
-              <button class="skill-key" data-skill="linux" role="listitem"><span>LINUX</span><small>06</small></button>
-              <button class="skill-key" data-skill="docker" role="listitem"><span>DOCKER</span><small>07</small></button>
-              <button class="skill-key wide" data-skill="vulnerability" role="listitem"><span>VULN ASSESS</span><small>08</small></button>
-              <button class="skill-key" data-skill="sqli" role="listitem"><span>SQLi</span><small>09</small></button>
-              <button class="skill-key" data-skill="xss" role="listitem"><span>XSS</span><small>10</small></button>
-            </div>
-            <div class="key-row key-row-three">
-              <button class="skill-key wide" data-skill="networking" role="listitem"><span>NETWORKING</span><small>11</small></button>
-              <button class="skill-key" data-skill="firewall" role="listitem"><span>FIREWALL</span><small>12</small></button>
-              <button class="skill-key" data-skill="ids" role="listitem"><span>IDS</span><small>13</small></button>
-              <button class="skill-key" data-skill="gophish" role="listitem"><span>GOPHISH</span><small>14</small></button>
-              <button class="skill-key" data-skill="honeypot" role="listitem"><span>HONEYPOT</span><small>15</small></button>
-            </div>
-            <div class="key-row key-row-four">
-              <button class="skill-key" data-skill="ctf" role="listitem"><span>CTF</span><small>16</small></button>
-              <button class="skill-key space-key active" data-skill="mindset" role="listitem"><span>SECURITY MINDSET</span><small>SPACE</small></button>
-              <button class="skill-key" data-skill="osint" role="listitem"><span>OSINT</span><small>17</small></button>
-            </div>
+            <!-- TEMPLATE: SKILLS -->
           </div>
+        </div>
         </div>
         <aside class="skill-display" aria-live="polite">
           <p class="skill-index" id="skill-index">CORE / 00</p>
@@ -351,56 +223,9 @@
         <h2>Practical security work,<br><span>documented clearly.</span></h2>
       </div>
       <div class="project-grid">
-        <article class="project-card project-featured tilt-card reveal" tabindex="0">
-          <div class="project-art phishing-art" aria-hidden="true">
-            <div class="mail-window">
-              <div class="mail-top"><i></i><i></i><i></i><span>Awareness simulation</span></div>
-              <div class="mail-body"><div class="fake-logo">!</div><b>Verify your account</b><span>Controlled training scenario</span><button>Review activity</button></div>
-            </div>
-            <div class="radar-ring"></div>
-            <div class="project-number">01</div>
-          </div>
-          <div class="project-content">
-            <div class="project-meta"><span>Social engineering</span><span>Academic supervision</span></div>
-            <h3>Authorized Phishing Awareness Campaign</h3>
-            <p>Designed and conducted an authorized Gophish simulation to assess real-world phishing awareness among students in a controlled academic setting.</p>
-            <ul class="chip-list"><li>Gophish</li><li>Campaign design</li><li>Awareness testing</li><li>Ethical scope</li></ul>
-            <button class="project-link" type="button" data-modal="phishing">Open case study <span>↗</span></button>
-          </div>
-        </article>
-
-        <article class="project-card tilt-card reveal" tabindex="0">
-          <div class="project-art honeypot-art" aria-hidden="true">
-            <div class="server-stack"><span></span><span></span><span></span></div>
-            <div class="attack-line line-a"></div><div class="attack-line line-b"></div><div class="attack-line line-c"></div>
-            <div class="shield-core">SSH</div>
-            <div class="project-number">02</div>
-          </div>
-          <div class="project-content">
-            <div class="project-meta"><span>Threat observation</span><span>Lab deployment</span></div>
-            <h3>SSH Honeypot Deployment</h3>
-            <p>Deployed an SSH honeypot using sshesame inside VirtualBox to observe brute-force behavior and study attacker interaction patterns.</p>
-            <ul class="chip-list"><li>sshesame</li><li>VirtualBox</li><li>SSH</li><li>Attack analysis</li></ul>
-            <button class="project-link" type="button" data-modal="honeypot">Open case study <span>↗</span></button>
-          </div>
-        </article>
-
-        <article class="project-card tilt-card reveal" tabindex="0">
-          <div class="project-art ctf-art" aria-hidden="true">
-            <div class="ctf-terminal"><p>&gt; flag_search</p><p>route: web → logic → exploit</p><p class="flag-text">FLAG{think_beyond_tools}</p></div>
-            <div class="cube cube-one"></div><div class="cube cube-two"></div>
-            <div class="project-number">03</div>
-          </div>
-          <div class="project-content">
-            <div class="project-meta"><span>CTF operations</span><span>Community</span></div>
-            <h3>CTF Challenge Practice & Organization</h3>
-            <p>Solving and organizing security challenges that encourage structured thinking across offensive and defensive cybersecurity concepts.</p>
-            <ul class="chip-list"><li>Web challenges</li><li>Challenge design</li><li>Team play</li><li>Write-ups</li></ul>
-            <a class="project-link" href="https://github.com/abdullahcyberx" target="_blank" rel="noreferrer">Visit GitHub profile <span>↗</span></a>
-          </div>
-        </article>
+        <!-- TEMPLATE: PROJECTS -->
       </div>
-      <p class="ethical-scope reveal" id="ethical-scope"><strong>Ethical scope:</strong> Every security test, simulation and demonstration shown here was performed in an authorized, isolated or educational environment. No unauthorized systems were targeted.</p>
+      <p class="ethical-scope reveal" id="ethical-scope"><strong>Ethical scope:</strong> {{ profile.ethicalDisclaimer }}</p>
     </section>
 
     <section class="credentials section-shell section-pad" id="credentials">
@@ -412,16 +237,7 @@
           </div>
           <p class="primary-credentials-label reveal">Primary certifications</p>
           <div class="cert-list">
-            <a class="cert-card primary-cert reveal" href="assets/certificates/web-rta.pdf" target="_blank" rel="noreferrer" aria-label="Open Certified Web Red Team Analyst certificate">
-              <div class="cert-icon">W</div>
-              <div><p>January 8, 2026</p><h3>Certified Web Red Team Analyst (WEB-RTA)</h3><span>CyberWarfare Labs · ID: WEB-RTA-695f78e7350a0624a439e29d</span></div>
-              <i aria-hidden="true">↗</i>
-            </a>
-            <a class="cert-card primary-cert reveal" href="assets/certificates/capt-hackviser.pdf" target="_blank" rel="noreferrer" aria-label="Open Certified Associate Penetration Tester certificate">
-              <div class="cert-icon">C</div>
-              <div><p>October 22, 2025</p><h3>Certified Associate Penetration Tester (CAPT)</h3><span>Hackviser · ID: HV-CAPT-DVG92YR9</span></div>
-              <i aria-hidden="true">↗</i>
-            </a>
+            <!-- TEMPLATE: FEATURED_CERTIFICATES -->
           </div>
 
           <details class="supporting-certificates reveal">
@@ -433,42 +249,21 @@
               <span class="supporting-toggle" aria-hidden="true"></span>
             </summary>
             <div class="supporting-grid">
-              <a class="mini-cert" href="assets/certificates/cpps-phishing-prevention.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">CP</span><span class="mini-cert-copy"><h4>Certified Phishing Prevention Specialist</h4><p>Hack & Fix · Dec 17, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/crtom-red-team-operations.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">RT</span><span class="mini-cert-copy"><h4>Red Team Operations Management</h4><p>Red Team Leaders · Dec 24, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/ics-scada-cybersecurity.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">ICS</span><span class="mini-cert-copy"><h4>ICS/SCADA Cybersecurity</h4><p>Red Team Leaders · Jan 5, 2026</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/cisco-cybersecurity-essentials.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">CS</span><span class="mini-cert-copy"><h4>Cybersecurity Essentials</h4><p>Cisco Networking Academy · Dec 4, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/cisco-network-defense.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">ND</span><span class="mini-cert-copy"><h4>Network Defense</h4><p>Cisco Networking Academy · May 6, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/cisco-introduction-cybersecurity.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">IC</span><span class="mini-cert-copy"><h4>Introduction to Cybersecurity</h4><p>Cisco Networking Academy · Apr 27, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/isc2-security-principles-coursera.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">ISC</span><span class="mini-cert-copy"><h4>Security Principles</h4><p>ISC2 via Coursera · Jul 10, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/tryhackme-advent-of-cyber-2025.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">THM</span><span class="mini-cert-copy"><h4>Advent of Cyber 2025</h4><p>TryHackMe · Dec 25, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/cybersavvy-linux-essential-cybersecurity.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">LX</span><span class="mini-cert-copy"><h4>Linux & Essential Cybersecurity</h4><p>UrduCourses · Mar 21, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/digital-empowerment-network-internship.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">IN</span><span class="mini-cert-copy"><h4>Cyber Security Internship</h4><p>Digital Empowerment Network · Sep 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/cisco-it-essentials.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">IT</span><span class="mini-cert-copy"><h4>IT Essentials</h4><p>Cisco Networking Academy · Dec 16, 2024</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/cisco-introduction-iot.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">IoT</span><span class="mini-cert-copy"><h4>Introduction to IoT & Digital Transformation</h4><p>Cisco Networking Academy · Apr 26, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/cisco-cpp-essentials-1.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">C+</span><span class="mini-cert-copy"><h4>C++ Essentials 1</h4><p>Cisco Networking Academy · Jan 8, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/cisco-cpp-advanced.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">C++</span><span class="mini-cert-copy"><h4>C++ Advanced</h4><p>Cisco Networking Academy · Dec 6, 2025</p></span><span class="mini-cert-arrow">↗</span></a>
-              <a class="mini-cert" href="assets/certificates/nascon-2025-participation.pdf" target="_blank" rel="noreferrer"><span class="mini-cert-icon">NC</span><span class="mini-cert-copy"><h4>NaSCon'25 Participation</h4><p>FAST-NUCES Islamabad · Apr 2025</p></span><span class="mini-cert-arrow">↗</span></a>
+              <!-- TEMPLATE: SUPPORTING_CERTIFICATES -->
             </div>
           </details>
         </div>
         <div id="achievements" class="achievement-orbit reveal">
-          <div class="orbit-label">ACHIEVEMENTS</div>
-          <div class="achievement-core"><strong>2×</strong><span>CTF<br>runner-up</span></div>
-          <div class="achievement-ring ring-a"><span>Riphah CTF</span></div>
-          <div class="achievement-ring ring-b"><span>Islamia Bahawalpur</span></div>
-          <div class="achievement-badge badge-a">Advent of Cyber 2025</div>
-          <div class="achievement-badge badge-b">CTF Event Organizer</div>
+          <!-- TEMPLATE: ACHIEVEMENTS -->
         </div>
+      </div>
       </div>
     </section>
 
     <section id="education" class="education-strip section-pad">
       <div class="section-shell education-grid">
         <div class="education-main reveal">
-          <p class="eyebrow">06 / Education</p>
-          <span class="education-year">2028</span>
-          <h2>Bachelor of<br><span>Cyber Security</span></h2>
-          <p>Riphah International University<br>Expected completion: 2028</p>
+          <!-- TEMPLATE: EDUCATION -->
         </div>
         <div class="education-extra reveal">
           <p class="eyebrow">Beyond the terminal</p>
@@ -486,7 +281,7 @@
           <p class="eyebrow">07 / Contact</p>
           <h2>Let’s investigate the<br><span>next opportunity.</span></h2>
           <p>For internships, junior penetration-testing roles, CTF collaboration or security projects, send me a message.</p>
-          <a class="email-link" href="mailto:abdullahcyberx@gmail.com">abdullahcyberx@gmail.com <span>↗</span></a>
+          <a class="email-link" href="mailto:{{ profile.email }}">{{ profile.email }} <span>↗</span></a>
         </div>
         <form id="contact-form" class="contact-form">
           <label><span>Your name</span><input name="name" type="text" autocomplete="name" required placeholder="Name" /></label>

@@ -1,0 +1,23 @@
+{
+  "name": "abdullahcyber-portfolio",
+  "version": "1.0.0",
+  "type": "module",
+  "engines": {
+    "node": "22.23.1"
+  },
+  "scripts": {
+    "dev": "node scripts/render-site.mjs && vite",
+    "manager": "vite --host 127.0.0.1",
+    "validate": "node scripts/validate-content.mjs",
+    "security": "node scripts/security-check.mjs",
+    "render": "node scripts/render-site.mjs",
+    "build": "npm run validate && npm run security && npm run render && vite build",
+    "preview": "vite preview",
+    "scan:secrets": "node scripts/scan-secrets.mjs",
+    "test:content-update": "node scripts/test-content-update.mjs",
+    "test": "npm run validate && npm run security && npm run build && npm run test:content-update && npm run scan:secrets"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}

@@ -1,24 +1,16 @@
 # Abdullah Cyber Portfolio
 
-Production portfolio for **Muhammad Abdullah** at **https://abdullahcyber.dev/**.
+A lightweight, production-ready static Vite website featuring a local visual Portfolio Manager, JSON-based content management, and robust security optimizations.
 
-## Highlights
+## Features
+- **JSON Content Management**: All content is stored in clean JSON schemas under `content/`.
+- **Local Portfolio Manager**: Edit content visually without a server or database.
+- **Shehzada's AI**: A local, deterministic chatbot assistant grounded in verified portfolio facts.
+- **Secure Static Rendering**: Generates strict, sanitized HTML for Cloudflare Pages deployment.
+- **Fast Build Times**: Powered by Vite and custom Node scripts.
 
-- Cosmic, responsive cybersecurity portfolio
-- Smooth performance-focused animations
-- Floating cosmic desktop navigation with a compact More menu
-- Mobile bottom navigation dock with a More bottom sheet
-- Searchable `Ctrl + K` command palette
-- Responsive touch-friendly skills keyboard for mobile and tablet
-- Shehzada's AI portfolio assistant
-- Experience, projects, certifications, CTF achievements, and contact details
-- SEO metadata, structured data, sitemap, robots.txt, Open Graph image, and canonical URLs
-- Cloudflare Pages headers, redirects, custom 404 page, and security.txt
-
-## Cloudflare Pages
-
-Use the repository root as the static output directory. No build command or package installation is required.
-
-## Local preview
-
-Open `index.html` directly, or serve this folder with a local static server.
+## Getting Started
+1. Run `npm ci`
+2. Run `npm run manager` to open the visual content editor.
+3. Edit your content, download the updated JSON files, and replace them in `content/`.
+4. Run `npm run build` to generate the production-ready `dist` folder.

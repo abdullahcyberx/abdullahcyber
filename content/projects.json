@@ -1,0 +1,68 @@
+[
+  {
+    "id": "proj-1",
+    "slug": "phishing",
+    "title": "Authorized Phishing Awareness Campaign",
+    "summary": "Designed and conducted an authorized Gophish simulation to assess real-world phishing awareness among students in a controlled academic setting.",
+    "fullDescription": "",
+    "category": "Social engineering",
+    "tools": [
+      "Gophish",
+      "Campaign design",
+      "Awareness testing",
+      "Ethical scope"
+    ],
+    "date": "",
+    "image": "phishing-art",
+    "repositoryUrl": "",
+    "liveUrl": "",
+    "caseStudyContent": "",
+    "featured": true,
+    "displayOrder": 1,
+    "ethicalDisclaimer": "Every security test, simulation and demonstration shown here was performed in an authorized, isolated or educational environment. No unauthorized systems were targeted."
+  },
+  {
+    "id": "proj-2",
+    "slug": "honeypot",
+    "title": "SSH Honeypot Deployment",
+    "summary": "Deployed an SSH honeypot using sshesame inside VirtualBox to observe brute-force behavior and study attacker interaction patterns.",
+    "fullDescription": "",
+    "category": "Threat observation",
+    "tools": [
+      "sshesame",
+      "VirtualBox",
+      "SSH",
+      "Attack analysis"
+    ],
+    "date": "",
+    "image": "honeypot-art",
+    "repositoryUrl": "",
+    "liveUrl": "",
+    "caseStudyContent": "",
+    "featured": true,
+    "displayOrder": 2,
+    "ethicalDisclaimer": ""
+  },
+  {
+    "id": "proj-3",
+    "slug": "ctf-practice",
+    "title": "CTF Challenge Practice & Organization",
+    "summary": "Solving and organizing security challenges that encourage structured thinking across offensive and defensive cybersecurity concepts.",
+    "fullDescription": "",
+    "category": "CTF operations",
+    "tools": [
+      "Web challenges",
+      "Challenge design",
+      "Team play",
+      "Write-ups"
+    ],
+    "date": "",
+    "image": "ctf-art",
+    "repositoryUrl": "https://github.com/abdullahcyberx",
+    "liveUrl": "",
+    "caseStudyContent": "",
+    "featured": true,
+    "displayOrder": 3,
+    "ethicalDisclaimer": ""
+  }
+]

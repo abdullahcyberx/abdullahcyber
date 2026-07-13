@@ -1,0 +1,38 @@
+[
+  {
+    "id": "ach-1",
+    "title": "Riphah CTF",
+    "organization": "Riphah",
+    "date": "2025",
+    "description": "CTF runner-up placement",
+    "displayOrder": 1,
+    "isBadge": false
+  },
+  {
+    "id": "ach-2",
+    "title": "Islamia Bahawalpur",
+    "organization": "Islamia Bahawalpur",
+    "date": "2025",
+    "description": "CTF runner-up placement",
+    "displayOrder": 2,
+    "isBadge": false
+  },
+  {
+    "id": "ach-3",
+    "title": "Advent of Cyber 2025",
+    "organization": "TryHackMe",
+    "date": "2025",
+    "description": "Achievement badge",
+    "displayOrder": 3,
+    "isBadge": true
+  },
+  {
+    "id": "ach-4",
+    "title": "CTF Event Organizer",
+    "organization": "Self-employed",
+    "date": "2025",
+    "description": "Organized events",
+    "displayOrder": 4,
+    "isBadge": true
+  }
+]

@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Local Portfolio Manager</title>
+  <style>
+    :root {
+      --bg: #070815; --surface: #12142B; --text: #E0E2F3; --muted: #8A8DAB;
+      --primary: #4F65F1; --primary-hover: #3b4ebd; --danger: #f14f4f;
+      --border: #2A2D53;
+    }
+    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background: var(--bg); color: var(--text); margin: 0; display: flex; height: 100vh; }
+    aside { width: 250px; background: var(--surface); border-right: 1px solid var(--border); padding: 1rem; display: flex; flex-direction: column; gap: 0.5rem; }
+    aside h2 { font-size: 1.1rem; margin: 0 0 1rem 0; color: #fff; }
+    aside button { background: none; border: none; color: var(--text); text-align: left; padding: 0.5rem; cursor: pointer; border-radius: 4px; }
+    aside button:hover, aside button.active { background: var(--border); }
+    main { flex: 1; padding: 2rem; overflow-y: auto; }
+    h1 { margin-top: 0; }
+    .form-group { margin-bottom: 1rem; display: flex; flex-direction: column; gap: 0.25rem; }
+    .form-group label { font-size: 0.9rem; color: var(--muted); }
+    input, textarea, select { background: var(--bg); border: 1px solid var(--border); color: var(--text); padding: 0.5rem; border-radius: 4px; font-family: inherit; }
+    button.btn { background: var(--primary); color: #fff; border: none; padding: 0.5rem 1rem; border-radius: 4px; cursor: pointer; }
+    button.btn:hover { background: var(--primary-hover); }
+    button.btn-danger { background: var(--danger); }
+    .list-item { background: var(--surface); border: 1px solid var(--border); padding: 1rem; margin-bottom: 1rem; border-radius: 4px; }
+    .actions { margin-top: 1rem; display: flex; gap: 1rem; }
+    .file-input { display: none; }
+    .drag-area { border: 2px dashed var(--border); padding: 2rem; text-align: center; border-radius: 8px; margin-bottom: 2rem; cursor: pointer; }
+  </style>
+</head>
+<body>
+  <aside>
+    <h2>Portfolio Manager</h2>
+    <button class="tab-btn active" onclick="switchTab('import')">Import / Export</button>
+    <button class="tab-btn" onclick="switchTab('profile')">Profile</button>
+    <button class="tab-btn" onclick="switchTab('experience')">Experience</button>
+    <button class="tab-btn" onclick="switchTab('projects')">Projects</button>
+    <button class="tab-btn" onclick="switchTab('skills')">Skills</button>
+    <button class="tab-btn" onclick="switchTab('certificates')">Certificates</button>
+    <button class="tab-btn" onclick="switchTab('achievements')">Achievements</button>
+    <button class="tab-btn" onclick="switchTab('education')">Education</button>
+    <button class="tab-btn" onclick="switchTab('seo')">SEO</button>
+    <button class="tab-btn" onclick="switchTab('ai')">AI Settings</button>
+  </aside>
+  <main>
+    <div id="import" class="tab-content">
+      <h1>Import / Export</h1>
+      <p>Select your content files from the <code>content/</code> folder or drop them below.</p>
+      <input type="file" id="file-input" class="file-input" multiple accept=".json" onchange="handleFiles(this.files)">
+      <div class="drag-area" onclick="document.getElementById('file-input').click()">
+        Click to select JSON files or Drag & Drop them here
+      </div>
+      <div class="actions">
+        <button class="btn" onclick="exportBackup()">Download Combined Backup</button>
+        <button class="btn" onclick="exportIndividual()">Download Individual JSONs</button>
+      </div>
+      <p id="loaded-status"></p>
+    </div>
+    
+    <div id="profile" class="tab-content" style="display:none;">
+      <h1>Profile</h1>
+      <div id="profile-editor"></div>
+      <button class="btn" onclick="saveProfile()">Save Changes to Memory</button>
+    </div>
+
+    <!-- Other tabs will just list items -->
+    <div id="experience" class="tab-content" style="display:none;">
+      <h1>Experience</h1>
+      <div id="experience-list"></div>
+      <button class="btn" onclick="addExperience()">Add Experience</button>
+    </div>
+    <div id="projects" class="tab-content" style="display:none;">
+      <h1>Projects</h1><div id="projects-list"></div><button class="btn" onclick="addProject()">Add Project</button>
+    </div>
+    <div id="skills" class="tab-content" style="display:none;">
+      <h1>Skills</h1><div id="skills-list"></div><button class="btn" onclick="addSkill()">Add Skill</button>
+    </div>
+    <div id="certificates" class="tab-content" style="display:none;">
+      <h1>Certificates</h1><div id="certificates-list"></div><button class="btn" onclick="addCertificate()">Add Certificate</button>
+      <p style="margin-top:1rem;font-size:0.9rem;color:var(--muted)">Certificate files must be copied into <code>public/assets/certificates/</code> manually.</p>
+    </div>
+    <div id="achievements" class="tab-content" style="display:none;">
+      <h1>Achievements</h1><div id="achievements-list"></div><button class="btn" onclick="addAchievement()">Add Achievement</button>
+    </div>
+    <div id="education" class="tab-content" style="display:none;">
+      <h1>Education</h1><div id="education-list"></div>
+    </div>
+    <div id="seo" class="tab-content" style="display:none;">
+      <h1>SEO Settings</h1><div id="seo-list"></div>
+    </div>
+    <div id="ai" class="tab-content" style="display:none;">
+      <h1>Shehzada's AI Settings</h1><div id="ai-list"></div>
+    </div>
+  </main>
+
+  <script>
+    let contentStore = {
+      profile: {}, experience: [], projects: [], skills: [], certificates: [], achievements: [], education: [], seo: {}, ai: {}
+    };
+    let unsavedChanges = false;
+
+    window.addEventListener('beforeunload', (e) => {
+      if (unsavedChanges) {
+        e.preventDefault();
+        e.returnValue = '';
+      }
+    });
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(c => c.style.display = 'none');
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      document.getElementById(tabId).style.display = 'block';
+      event.target.classList.add('active');
+      renderTab(tabId);
+    }
+
+    function handleFiles(files) {
+      Array.from(files).forEach(file => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const data = JSON.parse(e.target.result);
+            const key = file.name.replace('.json', '');
+            if (key === 'portfolio-content-backup') {
+              contentStore = { ...contentStore, ...data };
+            } else if (contentStore.hasOwnProperty(key)) {
+              contentStore[key] = data;
+            }
+            document.getElementById('loaded-status').innerText += `Loaded ${file.name}\n`;
+            unsavedChanges = false;
+          } catch (err) {
+            alert('Failed to parse ' + file.name);
+          }
+        };
+        reader.readAsText(file);
+      });
+    }
+
+    function triggerDownload(filename, text) {
+      const el = document.createElement('a');
+      el.setAttribute('href', 'data:application/json;charset=utf-8,' + encodeURIComponent(text));
+      el.setAttribute('download', filename);
+      el.style.display = 'none';
+      document.body.appendChild(el);
+      el.click();
+      document.body.removeChild(el);
+      unsavedChanges = false;
+    }
+
+    function exportBackup() {
+      triggerDownload('portfolio-content-backup.json', JSON.stringify(contentStore, null, 2));
+    }
+
+    function exportIndividual() {
+      Object.keys(contentStore).forEach(key => {
+        if(Object.keys(contentStore[key]).length > 0) {
+          triggerDownload(`${key}.json`, JSON.stringify(contentStore[key], null, 2));
+        }
+      });
+    }
+
+    function createField(label, value, type="text", key) {
+      return `
+        <div class="form-group">
+          <label>${label}</label>
+          ${type === 'textarea' ? `<textarea data-key="${key}" rows="4">${value || ''}</textarea>` 
+            : type === 'checkbox' ? `<input type="checkbox" data-key="${key}" ${value ? 'checked' : ''}>`
+            : `<input type="text" data-key="${key}" value="${value || ''}">`}
+        </div>
+      `;
+    }
+
+    function renderTab(tab) {
+      // Basic rendering logic for arrays
+      if (['experience', 'projects', 'skills', 'certificates', 'achievements', 'education'].includes(tab)) {
+        const list = document.getElementById(`${tab}-list`);
+        list.innerHTML = contentStore[tab].map((item, idx) => `
+          <div class="list-item">
+            <h3>${item.title || item.name || item.company || item.institution || item.id}</h3>
+            <button class="btn" onclick="editItem('${tab}', ${idx})">Edit</button>
+            <button class="btn btn-danger" onclick="deleteItem('${tab}', ${idx})">Delete</button>
+          </div>
+        `).join('');
+      } else if (tab === 'profile') {
+        const p = contentStore.profile;
+        document.getElementById('profile-editor').innerHTML = 
+          createField('Full Name', p.fullName, 'text', 'fullName') +
+          createField('Title', p.professionalTitle, 'text', 'professionalTitle') +
+          createField('Hero Intro', p.heroIntroduction, 'textarea', 'heroIntroduction') +
+          createField('About Text', p.aboutText, 'textarea', 'aboutText');
+      }
+    }
+
+    function saveProfile() {
+      document.querySelectorAll('#profile-editor [data-key]').forEach(el => {
+        contentStore.profile[el.dataset.key] = el.value;
+      });
+      unsavedChanges = true;
+      alert('Saved to memory!');
+    }
+
+    function deleteItem(tab, idx) {
+      if(confirm('Are you sure?')) {
+        contentStore[tab].splice(idx, 1);
+        unsavedChanges = true;
+        renderTab(tab);
+      }
+    }
+
+    // Simplified additions to prevent overly long code
+    function addExperience() { contentStore.experience.push({ id: 'new-exp', company: 'New Company', role: '', location: '', responsibilities: [], displayOrder: 99 }); renderTab('experience'); unsavedChanges = true; }
+    function addProject() { contentStore.projects.push({ id: 'new-proj', title: 'New Project', slug: 'new', tools: [], displayOrder: 99 }); renderTab('projects'); unsavedChanges = true; }
+    function addSkill() { contentStore.skills.push({ id: 'new-skill', name: 'New Skill', proficiencyValue: 50, featured: true, displayOrder: 99 }); renderTab('skills'); unsavedChanges = true; }
+    function addCertificate() { contentStore.certificates.push({ id: 'new-cert', title: 'New Certificate', slug: 'new-cert', issuer: '', issueDate: '', certificateFile: '/assets/certificates/new.pdf', featured: false, displayOrder: 99 }); renderTab('certificates'); unsavedChanges = true; }
+    function addAchievement() { contentStore.achievements.push({ id: 'new-ach', title: 'New Achievement', displayOrder: 99 }); renderTab('achievements'); unsavedChanges = true; }
+  </script>
+</body>
+</html>
