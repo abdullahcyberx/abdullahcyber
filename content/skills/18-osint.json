@@ -1,0 +1,12 @@
+{
+  "key": "osint",
+  "keyLabel": "OSINT",
+  "title": "OSINT",
+  "index": "METHOD / 17",
+  "description": "Collecting and validating publicly available information as part of structured reconnaissance.",
+  "levelLabel": "Reconnaissance",
+  "percent": 72,
+  "order": 18,
+  "wide": false,
+  "primary": false
+}

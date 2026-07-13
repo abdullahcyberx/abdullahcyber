@@ -1,0 +1,36 @@
+{
+  "assistantName": "Shehzada’s AI",
+  "greeting": "Hello — I’m Shehzada’s AI, Muhammad’s portfolio assistant. I answer from verified portfolio facts only.",
+  "unknown": "I could not verify that from Muhammad’s portfolio, so I will not invent an answer.",
+  "customFacts": [
+    {
+      "id": "availability",
+      "patterns": [
+        "is he available",
+        "availability",
+        "open to work"
+      ],
+      "keywords": [
+        "available",
+        "internship",
+        "work",
+        "opportunity"
+      ],
+      "answer": "Muhammad is open to cybersecurity internships, junior penetration-testing opportunities, CTF collaboration and practical security projects.",
+      "source": "Verified from the portfolio availability status."
+    },
+    {
+      "id": "identity",
+      "patterns": [
+        "what is your name",
+        "who are you"
+      ],
+      "keywords": [
+        "name",
+        "who"
+      ],
+      "answer": "I am Shehzada’s AI, a grounded portfolio assistant designed to answer questions about Muhammad Abdullah.",
+      "source": "AI Identity Profile"
+    }
+  ]
+}

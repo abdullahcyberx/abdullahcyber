@@ -1,0 +1,36 @@
+{
+  "name": "abdullahcyber-tinacms-portfolio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "engines": {
+    "node": "22.23.1"
+  },
+  "scripts": {
+    "dev": "node scripts/render-site.mjs && tinacms dev -c \"vite --host 0.0.0.0\"",
+    "validate": "node scripts/validate-content.mjs",
+    "security": "node scripts/security-check.mjs",
+    "render": "node scripts/render-site.mjs",
+    "build:site": "npm run validate && npm run security && npm run render && vite build",
+    "build:local": "npm run validate && npm run security && npm run render && tinacms build --local --skip-cloud-checks && vite build",
+    "build": "npm run validate && npm run security && npm run render && node scripts/require-tina-env.mjs && tinacms build && vite build",
+    "preview": "vite preview --host 0.0.0.0",
+    "test:access": "node scripts/test-access-gate.mjs",
+    "test:e2e": "playwright test",
+    "scan:secrets": "node scripts/scan-secrets.mjs",
+    "test:local": "npm run build:local && npm run test:access && npm run test:e2e && npm run scan:secrets",
+    "test:twice": "node scripts/test-twice.mjs"
+  },
+  "dependencies": {
+    "tinacms": "3.8.3"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.61.1",
+    "@tinacms/cli": "2.4.1",
+    "cheerio": "1.2.0",
+    "jose": "^6.2.3",
+    "typescript": "5.9.3",
+    "vite": "8.1.4",
+    "wrangler": "^4.110.0"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "web-rta",
+  "title": "Certified Web Red Team Analyst (WEB-RTA)",
+  "issuer": "CyberWarfare Labs",
+  "displayDate": "January 8, 2026",
+  "credentialId": "WEB-RTA-695f78e7350a0624a439e29d",
+  "featured": true,
+  "order": 1,
+  "icon": "W",
+  "file": "/assets/certificates/web-rta.pdf",
+  "verificationUrl": ""
+}

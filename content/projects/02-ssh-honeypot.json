@@ -1,0 +1,28 @@
+{
+  "title": "SSH Honeypot Deployment",
+  "slug": "ssh-honeypot",
+  "order": 2,
+  "featured": false,
+  "artStyle": "honeypot",
+  "meta": [
+    "Threat observation",
+    "Lab deployment"
+  ],
+  "description": "Deployed an SSH honeypot using sshesame inside VirtualBox to observe brute-force behavior and study attacker interaction patterns.",
+  "tools": [
+    "sshesame",
+    "VirtualBox",
+    "SSH",
+    "Attack analysis"
+  ],
+  "linkType": "modal",
+  "externalUrl": "",
+  "caseStudy": {
+    "label": "Case study / Threat observation",
+    "summary": "A lab deployment created to expose a controlled SSH service and study automated brute-force behavior in an isolated environment.",
+    "objective": "Observe login attempts, attacker patterns and the value of deception systems for security learning.",
+    "environment": "sshesame deployed inside a VirtualBox lab with controlled networking and logging.",
+    "learning": "Linux services, SSH behavior, log review, safe exposure design and basic attacker-behavior analysis.",
+    "ethics": "Isolated lab setup with no offensive interaction against external systems."
+  }
+}

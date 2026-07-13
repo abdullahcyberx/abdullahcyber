@@ -1,0 +1,12 @@
+{
+  "key": "honeypot",
+  "keyLabel": "HONEYPOT",
+  "title": "Honeypot Deployment",
+  "index": "LAB / 15",
+  "description": "Deploying intentionally exposed services to observe brute-force attempts and attacker behavior safely.",
+  "levelLabel": "Threat observation",
+  "percent": 79,
+  "order": 15,
+  "wide": false,
+  "primary": false
+}

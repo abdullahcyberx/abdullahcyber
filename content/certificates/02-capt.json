@@ -1,0 +1,12 @@
+{
+  "slug": "capt",
+  "title": "Certified Associate Penetration Tester (CAPT)",
+  "issuer": "Hack Viser",
+  "displayDate": "October 2025",
+  "credentialId": "69cb8639257cd5f5",
+  "featured": true,
+  "order": 2,
+  "icon": "C",
+  "file": "/assets/certificates/capt-hackviser.pdf",
+  "verificationUrl": ""
+}

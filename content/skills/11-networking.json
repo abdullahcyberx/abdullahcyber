@@ -1,0 +1,12 @@
+{
+  "key": "networking",
+  "keyLabel": "NETWORKING",
+  "title": "Networking Fundamentals",
+  "index": "CORE / 11",
+  "description": "Applying TCP/IP, routing, DNS, ports and service knowledge to security analysis and troubleshooting.",
+  "levelLabel": "Core foundation",
+  "percent": 86,
+  "order": 11,
+  "wide": true,
+  "primary": false
+}

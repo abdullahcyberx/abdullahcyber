@@ -1,0 +1,12 @@
+{
+  "key": "burp",
+  "keyLabel": "BURP",
+  "title": "Burp Suite",
+  "index": "TOOL / 01",
+  "description": "Intercepting, inspecting and testing web traffic to understand application behavior and identify security weaknesses.",
+  "levelLabel": "Hands-on toolkit",
+  "percent": 86,
+  "order": 1,
+  "wide": false,
+  "primary": false
+}

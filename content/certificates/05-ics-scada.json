@@ -1,0 +1,12 @@
+{
+  "slug": "ics-scada",
+  "title": "ICS/SCADA Cybersecurity",
+  "issuer": "Red Team Leaders",
+  "displayDate": "January 5, 2026",
+  "credentialId": "",
+  "featured": false,
+  "order": 5,
+  "icon": "ICS",
+  "file": "/assets/certificates/ics-scada-cybersecurity.pdf",
+  "verificationUrl": ""
+}

@@ -1,0 +1,16 @@
+node_modules/
+dist/
+.tina/
+.env
+.env.*
+!.env.example
+.DS_Store
+npm-debug.log*
+test-results/
+playwright-report/
+.wrangler/
+tina/__generated__/
+portable-node/
+node-v22.23.1-win-x64/
+.cache/
+*.log

@@ -1,0 +1,28 @@
+{
+  "title": "CTF Challenge Practice & Organization",
+  "slug": "ctf-operations",
+  "order": 3,
+  "featured": false,
+  "artStyle": "ctf",
+  "meta": [
+    "CTF operations",
+    "Community"
+  ],
+  "description": "Solving and organizing security challenges that encourage structured thinking across offensive and defensive cybersecurity concepts.",
+  "tools": [
+    "Web challenges",
+    "Challenge design",
+    "Team play",
+    "Write-ups"
+  ],
+  "linkType": "external",
+  "externalUrl": "https://github.com/abdullahcyberx",
+  "caseStudy": {
+    "label": "Case study / CTF",
+    "summary": "Competitive and community security practice.",
+    "objective": "Develop structured security thinking through hands-on challenges.",
+    "environment": "Authorized CTF platforms and organized events.",
+    "learning": "Challenge design, collaboration and problem solving.",
+    "ethics": "All activity occurs in authorized competition or educational environments."
+  }
+}

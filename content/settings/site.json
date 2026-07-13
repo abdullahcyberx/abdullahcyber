@@ -1,0 +1,75 @@
+{
+  "siteName": "Abdullah Cyber",
+  "domain": "https://abdullahcyber.dev",
+  "brandText": "MA.",
+  "profile": {
+    "name": "Muhammad Abdullah",
+    "alternateName": "Abdullah Cyber",
+    "jobTitle": "Penetration Tester",
+    "location": "Pakistan",
+    "email": "abdullahcyberx@gmail.com",
+    "github": "https://github.com/abdullahcyberx",
+    "linkedin": "https://www.linkedin.com/in/hafizabdullahx",
+    "cv": "/assets/Muhammad-Abdullah-CV.pdf"
+  },
+  "hero": {
+    "status": "Pakistan · Open to cybersecurity opportunities",
+    "eyebrow": "Cyber Security at Riphah · Web pentesting · CTF",
+    "firstName": "Muhammad",
+    "lastName": "Abdullah",
+    "roles": [
+      "Penetration Tester",
+      "Web Security Enthusiast",
+      "CTF Organizer & Player"
+    ],
+    "description": "I’m Muhammad Abdullah, also known online as Abdullah Cyber—a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing, practical labs and CTF challenges.",
+    "primaryButton": "Explore my work",
+    "secondaryButton": "Start a conversation"
+  },
+  "about": {
+    "eyebrow": "01 / About",
+    "headingLine1": "Curiosity turned into a",
+    "headingHighlight": "security mindset.",
+    "lead": "I focus on web penetration testing—understanding how applications behave, questioning their trust boundaries and finding weaknesses before attackers do.",
+    "paragraphs": [
+      "As a Bachelor of Cyber Security student at Riphah International University, I am building practical experience in Pakistan through authorized assessments, security labs, internships and CTF events.",
+      "My learning is practical: I combine Linux, networking and Docker fundamentals with vulnerability testing, security controls and CTF problem-solving. I am continuously improving through labs, projects and collaborative security events."
+    ],
+    "quote": "Security is not only about tools. It starts with understanding what an application assumes—and what happens when those assumptions break.",
+    "focus": "Web Penetration Testing",
+    "approach": "Hands-on & logic driven",
+    "educationShort": "BS Cyber Security · Riphah",
+    "contextTitle": "Cyber Security student at Riphah International University",
+    "contextText": "Muhammad Abdullah’s portfolio documents practical web security learning in Pakistan, including penetration-testing internships, authorized phishing-awareness work, an SSH honeypot lab and competitive CTF experience."
+  },
+  "contact": {
+    "eyebrow": "07 / Contact",
+    "headingLine1": "Let’s investigate the",
+    "headingHighlight": "next opportunity.",
+    "description": "For internships, junior penetration-testing roles, CTF collaboration or security projects, send me a message.",
+    "formNote": "This opens your email app—no information is stored."
+  },
+  "footer": {
+    "tagline": "Penetration tester exploring the space between assumptions and security."
+  },
+  "seo": {
+    "title": "Abdullah Cyber | Muhammad Abdullah — Cyber Security Pakistan",
+    "description": "Muhammad Abdullah (Abdullah Cyber) is a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing and CTFs.",
+    "keywords": [
+      "Muhammad Abdullah",
+      "Abdullah Cyber",
+      "cyber security Riphah",
+      "cyber security in Pakistan",
+      "penetration tester Pakistan",
+      "web penetration testing",
+      "cybersecurity portfolio",
+      "CTF Pakistan"
+    ],
+    "ogTitle": "Abdullah Cyber | Muhammad Abdullah — Cyber Security Pakistan",
+    "ogDescription": "Cyber Security student at Riphah International University, Pakistan. Explore Muhammad Abdullah’s web penetration-testing projects, CTF achievements and credentials.",
+    "ogImage": "/assets/abdullah-cyber-og.png"
+  },
+  "security": {
+    "denialMessage": "not here boy 🙂"
+  }
+}

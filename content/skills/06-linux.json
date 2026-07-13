@@ -1,0 +1,12 @@
+{
+  "key": "linux",
+  "keyLabel": "LINUX",
+  "title": "Linux",
+  "index": "PLATFORM / 06",
+  "description": "Working comfortably with the command line, permissions, services and common security workflows.",
+  "levelLabel": "Daily environment",
+  "percent": 87,
+  "order": 6,
+  "wide": false,
+  "primary": false
+}

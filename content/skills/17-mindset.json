@@ -1,0 +1,12 @@
+{
+  "key": "mindset",
+  "keyLabel": "SECURITY MINDSET",
+  "title": "Security Mindset",
+  "index": "CORE / 00",
+  "description": "Understanding application logic, questioning trust boundaries and combining tools with structured reasoning.",
+  "levelLabel": "Primary approach",
+  "percent": 92,
+  "order": 17,
+  "wide": true,
+  "primary": true
+}

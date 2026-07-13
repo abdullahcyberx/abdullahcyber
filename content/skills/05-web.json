@@ -1,0 +1,12 @@
+{
+  "key": "web",
+  "keyLabel": "WEB TESTING",
+  "title": "Web Penetration Testing",
+  "index": "FOCUS / 05",
+  "description": "Testing authentication, authorization, input handling and business logic in authorized web applications.",
+  "levelLabel": "Primary focus",
+  "percent": 92,
+  "order": 5,
+  "wide": true,
+  "primary": false
+}

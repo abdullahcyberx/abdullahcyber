@@ -1,0 +1,12 @@
+{
+  "key": "gophish",
+  "keyLabel": "GOPHISH",
+  "title": "Gophish",
+  "index": "TOOL / 14",
+  "description": "Creating controlled and authorized phishing simulations for awareness assessment and education.",
+  "levelLabel": "Campaign tooling",
+  "percent": 80,
+  "order": 14,
+  "wide": false,
+  "primary": false
+}

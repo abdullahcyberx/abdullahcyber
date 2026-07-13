@@ -1,0 +1,12 @@
+{
+  "key": "nmap",
+  "keyLabel": "NMAP",
+  "title": "Nmap",
+  "index": "TOOL / 02",
+  "description": "Mapping hosts, services and exposed ports to build an informed picture of a target environment.",
+  "levelLabel": "Network discovery",
+  "percent": 84,
+  "order": 2,
+  "wide": false,
+  "primary": false
+}

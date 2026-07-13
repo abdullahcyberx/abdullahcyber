@@ -1,0 +1,15 @@
+{
+  "title": "Cyber Security Intern",
+  "organization": "Digital Empowerment Network",
+  "location": "Remote",
+  "period": "Jul — Sep 2025",
+  "type": "Internship",
+  "current": false,
+  "order": 3,
+  "description": "Conducted penetration testing and vulnerability assessments in simulated attack environments, identifying weaknesses and recommending improvements.",
+  "skills": [
+    "Vulnerability assessment",
+    "Reporting",
+    "Simulated attacks"
+  ]
+}

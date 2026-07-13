@@ -1,0 +1,12 @@
+{
+  "key": "wireshark",
+  "keyLabel": "WIRESHARK",
+  "title": "Wireshark",
+  "index": "TOOL / 04",
+  "description": "Inspecting packets and protocols to understand network conversations and troubleshoot suspicious behavior.",
+  "levelLabel": "Traffic analysis",
+  "percent": 78,
+  "order": 4,
+  "wide": false,
+  "primary": false
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "network-defense",
+  "title": "Network Defense",
+  "issuer": "Cisco Networking Academy",
+  "displayDate": "May 6, 2025",
+  "credentialId": "",
+  "featured": false,
+  "order": 7,
+  "icon": "ND",
+  "file": "/assets/certificates/cisco-network-defense.pdf",
+  "verificationUrl": ""
+}

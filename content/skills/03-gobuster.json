@@ -1,0 +1,12 @@
+{
+  "key": "gobuster",
+  "keyLabel": "GOBUSTER",
+  "title": "Gobuster",
+  "index": "TOOL / 03",
+  "description": "Discovering hidden web paths, virtual hosts and DNS entries during authorized reconnaissance.",
+  "levelLabel": "Content discovery",
+  "percent": 80,
+  "order": 3,
+  "wide": false,
+  "primary": false
+}

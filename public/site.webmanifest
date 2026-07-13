@@ -1,0 +1,24 @@
+{
+  "name": "Muhammad Abdullah \u2014 Abdullah Cyber",
+  "short_name": "Abdullah Cyber",
+  "description": "Cyber Security and penetration-testing portfolio of Muhammad Abdullah.",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#070815",
+  "theme_color": "#070815",
+  "lang": "en-PK",
+  "icons": [
+    {
+      "src": "/assets/apple-touch-icon.png",
+      "sizes": "180x180",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}

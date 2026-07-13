@@ -1,0 +1,17 @@
+{
+  "title": "Cyber Security Intern",
+  "organization": "Inara Technologies",
+  "location": "On-site",
+  "period": "Jan — Mar 2026",
+  "type": "Internship",
+  "current": false,
+  "order": 2,
+  "description": "Completed practical training across Linux administration, networking, Docker, security principles, access control, firewalls, IDS, malware analysis and web vulnerability testing.",
+  "skills": [
+    "Linux",
+    "Networking",
+    "Docker",
+    "SQL injection",
+    "XSS"
+  ]
+}

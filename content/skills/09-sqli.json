@@ -1,0 +1,12 @@
+{
+  "key": "sqli",
+  "keyLabel": "SQLi",
+  "title": "SQL Injection",
+  "index": "VULN / 09",
+  "description": "Understanding how unsafe query handling can expose, alter or destroy application data.",
+  "levelLabel": "Web vulnerability",
+  "percent": 82,
+  "order": 9,
+  "wide": false,
+  "primary": false
+}

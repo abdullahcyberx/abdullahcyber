@@ -1,0 +1,12 @@
+{
+  "key": "docker",
+  "keyLabel": "DOCKER",
+  "title": "Docker",
+  "index": "PLATFORM / 07",
+  "description": "Using containers to build isolated labs, reproduce environments and support security testing workflows.",
+  "levelLabel": "Lab environment",
+  "percent": 76,
+  "order": 7,
+  "wide": false,
+  "primary": false
+}

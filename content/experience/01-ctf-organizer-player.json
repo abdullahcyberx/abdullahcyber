@@ -1,0 +1,16 @@
+{
+  "title": "CTF Organizer & Player",
+  "organization": "Self-employed",
+  "location": "Remote",
+  "period": "2025 — Present",
+  "type": "Current",
+  "current": true,
+  "order": 1,
+  "description": "Organizing and solving capture-the-flag challenges with an emphasis on offensive and defensive cybersecurity techniques.",
+  "skills": [
+    "CTF design",
+    "Web exploitation",
+    "Problem solving",
+    "Team collaboration"
+  ]
+}

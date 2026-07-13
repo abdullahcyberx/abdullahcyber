@@ -1,0 +1,12 @@
+{
+  "key": "ids",
+  "keyLabel": "IDS",
+  "title": "IDS Concepts",
+  "index": "CONTROL / 13",
+  "description": "Studying how intrusion detection systems identify suspicious activity and support defensive monitoring.",
+  "levelLabel": "Defensive awareness",
+  "percent": 70,
+  "order": 13,
+  "wide": false,
+  "primary": false
+}

@@ -1,0 +1,28 @@
+{
+  "title": "Authorized Phishing Awareness Campaign",
+  "slug": "phishing-awareness",
+  "order": 1,
+  "featured": true,
+  "artStyle": "phishing",
+  "meta": [
+    "Social engineering",
+    "Academic supervision"
+  ],
+  "description": "Designed and conducted an authorized Gophish simulation to assess real-world phishing awareness among students in a controlled academic setting.",
+  "tools": [
+    "Gophish",
+    "Campaign design",
+    "Awareness testing",
+    "Ethical scope"
+  ],
+  "linkType": "modal",
+  "externalUrl": "",
+  "caseStudy": {
+    "label": "Case study / Social engineering",
+    "summary": "A controlled, academically supervised simulation designed to evaluate how users respond to realistic phishing cues without exposing participants to harmful content.",
+    "objective": "Assess awareness, observe interaction patterns and identify opportunities for better security education.",
+    "environment": "Gophish-based campaign conducted under academic supervision with an explicitly authorized scope.",
+    "learning": "Campaign configuration, ethical scoping, communication design, result interpretation and awareness-focused reporting.",
+    "ethics": "No unauthorized targeting. The activity was conducted as a supervised learning exercise with a defined audience and purpose."
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "slug": "advent-cyber",
+  "title": "Advent of Cyber 2025",
+  "issuer": "TryHackMe",
+  "displayDate": "December 25, 2025",
+  "credentialId": "",
+  "featured": false,
+  "order": 10,
+  "icon": "THM",
+  "file": "/assets/certificates/tryhackme-advent-of-cyber-2025.pdf",
+  "verificationUrl": ""
+}

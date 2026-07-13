@@ -1,0 +1,719 @@
+{
+  "settings": {
+    "siteName": "Abdullah Cyber",
+    "domain": "https://abdullahcyber.dev",
+    "brandText": "MA.",
+    "profile": {
+      "name": "Muhammad Abdullah",
+      "alternateName": "Abdullah Cyber",
+      "jobTitle": "Penetration Tester",
+      "location": "Pakistan",
+      "email": "abdullahcyberx@gmail.com",
+      "github": "https://github.com/abdullahcyberx",
+      "linkedin": "https://www.linkedin.com/in/hafizabdullahx",
+      "cv": "/assets/Muhammad-Abdullah-CV.pdf"
+    },
+    "hero": {
+      "status": "Pakistan · Open to cybersecurity opportunities",
+      "eyebrow": "Cyber Security at Riphah · Web pentesting · CTF",
+      "firstName": "Muhammad",
+      "lastName": "Abdullah",
+      "roles": [
+        "Penetration Tester",
+        "Web Security Enthusiast",
+        "CTF Organizer & Player"
+      ],
+      "description": "I’m Muhammad Abdullah, also known online as Abdullah Cyber—a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing, practical labs and CTF challenges.",
+      "primaryButton": "Explore my work",
+      "secondaryButton": "Start a conversation"
+    },
+    "about": {
+      "eyebrow": "01 / About",
+      "headingLine1": "Curiosity turned into a",
+      "headingHighlight": "security mindset.",
+      "lead": "I focus on web penetration testing—understanding how applications behave, questioning their trust boundaries and finding weaknesses before attackers do.",
+      "paragraphs": [
+        "As a Bachelor of Cyber Security student at Riphah International University, I am building practical experience in Pakistan through authorized assessments, security labs, internships and CTF events.",
+        "My learning is practical: I combine Linux, networking and Docker fundamentals with vulnerability testing, security controls and CTF problem-solving. I am continuously improving through labs, projects and collaborative security events."
+      ],
+      "quote": "Security is not only about tools. It starts with understanding what an application assumes—and what happens when those assumptions break.",
+      "focus": "Web Penetration Testing",
+      "approach": "Hands-on & logic driven",
+      "educationShort": "BS Cyber Security · Riphah",
+      "contextTitle": "Cyber Security student at Riphah International University",
+      "contextText": "Muhammad Abdullah’s portfolio documents practical web security learning in Pakistan, including penetration-testing internships, authorized phishing-awareness work, an SSH honeypot lab and competitive CTF experience."
+    },
+    "contact": {
+      "eyebrow": "07 / Contact",
+      "headingLine1": "Let’s investigate the",
+      "headingHighlight": "next opportunity.",
+      "description": "For internships, junior penetration-testing roles, CTF collaboration or security projects, send me a message.",
+      "formNote": "This opens your email app—no information is stored."
+    },
+    "footer": {
+      "tagline": "Penetration tester exploring the space between assumptions and security."
+    },
+    "seo": {
+      "title": "Abdullah Cyber | Muhammad Abdullah — Cyber Security Pakistan",
+      "description": "Muhammad Abdullah (Abdullah Cyber) is a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing and CTFs.",
+      "keywords": [
+        "Muhammad Abdullah",
+        "Abdullah Cyber",
+        "cyber security Riphah",
+        "cyber security in Pakistan",
+        "penetration tester Pakistan",
+        "web penetration testing",
+        "cybersecurity portfolio",
+        "CTF Pakistan"
+      ],
+      "ogTitle": "Abdullah Cyber | Muhammad Abdullah — Cyber Security Pakistan",
+      "ogDescription": "Cyber Security student at Riphah International University, Pakistan. Explore Muhammad Abdullah’s web penetration-testing projects, CTF achievements and credentials.",
+      "ogImage": "/assets/abdullah-cyber-og.png"
+    },
+    "security": {
+      "denialMessage": "not here boy 🙂"
+    }
+  },
+  "experiences": [
+    {
+      "title": "CTF Organizer & Player",
+      "organization": "Self-employed",
+      "location": "Remote",
+      "period": "2025 — Present",
+      "type": "Current",
+      "current": true,
+      "order": 1,
+      "description": "Organizing and solving capture-the-flag challenges with an emphasis on offensive and defensive cybersecurity techniques.",
+      "skills": [
+        "CTF design",
+        "Web exploitation",
+        "Problem solving",
+        "Team collaboration"
+      ]
+    },
+    {
+      "title": "Cyber Security Intern",
+      "organization": "Inara Technologies",
+      "location": "On-site",
+      "period": "Jan — Mar 2026",
+      "type": "Internship",
+      "current": false,
+      "order": 2,
+      "description": "Completed practical training across Linux administration, networking, Docker, security principles, access control, firewalls, IDS, malware analysis and web vulnerability testing.",
+      "skills": [
+        "Linux",
+        "Networking",
+        "Docker",
+        "SQL injection",
+        "XSS"
+      ]
+    },
+    {
+      "title": "Cyber Security Intern",
+      "organization": "Digital Empowerment Network",
+      "location": "Remote",
+      "period": "Jul — Sep 2025",
+      "type": "Internship",
+      "current": false,
+      "order": 3,
+      "description": "Conducted penetration testing and vulnerability assessments in simulated attack environments, identifying weaknesses and recommending improvements.",
+      "skills": [
+        "Vulnerability assessment",
+        "Reporting",
+        "Simulated attacks"
+      ]
+    }
+  ],
+  "skills": [
+    {
+      "key": "burp",
+      "keyLabel": "BURP",
+      "title": "Burp Suite",
+      "index": "TOOL / 01",
+      "description": "Intercepting, inspecting and testing web traffic to understand application behavior and identify security weaknesses.",
+      "levelLabel": "Hands-on toolkit",
+      "percent": 86,
+      "order": 1,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "nmap",
+      "keyLabel": "NMAP",
+      "title": "Nmap",
+      "index": "TOOL / 02",
+      "description": "Mapping hosts, services and exposed ports to build an informed picture of a target environment.",
+      "levelLabel": "Network discovery",
+      "percent": 84,
+      "order": 2,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "gobuster",
+      "keyLabel": "GOBUSTER",
+      "title": "Gobuster",
+      "index": "TOOL / 03",
+      "description": "Discovering hidden web paths, virtual hosts and DNS entries during authorized reconnaissance.",
+      "levelLabel": "Content discovery",
+      "percent": 80,
+      "order": 3,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "wireshark",
+      "keyLabel": "WIRESHARK",
+      "title": "Wireshark",
+      "index": "TOOL / 04",
+      "description": "Inspecting packets and protocols to understand network conversations and troubleshoot suspicious behavior.",
+      "levelLabel": "Traffic analysis",
+      "percent": 78,
+      "order": 4,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "web",
+      "keyLabel": "WEB TESTING",
+      "title": "Web Penetration Testing",
+      "index": "FOCUS / 05",
+      "description": "Testing authentication, authorization, input handling and business logic in authorized web applications.",
+      "levelLabel": "Primary focus",
+      "percent": 92,
+      "order": 5,
+      "wide": true,
+      "primary": false
+    },
+    {
+      "key": "linux",
+      "keyLabel": "LINUX",
+      "title": "Linux",
+      "index": "PLATFORM / 06",
+      "description": "Working comfortably with the command line, permissions, services and common security workflows.",
+      "levelLabel": "Daily environment",
+      "percent": 87,
+      "order": 6,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "docker",
+      "keyLabel": "DOCKER",
+      "title": "Docker",
+      "index": "PLATFORM / 07",
+      "description": "Using containers to build isolated labs, reproduce environments and support security testing workflows.",
+      "levelLabel": "Lab environment",
+      "percent": 76,
+      "order": 7,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "vulnerability",
+      "keyLabel": "VULN ASSESS",
+      "title": "Vulnerability Assessment",
+      "index": "METHOD / 08",
+      "description": "Identifying, validating, prioritizing and communicating security weaknesses with practical recommendations.",
+      "levelLabel": "Assessment workflow",
+      "percent": 85,
+      "order": 8,
+      "wide": true,
+      "primary": false
+    },
+    {
+      "key": "sqli",
+      "keyLabel": "SQLi",
+      "title": "SQL Injection",
+      "index": "VULN / 09",
+      "description": "Understanding how unsafe query handling can expose, alter or destroy application data.",
+      "levelLabel": "Web vulnerability",
+      "percent": 82,
+      "order": 9,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "xss",
+      "keyLabel": "XSS",
+      "title": "Cross-Site Scripting",
+      "index": "VULN / 10",
+      "description": "Testing how untrusted input reaches the browser and can affect users or application sessions.",
+      "levelLabel": "Web vulnerability",
+      "percent": 82,
+      "order": 10,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "networking",
+      "keyLabel": "NETWORKING",
+      "title": "Networking Fundamentals",
+      "index": "CORE / 11",
+      "description": "Applying TCP/IP, routing, DNS, ports and service knowledge to security analysis and troubleshooting.",
+      "levelLabel": "Core foundation",
+      "percent": 86,
+      "order": 11,
+      "wide": true,
+      "primary": false
+    },
+    {
+      "key": "firewall",
+      "keyLabel": "FIREWALL",
+      "title": "Firewall Configuration",
+      "index": "CONTROL / 12",
+      "description": "Understanding filtering rules and network boundaries through practical firewall setup labs.",
+      "levelLabel": "Security control",
+      "percent": 73,
+      "order": 12,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "ids",
+      "keyLabel": "IDS",
+      "title": "IDS Concepts",
+      "index": "CONTROL / 13",
+      "description": "Studying how intrusion detection systems identify suspicious activity and support defensive monitoring.",
+      "levelLabel": "Defensive awareness",
+      "percent": 70,
+      "order": 13,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "gophish",
+      "keyLabel": "GOPHISH",
+      "title": "Gophish",
+      "index": "TOOL / 14",
+      "description": "Creating controlled and authorized phishing simulations for awareness assessment and education.",
+      "levelLabel": "Campaign tooling",
+      "percent": 80,
+      "order": 14,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "honeypot",
+      "keyLabel": "HONEYPOT",
+      "title": "Honeypot Deployment",
+      "index": "LAB / 15",
+      "description": "Deploying intentionally exposed services to observe brute-force attempts and attacker behavior safely.",
+      "levelLabel": "Threat observation",
+      "percent": 79,
+      "order": 15,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "ctf",
+      "keyLabel": "CTF",
+      "title": "CTF Challenges",
+      "index": "PRACTICE / 16",
+      "description": "Solving and organizing practical challenges that develop security intuition, creativity and teamwork.",
+      "levelLabel": "Competitive practice",
+      "percent": 90,
+      "order": 16,
+      "wide": false,
+      "primary": false
+    },
+    {
+      "key": "mindset",
+      "keyLabel": "SECURITY MINDSET",
+      "title": "Security Mindset",
+      "index": "CORE / 00",
+      "description": "Understanding application logic, questioning trust boundaries and combining tools with structured reasoning.",
+      "levelLabel": "Primary approach",
+      "percent": 92,
+      "order": 17,
+      "wide": true,
+      "primary": true
+    },
+    {
+      "key": "osint",
+      "keyLabel": "OSINT",
+      "title": "OSINT",
+      "index": "METHOD / 17",
+      "description": "Collecting and validating publicly available information as part of structured reconnaissance.",
+      "levelLabel": "Reconnaissance",
+      "percent": 72,
+      "order": 18,
+      "wide": false,
+      "primary": false
+    }
+  ],
+  "projects": [
+    {
+      "title": "Authorized Phishing Awareness Campaign",
+      "slug": "phishing-awareness",
+      "order": 1,
+      "featured": true,
+      "artStyle": "phishing",
+      "meta": [
+        "Social engineering",
+        "Academic supervision"
+      ],
+      "description": "Designed and conducted an authorized Gophish simulation to assess real-world phishing awareness among students in a controlled academic setting.",
+      "tools": [
+        "Gophish",
+        "Campaign design",
+        "Awareness testing",
+        "Ethical scope"
+      ],
+      "linkType": "modal",
+      "externalUrl": "",
+      "caseStudy": {
+        "label": "Case study / Social engineering",
+        "summary": "A controlled, academically supervised simulation designed to evaluate how users respond to realistic phishing cues without exposing participants to harmful content.",
+        "objective": "Assess awareness, observe interaction patterns and identify opportunities for better security education.",
+        "environment": "Gophish-based campaign conducted under academic supervision with an explicitly authorized scope.",
+        "learning": "Campaign configuration, ethical scoping, communication design, result interpretation and awareness-focused reporting.",
+        "ethics": "No unauthorized targeting. The activity was conducted as a supervised learning exercise with a defined audience and purpose."
+      }
+    },
+    {
+      "title": "SSH Honeypot Deployment",
+      "slug": "ssh-honeypot",
+      "order": 2,
+      "featured": false,
+      "artStyle": "honeypot",
+      "meta": [
+        "Threat observation",
+        "Lab deployment"
+      ],
+      "description": "Deployed an SSH honeypot using sshesame inside VirtualBox to observe brute-force behavior and study attacker interaction patterns.",
+      "tools": [
+        "sshesame",
+        "VirtualBox",
+        "SSH",
+        "Attack analysis"
+      ],
+      "linkType": "modal",
+      "externalUrl": "",
+      "caseStudy": {
+        "label": "Case study / Threat observation",
+        "summary": "A lab deployment created to expose a controlled SSH service and study automated brute-force behavior in an isolated environment.",
+        "objective": "Observe login attempts, attacker patterns and the value of deception systems for security learning.",
+        "environment": "sshesame deployed inside a VirtualBox lab with controlled networking and logging.",
+        "learning": "Linux services, SSH behavior, log review, safe exposure design and basic attacker-behavior analysis.",
+        "ethics": "Isolated lab setup with no offensive interaction against external systems."
+      }
+    },
+    {
+      "title": "CTF Challenge Practice & Organization",
+      "slug": "ctf-operations",
+      "order": 3,
+      "featured": false,
+      "artStyle": "ctf",
+      "meta": [
+        "CTF operations",
+        "Community"
+      ],
+      "description": "Solving and organizing security challenges that encourage structured thinking across offensive and defensive cybersecurity concepts.",
+      "tools": [
+        "Web challenges",
+        "Challenge design",
+        "Team play",
+        "Write-ups"
+      ],
+      "linkType": "external",
+      "externalUrl": "https://github.com/abdullahcyberx",
+      "caseStudy": {
+        "label": "Case study / CTF",
+        "summary": "Competitive and community security practice.",
+        "objective": "Develop structured security thinking through hands-on challenges.",
+        "environment": "Authorized CTF platforms and organized events.",
+        "learning": "Challenge design, collaboration and problem solving.",
+        "ethics": "All activity occurs in authorized competition or educational environments."
+      }
+    }
+  ],
+  "certificates": [
+    {
+      "slug": "web-rta",
+      "title": "Certified Web Red Team Analyst (WEB-RTA)",
+      "issuer": "CyberWarfare Labs",
+      "displayDate": "January 8, 2026",
+      "credentialId": "WEB-RTA-695f78e7350a0624a439e29d",
+      "featured": true,
+      "order": 1,
+      "icon": "W",
+      "file": "/assets/certificates/web-rta.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "capt",
+      "title": "Certified Associate Penetration Tester (CAPT)",
+      "issuer": "Hack Viser",
+      "displayDate": "October 2025",
+      "credentialId": "69cb8639257cd5f5",
+      "featured": true,
+      "order": 2,
+      "icon": "C",
+      "file": "/assets/certificates/capt-hackviser.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "cpps",
+      "title": "Certified Phishing Prevention Specialist",
+      "issuer": "Hack & Fix",
+      "displayDate": "December 17, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 3,
+      "icon": "CP",
+      "file": "/assets/certificates/cpps-phishing-prevention.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "crtom",
+      "title": "Red Team Operations Management",
+      "issuer": "Red Team Leaders",
+      "displayDate": "December 24, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 4,
+      "icon": "RT",
+      "file": "/assets/certificates/crtom-red-team-operations.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "ics-scada",
+      "title": "ICS/SCADA Cybersecurity",
+      "issuer": "Red Team Leaders",
+      "displayDate": "January 5, 2026",
+      "credentialId": "",
+      "featured": false,
+      "order": 5,
+      "icon": "ICS",
+      "file": "/assets/certificates/ics-scada-cybersecurity.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "cybersecurity-essentials",
+      "title": "Cybersecurity Essentials",
+      "issuer": "Cisco Networking Academy",
+      "displayDate": "December 4, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 6,
+      "icon": "CS",
+      "file": "/assets/certificates/cisco-cybersecurity-essentials.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "network-defense",
+      "title": "Network Defense",
+      "issuer": "Cisco Networking Academy",
+      "displayDate": "May 6, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 7,
+      "icon": "ND",
+      "file": "/assets/certificates/cisco-network-defense.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "intro-cybersecurity",
+      "title": "Introduction to Cybersecurity",
+      "issuer": "Cisco Networking Academy",
+      "displayDate": "April 27, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 8,
+      "icon": "IC",
+      "file": "/assets/certificates/cisco-introduction-cybersecurity.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "security-principles",
+      "title": "Security Principles",
+      "issuer": "ISC2 via Coursera",
+      "displayDate": "July 10, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 9,
+      "icon": "ISC",
+      "file": "/assets/certificates/isc2-security-principles-coursera.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "advent-cyber",
+      "title": "Advent of Cyber 2025",
+      "issuer": "TryHackMe",
+      "displayDate": "December 25, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 10,
+      "icon": "THM",
+      "file": "/assets/certificates/tryhackme-advent-of-cyber-2025.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "linux-essential",
+      "title": "Linux & Essential Cybersecurity",
+      "issuer": "UrduCourses",
+      "displayDate": "March 21, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 11,
+      "icon": "LX",
+      "file": "/assets/certificates/cybersavvy-linux-essential-cybersecurity.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "den-internship",
+      "title": "Cyber Security Internship",
+      "issuer": "Digital Empowerment Network",
+      "displayDate": "September 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 12,
+      "icon": "IN",
+      "file": "/assets/certificates/digital-empowerment-network-internship.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "it-essentials",
+      "title": "IT Essentials",
+      "issuer": "Cisco Networking Academy",
+      "displayDate": "December 16, 2024",
+      "credentialId": "",
+      "featured": false,
+      "order": 13,
+      "icon": "IT",
+      "file": "/assets/certificates/cisco-it-essentials.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "intro-iot",
+      "title": "Introduction to IoT & Digital Transformation",
+      "issuer": "Cisco Networking Academy",
+      "displayDate": "April 26, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 14,
+      "icon": "IoT",
+      "file": "/assets/certificates/cisco-introduction-iot.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "cpp-essentials",
+      "title": "C++ Essentials 1",
+      "issuer": "Cisco Networking Academy",
+      "displayDate": "January 8, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 15,
+      "icon": "C+",
+      "file": "/assets/certificates/cisco-cpp-essentials-1.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "cpp-advanced",
+      "title": "C++ Advanced",
+      "issuer": "Cisco Networking Academy",
+      "displayDate": "December 6, 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 16,
+      "icon": "C++",
+      "file": "/assets/certificates/cisco-cpp-advanced.pdf",
+      "verificationUrl": ""
+    },
+    {
+      "slug": "nascon",
+      "title": "NaSCon'25 Participation",
+      "issuer": "FAST-NUCES Islamabad",
+      "displayDate": "April 2025",
+      "credentialId": "",
+      "featured": false,
+      "order": 17,
+      "icon": "NC",
+      "file": "/assets/certificates/nascon-2025-participation.pdf",
+      "verificationUrl": ""
+    }
+  ],
+  "achievements": [
+    {
+      "title": "2nd Place — Riphah CTF",
+      "shortTitle": "Riphah CTF",
+      "category": "Runner-up",
+      "order": 1
+    },
+    {
+      "title": "2nd Place — Islamia Bahawalpur CTF",
+      "shortTitle": "Islamia Bahawalpur",
+      "category": "Runner-up",
+      "order": 2
+    },
+    {
+      "title": "Advent of Cyber 2025",
+      "shortTitle": "Advent of Cyber 2025",
+      "category": "Learning",
+      "order": 3
+    },
+    {
+      "title": "CTF Event Organizer — Riphah University",
+      "shortTitle": "CTF Event Organizer",
+      "category": "Community",
+      "order": 4
+    }
+  ],
+  "education": {
+    "degree": "Bachelor of Cyber Security",
+    "institution": "Riphah International University",
+    "expectedCompletion": "2028",
+    "eyebrow": "06 / Education",
+    "extras": [
+      {
+        "title": "Hafiz-e-Quran",
+        "description": "Discipline, consistency and focus."
+      },
+      {
+        "title": "100+ WPM",
+        "description": "Fast, accurate keyboard workflow."
+      },
+      {
+        "title": "Vibe Coder",
+        "description": "Turning ideas into working digital experiences."
+      }
+    ]
+  },
+  "ai": {
+    "assistantName": "Shehzada’s AI",
+    "greeting": "Hello — I’m Shehzada’s AI, Muhammad’s portfolio assistant. I answer from verified portfolio facts only.",
+    "unknown": "I could not verify that from Muhammad’s portfolio, so I will not invent an answer.",
+    "customFacts": [
+      {
+        "id": "availability",
+        "patterns": [
+          "is he available",
+          "availability",
+          "open to work"
+        ],
+        "keywords": [
+          "available",
+          "internship",
+          "work",
+          "opportunity"
+        ],
+        "answer": "Muhammad is open to cybersecurity internships, junior penetration-testing opportunities, CTF collaboration and practical security projects.",
+        "source": "Verified from the portfolio availability status."
+      },
+      {
+        "id": "identity",
+        "patterns": [
+          "what is your name",
+          "who are you"
+        ],
+        "keywords": [
+          "name",
+          "who"
+        ],
+        "answer": "I am Shehzada’s AI, a grounded portfolio assistant designed to answer questions about Muhammad Abdullah.",
+        "source": "AI Identity Profile"
+      }
+    ]
+  }
+}

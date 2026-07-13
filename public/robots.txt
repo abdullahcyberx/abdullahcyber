@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /admin/
+Disallow: /not-here-boy/
+
+Sitemap: https://abdullahcyber.dev/sitemap.xml

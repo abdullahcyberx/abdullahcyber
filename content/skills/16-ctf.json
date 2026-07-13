@@ -1,0 +1,12 @@
+{
+  "key": "ctf",
+  "keyLabel": "CTF",
+  "title": "CTF Challenges",
+  "index": "PRACTICE / 16",
+  "description": "Solving and organizing practical challenges that develop security intuition, creativity and teamwork.",
+  "levelLabel": "Competitive practice",
+  "percent": 90,
+  "order": 16,
+  "wide": false,
+  "primary": false
+}

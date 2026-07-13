@@ -1,0 +1,12 @@
+{
+  "key": "firewall",
+  "keyLabel": "FIREWALL",
+  "title": "Firewall Configuration",
+  "index": "CONTROL / 12",
+  "description": "Understanding filtering rules and network boundaries through practical firewall setup labs.",
+  "levelLabel": "Security control",
+  "percent": 73,
+  "order": 12,
+  "wide": false,
+  "primary": false
+}

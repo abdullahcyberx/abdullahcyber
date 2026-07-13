@@ -1,0 +1,12 @@
+{
+  "key": "xss",
+  "keyLabel": "XSS",
+  "title": "Cross-Site Scripting",
+  "index": "VULN / 10",
+  "description": "Testing how untrusted input reaches the browser and can affect users or application sessions.",
+  "levelLabel": "Web vulnerability",
+  "percent": 82,
+  "order": 10,
+  "wide": false,
+  "primary": false
+}
