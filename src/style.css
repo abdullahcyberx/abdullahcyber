@@ -1876,10 +1876,73 @@ body.ai-open {
     font-size: clamp(2rem, 8vw, 3.5rem);
   }
 
-  .project-row {
-    grid-template-columns: 40px 1fr;
-    gap: 12px;
-    padding: 28px 0;
+  .project-row,
+  .project-split,
+  .project-split-reverse,
+  .project-horizontal {
+    display: flex;
+    flex-direction: column;
+    grid-template-columns: none;
+    gap: 20px;
+    width: 100%;
+    min-width: 0;
+    padding: 32px 0;
+  }
+
+  .project-number {
+    order: 0;
+    width: auto;
+    padding: 0;
+  }
+
+  .project-visual-container {
+    order: 1;
+    width: 100%;
+    min-width: 0;
+    min-height: 220px;
+    grid-column: auto;
+    margin: 0;
+  }
+
+  .project-content,
+  .project-split .project-content,
+  .project-split-reverse .project-content,
+  .project-horizontal .project-content {
+    order: 2;
+    width: 100%;
+    min-width: 0;
+    grid-column: auto;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .project-title,
+  .project-category,
+  .project-tools,
+  .project-desc {
+    width: 100%;
+    max-width: 100%;
+    min-width: 0;
+    word-break: normal;
+    overflow-wrap: normal;
+  }
+
+  .project-tools {
+    line-height: 1.6;
+  }
+
+  .project-visual {
+    padding: 24px 18px;
+  }
+
+  .project-title {
+    font-size: clamp(1.75rem, 8vw, 2.5rem);
+    line-height: 1.05;
+  }
+
+  .project-desc {
+    font-size: 1rem;
+    line-height: 1.65;
   }
 
   .timeline-row {

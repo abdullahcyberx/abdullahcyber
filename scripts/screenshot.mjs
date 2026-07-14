@@ -75,7 +75,7 @@ import fs from "fs";
       .getElementById("contact")
       ?.scrollIntoView({ behavior: "auto", block: "start" });
   });
-  await pageMobile.waitForTimeout(600);
+  await pageMobile.waitForTimeout(800);
   await pageMobile.screenshot({
     path: "screenshots/cleanup-mobile-contact.png",
   });
