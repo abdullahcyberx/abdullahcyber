@@ -16,27 +16,30 @@ import fs from "fs";
   await pageDesktop.goto("http://localhost:4173", { waitUntil: "networkidle" });
   await pageDesktop.waitForTimeout(1500);
 
-  // Scroll to about
+  // Scroll to about links
   await pageDesktop.evaluate(() => {
     document
-      .getElementById("about")
+      .querySelector(".about-links-block")
+      ?.scrollIntoView({ behavior: "auto", block: "center" });
+  });
+  await pageDesktop.waitForTimeout(800);
+  await pageDesktop.screenshot({ path: "screenshots/about-links-desktop.png" });
+
+  // Scroll to contact
+  await pageDesktop.evaluate(() => {
+    document
+      .getElementById("contact")
       ?.scrollIntoView({ behavior: "auto", block: "start" });
   });
   await pageDesktop.waitForTimeout(800);
   await pageDesktop.screenshot({
-    path: "screenshots/cleanup-desktop-about.png",
+    path: "screenshots/gmail-contact-desktop.png",
   });
 
-  // Scroll to projects
-  await pageDesktop.evaluate(() => {
-    document
-      .getElementById("projects")
-      ?.scrollIntoView({ behavior: "auto", block: "start" });
-  });
-  await pageDesktop.waitForTimeout(800);
-  await pageDesktop.screenshot({
-    path: "screenshots/cleanup-desktop-projects.png",
-  });
+  // Hover gmail contact
+  await pageDesktop.hover(".gmail-contact");
+  await pageDesktop.waitForTimeout(500);
+  await pageDesktop.screenshot({ path: "screenshots/gmail-contact-hover.png" });
 
   await contextDesktop.close();
 
@@ -47,49 +50,38 @@ import fs from "fs";
   const pageMobile = await contextMobile.newPage();
   await pageMobile.goto("http://localhost:4173", { waitUntil: "networkidle" });
   await pageMobile.waitForTimeout(1500);
-  await pageMobile.screenshot({ path: "screenshots/cleanup-mobile-hero.png" });
 
-  // Mobile projects
+  // Scroll to about links mobile
   await pageMobile.evaluate(() => {
     document
-      .getElementById("projects")
-      ?.scrollIntoView({ behavior: "auto", block: "start" });
+      .querySelector(".about-links-block")
+      ?.scrollIntoView({ behavior: "auto", block: "center" });
   });
-  await pageMobile.waitForTimeout(600);
-  await pageMobile.screenshot({
-    path: "screenshots/cleanup-mobile-projects.png",
-  });
+  await pageMobile.waitForTimeout(800);
+  await pageMobile.screenshot({ path: "screenshots/about-links-mobile.png" });
 
-  // Mobile about
-  await pageMobile.evaluate(() => {
-    document
-      .getElementById("about")
-      ?.scrollIntoView({ behavior: "auto", block: "start" });
-  });
-  await pageMobile.waitForTimeout(600);
-  await pageMobile.screenshot({ path: "screenshots/cleanup-mobile-about.png" });
-
-  // Mobile contact
+  // Scroll to contact mobile
   await pageMobile.evaluate(() => {
     document
       .getElementById("contact")
       ?.scrollIntoView({ behavior: "auto", block: "start" });
   });
-  await pageMobile.waitForTimeout(800);
-  await pageMobile.screenshot({
-    path: "screenshots/cleanup-mobile-contact.png",
-  });
+  await pageMobile.waitForTimeout(1200);
 
-  // Mobile menu
-  await pageMobile.evaluate(() => window.scrollTo(0, 0));
-  await pageMobile.waitForTimeout(300);
-  await pageMobile.click("#mobile-menu-trigger");
-  await pageMobile.waitForTimeout(500);
-  await pageMobile.screenshot({ path: "screenshots/cleanup-mobile-menu.png" });
-  await pageMobile.click("#mobile-menu-close");
-  await pageMobile.waitForTimeout(300);
+  // Confirm opacity
+  const gmailOpacity = await pageMobile.evaluate(() => {
+    const el = document.querySelector(".gmail-contact");
+    return el ? parseFloat(getComputedStyle(el).opacity) : 0;
+  });
+  if (gmailOpacity < 0.95) {
+    console.warn(
+      `Mobile Gmail card opacity is ${gmailOpacity}, expected >= 0.95`,
+    );
+  }
+
+  await pageMobile.screenshot({ path: "screenshots/gmail-contact-mobile.png" });
 
   await contextMobile.close();
   await browser.close();
-  console.log("Screenshots captured: cleanup-* series");
+  console.log("Screenshots captured");
 })();

@@ -157,6 +157,103 @@ test.describe("Portfolio Smoke Tests", () => {
     expect(isVisible).toBe(true);
   });
 
+  test("About links section", async ({ page }) => {
+    await page.goto("/");
+
+    const aboutLinksBlock = page.locator(".about-links-block");
+    await expect(aboutLinksBlock).toBeVisible();
+    await expect(aboutLinksBlock.locator(".eyebrow")).toHaveText(
+      "Find me online",
+    );
+
+    const links = aboutLinksBlock.locator(".profile-link");
+    expect(await links.count()).toBe(4);
+
+    // Verify order
+    await expect(links.nth(0).locator("strong")).toHaveText("GitHub");
+    await expect(links.nth(1).locator("strong")).toHaveText("TryHackMe");
+    await expect(links.nth(2).locator("strong")).toHaveText("LinkedIn");
+    await expect(links.nth(3).locator("strong")).toHaveText("Personal profile");
+
+    for (let i = 0; i < 4; i++) {
+      await expect(links.nth(i)).toHaveAttribute("target", "_blank");
+      await expect(links.nth(i)).toHaveAttribute("rel", "noopener noreferrer");
+    }
+
+    await expect(links.nth(0)).toHaveAttribute(
+      "href",
+      "https://github.com/abdullahcyberx",
+    );
+    await expect(links.nth(1)).toHaveAttribute(
+      "href",
+      "https://tryhackme.com/p/HAFIZABDULLAH",
+    );
+    await expect(links.nth(2)).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/abdullahcyberx/",
+    );
+    await expect(links.nth(3)).toHaveAttribute(
+      "href",
+      "https://guns.lol/abdullahcyberx",
+    );
+  });
+
+  test("Contact section Gmail action", async ({ page, isMobile }) => {
+    await page.goto("/");
+    await page.waitForTimeout(1000);
+
+    // Scroll to contact to trigger reveal
+    await page.evaluate(() => {
+      document
+        .getElementById("contact")
+        ?.scrollIntoView({ behavior: "auto", block: "start" });
+    });
+    await page.waitForTimeout(1200);
+
+    const contactLinks = page.locator("#contact a");
+    expect(await contactLinks.count()).toBe(1);
+
+    const gmailCard = page.locator(".gmail-contact");
+    await expect(gmailCard).toBeVisible();
+
+    const gmailOpacity = await gmailCard.evaluate((element) =>
+      Number.parseFloat(getComputedStyle(element).opacity),
+    );
+    expect(gmailOpacity).toBeGreaterThanOrEqual(0.95);
+
+    const gmailStrongColor = await gmailCard
+      .locator(".gmail-contact-copy strong")
+      .evaluate((el) => getComputedStyle(el).color);
+    expect(gmailStrongColor).toContain("rgb(245, 245, 242)"); // #f5f5f2
+
+    const href = await gmailCard.getAttribute("href");
+    expect(href).toMatch(/^mailto:abdullahcyberx@gmail\.com/);
+
+    await expect(gmailCard).toHaveAttribute(
+      "aria-label",
+      expect.stringContaining("abdullahcyberx@gmail.com"),
+    );
+    await expect(gmailCard.locator("strong")).toHaveText("Email Muhammad");
+
+    const cvLink = page.locator("#contact a[download]");
+    await expect(cvLink).toHaveCount(0);
+
+    if (isMobile) {
+      await page.locator("#contact").scrollIntoViewIfNeeded();
+      await page.waitForTimeout(500);
+
+      const aiButton = page.locator("[data-ai-open]");
+
+      await expect(aiButton).toHaveCSS("visibility", "hidden");
+      await expect(aiButton).toHaveCSS("pointer-events", "none");
+
+      // Scroll to About and verify
+      await page.locator("#about").scrollIntoViewIfNeeded();
+      await page.waitForTimeout(500);
+      await expect(aiButton).toHaveCSS("visibility", "visible");
+    }
+  });
+
   test("Mobile menu interactions and accessibility", async ({
     page,
     isMobile,

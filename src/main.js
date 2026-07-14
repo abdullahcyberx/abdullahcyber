@@ -22,6 +22,24 @@
 
   document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 
+  const contactObserver = new IntersectionObserver(
+    (entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          document.body.classList.add("contact-visible");
+        } else {
+          document.body.classList.remove("contact-visible");
+        }
+      });
+    },
+    { threshold: 0.1 },
+  );
+
+  const contactSection = document.getElementById("contact");
+  if (contactSection) {
+    contactObserver.observe(contactSection);
+  }
+
   /* -------------------------
      Header & Active Navigation
      ------------------------- */
