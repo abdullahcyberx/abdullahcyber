@@ -31,9 +31,8 @@ function runChecks(expectFeatured, expectPresent) {
   }
 
   // Check if it's featured
-  const certCardRegex = new RegExp(`<a class="cert-card primary-cert reveal"[^>]*>\\s*<div[^>]*>.*?</div>\\s*<div><p>[^<]*</p><h3>${testCertName}</h3>`, 'i');
-  const isFeatured = certCardRegex.test(html);
-
+  const isFeatured = html.includes(`<h3 class="cert-title">${testCertName}</h3>`) && html.indexOf(`<h3 class="cert-title">${testCertName}</h3>`) < html.indexOf('class="additional-certs');
+  
   if (expectPresent && expectFeatured) {
     if (!isFeatured) {
       throw new Error(`Expected ${testCertName} to be featured.`);
