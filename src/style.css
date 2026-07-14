@@ -758,9 +758,12 @@ body.menu-open {
 
 .project-row {
   display: grid;
-  grid-template-columns: 64px 1fr;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
   gap: 20px;
-  padding: 40px 0;
+  width: 100%;
+  min-width: 0;
+  padding: clamp(40px, 6vw, 72px) 0;
   border-top: 1px solid var(--border);
   position: relative;
   transition: background 200ms var(--ease);
@@ -776,6 +779,8 @@ body.menu-open {
 }
 
 .project-number {
+  grid-column: 1;
+  grid-row: 1;
   font-family: var(--font);
   font-size: 0.75rem;
   color: var(--text-muted);
@@ -785,9 +790,17 @@ body.menu-open {
 }
 
 .project-content {
+  grid-column: 1;
+  grid-row: 3;
   display: flex;
   flex-direction: column;
+  align-self: start;
+  min-width: 0;
   gap: 10px;
+}
+
+.project-content > * {
+  min-width: 0;
 }
 
 .project-category {
@@ -859,53 +872,77 @@ body.menu-open {
   transform: translateX(3px);
 }
 
-.project-split {
-  grid-template-columns: 1fr;
-}
-.project-split-reverse {
-  grid-template-columns: 1fr;
-}
+/* Project composition
+   Mobile/tablet uses a clean vertical flow. Desktop fixes every visual and
+   content block to the same explicit grid row, preventing CSS auto-placement
+   from pushing projects 02 and 03 downward. */
+.project-split,
+.project-split-reverse,
 .project-horizontal {
-  grid-template-columns: 1fr;
+  grid-template-columns: minmax(0, 1fr);
 }
 
-@media (min-width: 768px) {
-  .project-split {
-    grid-template-columns: 64px 5fr 4fr;
+@media (min-width: 1024px) {
+  .project-row {
+    grid-template-columns: 64px minmax(0, 1.12fr) minmax(320px, 0.88fr);
+    grid-template-rows: auto;
+    column-gap: clamp(32px, 4vw, 64px);
+    row-gap: 0;
   }
-  .project-split .project-content {
-    grid-column: 3;
-    padding-left: 32px;
+
+  .project-row .project-number {
+    grid-column: 1;
+    grid-row: 1;
   }
-  .project-split .project-visual-container {
+
+  .project-row .project-visual-container,
+  .project-row .project-content {
+    grid-row: 1;
+    align-self: start;
+    min-width: 0;
+  }
+
+  .project-split .project-visual-container,
+  .project-horizontal .project-visual-container {
     grid-column: 2;
   }
 
-  .project-split-reverse {
-    grid-template-columns: 64px 4fr 5fr;
+  .project-split .project-content,
+  .project-horizontal .project-content {
+    grid-column: 3;
+    padding: 4px 0 0 clamp(24px, 2.5vw, 40px);
   }
+
   .project-split-reverse .project-content {
     grid-column: 2;
-    padding-right: 32px;
+    padding: 4px clamp(24px, 2.5vw, 40px) 0 0;
   }
+
   .project-split-reverse .project-visual-container {
     grid-column: 3;
   }
+}
 
-  .project-horizontal {
-    grid-template-columns: 64px 1fr;
+@media (min-width: 768px) and (max-width: 1023px) {
+  .project-row {
+    padding: 52px 0;
   }
-  .project-horizontal .project-content {
-    grid-column: 2;
+
+  .project-visual-container {
+    max-width: 760px;
   }
-  .project-horizontal .project-visual-container {
-    grid-column: 2;
-    margin-bottom: 32px;
+
+  .project-content {
+    max-width: 680px;
   }
 }
 
 .project-visual-container {
+  grid-column: 1;
+  grid-row: 2;
   width: 100%;
+  min-width: 0;
+  align-self: start;
   border-radius: 12px;
   overflow: hidden;
   background: var(--surface);
