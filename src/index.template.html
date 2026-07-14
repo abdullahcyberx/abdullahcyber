@@ -1,202 +1,302 @@
 <!doctype html>
 <html lang="en-PK">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="theme-color" content="#08090b" />
-  <meta name="color-scheme" content="dark" />
-  <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1" />
-  <meta name="author" content="Muhammad Abdullah" />
-  <meta name="description" content="{{ seo.description }}" />
-  <meta name="keywords" content="{{ seo.keywords }}" />
-  <meta name="geo.region" content="PK" />
-  <link rel="canonical" href="https://abdullahcyber.dev/" />
-  <link rel="manifest" href="site.webmanifest" />
-  <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
-  <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
-  <meta property="og:locale" content="en_PK" />
-  <meta property="og:type" content="profile" />
-  <meta property="og:site_name" content="Abdullah Cyber" />
-  <meta property="og:url" content="https://abdullahcyber.dev/" />
-  <meta property="og:title" content="{{ seo.openGraph.title }}" />
-  <meta property="og:description" content="{{ seo.openGraph.description }}" />
-  <meta property="og:image" content="https://abdullahcyber.dev/assets/abdullah-cyber-og.png" />
-  <meta property="og:image:width" content="1200" />
-  <meta property="og:image:height" content="630" />
-  <meta property="og:image:alt" content="Muhammad Abdullah — Abdullah Cyber portfolio" />
-  <meta property="profile:first_name" content="Muhammad" />
-  <meta property="profile:last_name" content="Abdullah" />
-  <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="{{ seo.twitter.title }}" />
-  <meta name="twitter:description" content="{{ seo.twitter.description }}" />
-  <meta name="twitter:image" content="https://abdullahcyber.dev/assets/abdullah-cyber-og.png" />
-  <title>{{ seo.title }}</title>
-  <!-- TEMPLATE: SCHEMA_ORG -->
-  <link rel="stylesheet" href="/src/style.css" />
-  <script type="application/json" id="ai-data">
-    <!-- TEMPLATE: AI_PAYLOAD -->
-  </script>
-</head>
-<body>
-  <a class="skip-link" href="#main">Skip to content</a>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#08090b" />
+    <meta name="color-scheme" content="dark" />
+    <meta
+      name="robots"
+      content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+    />
+    <meta name="author" content="Muhammad Abdullah" />
+    <meta name="description" content="{{ seo.description }}" />
+    <meta name="keywords" content="{{ seo.keywords }}" />
+    <meta name="geo.region" content="PK" />
+    <link rel="canonical" href="https://abdullahcyber.dev/" />
+    <link rel="manifest" href="site.webmanifest" />
+    <link rel="icon" href="assets/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="assets/apple-touch-icon.png" />
+    <meta property="og:locale" content="en_PK" />
+    <meta property="og:type" content="profile" />
+    <meta property="og:site_name" content="Abdullah Cyber" />
+    <meta property="og:url" content="https://abdullahcyber.dev/" />
+    <meta property="og:title" content="{{ seo.openGraph.title }}" />
+    <meta property="og:description" content="{{ seo.openGraph.description }}" />
+    <meta
+      property="og:image"
+      content="https://abdullahcyber.dev/assets/abdullah-cyber-og.png"
+    />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta
+      property="og:image:alt"
+      content="Muhammad Abdullah — Abdullah Cyber portfolio"
+    />
+    <meta property="profile:first_name" content="Muhammad" />
+    <meta property="profile:last_name" content="Abdullah" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="{{ seo.twitter.title }}" />
+    <meta name="twitter:description" content="{{ seo.twitter.description }}" />
+    <meta
+      name="twitter:image"
+      content="https://abdullahcyber.dev/assets/abdullah-cyber-og.png"
+    />
+    <title>{{ seo.title }}</title>
+    <!-- TEMPLATE: SCHEMA_ORG -->
+    <link rel="stylesheet" href="/src/style.css" />
+    <script type="application/json" id="ai-data">
+      <!-- TEMPLATE: AI_PAYLOAD -->
+    </script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">Skip to content</a>
 
-  <header class="site-header" id="top">
-    <div class="nav-container">
-      <a class="brand" href="#home" aria-label="Muhammad Abdullah home">Abdullah Cyber.</a>
-      
-      <nav id="main-nav" class="desktop-nav" aria-label="Main navigation">
+    <header class="site-header" id="top">
+      <div class="nav-container">
+        <a class="brand" href="#home" aria-label="Muhammad Abdullah home"
+          >Abdullah Cyber.</a
+        >
+
+        <nav id="main-nav" class="desktop-nav" aria-label="Main navigation">
+          <a href="#projects">Work</a>
+          <a href="#about">About</a>
+          <a href="#experience">Experience</a>
+          <a href="#skills">Skills</a>
+          <a href="#credentials">Certificates</a>
+          <a href="#contact">Contact</a>
+        </nav>
+
+        <div class="nav-actions">
+          <button
+            class="ai-trigger"
+            type="button"
+            data-ai-open
+            aria-label="Ask Shehzada’s AI"
+            title="Ask Shehzada’s AI"
+          >
+            Shehzada's AI
+          </button>
+          <button
+            class="menu-toggle"
+            id="mobile-menu-trigger"
+            type="button"
+            aria-expanded="false"
+            aria-controls="mobile-menu"
+            aria-label="Open menu"
+          >
+            Menu
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <div
+      class="mobile-menu"
+      id="mobile-menu"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Mobile navigation"
+    >
+      <button
+        class="mobile-menu-close"
+        id="mobile-menu-close"
+        type="button"
+        aria-label="Close menu"
+      >
+        Close
+      </button>
+      <nav class="mobile-nav">
         <a href="#projects">Work</a>
         <a href="#about">About</a>
         <a href="#experience">Experience</a>
         <a href="#skills">Skills</a>
         <a href="#credentials">Certificates</a>
         <a href="#contact">Contact</a>
-      </nav>
-
-      <div class="nav-actions">
-        <button class="ai-trigger" type="button" data-ai-open aria-label="Ask Shehzada’s AI" title="Ask Shehzada’s AI">
-          Shehzada's AI
-        </button>
-        <button class="menu-toggle" id="mobile-menu-trigger" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
-          Menu
-        </button>
-      </div>
-    </div>
-  </header>
-
-  <div class="mobile-menu" id="mobile-menu" role="dialog" aria-modal="true" aria-label="Mobile navigation">
-    <button class="mobile-menu-close" id="mobile-menu-close" type="button" aria-label="Close menu">Close</button>
-    <nav class="mobile-nav">
-      <a href="#projects">Work</a>
-      <a href="#about">About</a>
-      <a href="#experience">Experience</a>
-      <a href="#skills">Skills</a>
-      <a href="#credentials">Certificates</a>
-      <a href="#contact">Contact</a>
-      <a href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
-    </nav>
-  </div>
-
-  <main id="main">
-    <section id="home" class="hero container" aria-labelledby="hero-title">
-      <div class="hero-grid">
-        <h1 id="hero-title" class="hero-title fade-in-up reveal">
-          <span class="hero-name-primary">{{ profile.heroHeading }}</span>
-          <span class="hero-name-accent">{{ profile.heroAccent }}</span>
-        </h1>
-        <div class="hero-details fade-in-up reveal" style="transition-delay: 100ms;">
-          <div>
-            <p class="hero-context">{{ profile.location }} · {{ profile.professionalTitle }}</p>
-            <p class="hero-statement">Finding how web applications break, then learning how to secure them.</p>
-          </div>
-          <div class="hero-copy">
-            <p>{{ profile.heroIntroduction }}</p>
-            <div class="hero-actions">
-              <a class="btn btn-primary" href="#projects">View selected work</a>
-              <a class="btn btn-outline" href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
-            </div>
-            <div class="hero-social">
-              <a href="{{ profile.githubUrl }}" target="_blank" rel="me noreferrer">GitHub</a>
-              <a href="{{ profile.linkedinUrl }}" target="_blank" rel="me noreferrer">LinkedIn</a>
-              <a href="mailto:{{ profile.email }}">Email</a>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <section id="projects" class="projects container">
-      <h2 class="section-header fade-in-up reveal">SELECTED WORK</h2>
-      <ul class="project-list">
-        <!-- TEMPLATE: PROJECTS -->
-      </ul>
-      <div class="hover-preview" id="hover-preview" aria-hidden="true"><div id="hover-preview-art" class="project-art"></div></div>
-    </section>
-
-    <section id="about" class="about container">
-      <h2 class="section-header fade-in-up reveal">ABOUT</h2>
-      <div class="about-grid fade-in-up reveal">
-        <p class="about-statement">I focus on web application security, application logic and practical testing.</p>
-        <div class="about-copy">
-          {{ profile.aboutText }}
-        </div>
-      </div>
-    </section>
-
-    <section id="experience" class="experience container">
-      <h2 class="section-header fade-in-up reveal">EXPERIENCE</h2>
-      <div class="timeline">
-        <!-- TEMPLATE: EXPERIENCE -->
-      </div>
-    </section>
-
-    <section id="skills" class="skills container">
-      <h2 class="section-header fade-in-up reveal">Tools I use to explore,<br>test and understand systems.</h2>
-      <div class="keyboard-container fade-in-up reveal" aria-label="Interactive skills keyboard">
-        <div class="skills-keyboard" role="list">
-          <!-- TEMPLATE: SKILLS -->
-        </div>
-        <p class="keyboard-instructions" aria-hidden="true">Use your keyboard to highlight skills.</p>
-      </div>
-    </section>
-
-    <section id="credentials" class="credentials container">
-      <h2 class="section-header fade-in-up reveal">CERTIFICATIONS</h2>
-      <div class="cert-list">
-        <!-- TEMPLATE: FEATURED_CERTIFICATES -->
-      </div>
-      <div class="additional-certs fade-in-up reveal">
-        <h3>Additional learning</h3>
-        <div class="supp-cert-list">
-          <!-- TEMPLATE: SUPPORTING_CERTIFICATES -->
-        </div>
-      </div>
-    </section>
-
-    <section id="achievements" class="achievements container">
-      <h2 class="section-header fade-in-up reveal">ACHIEVEMENTS</h2>
-      <div class="achievements-content fade-in-up reveal">
-        <!-- TEMPLATE: ACHIEVEMENTS -->
-      </div>
-    </section>
-
-    <section id="contact" class="contact container">
-      <h2 class="contact-hero fade-in-up reveal">Have a security project,<br>internship opportunity<br>or CTF collaboration?<br><br>Let’s talk.</h2>
-      <div class="contact-links fade-in-up reveal">
-        <a href="mailto:{{ profile.email }}">Email Muhammad</a>
-        <a href="{{ profile.githubUrl }}" target="_blank" rel="me noreferrer">GitHub</a>
-        <a href="{{ profile.linkedinUrl }}" target="_blank" rel="me noreferrer">LinkedIn</a>
         <a href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
-      </div>
-    </section>
-  </main>
+      </nav>
+    </div>
 
-  <footer class="container">
-    <span>&copy; <span id="year"></span> Muhammad Abdullah</span>
-    <a href="#top">Back to top</a>
-  </footer>
+    <main id="main">
+      <section id="home" class="hero container" aria-labelledby="hero-title">
+        <div class="hero-grid">
+          <h1 id="hero-title" class="hero-title">
+            <span class="hero-name-primary">{{ profile.heroHeading }}</span>
+            <span class="hero-name-accent">{{ profile.heroAccent }}</span>
+          </h1>
+          <div class="hero-details">
+            <div>
+              <p class="hero-context">
+                {{ profile.location }} · {{ profile.professionalTitle }}
+              </p>
+              <p class="hero-statement">
+                Finding how web applications break, then learning how to secure
+                them.
+              </p>
+            </div>
+            <div class="hero-copy">
+              <p>{{ profile.heroIntroduction }}</p>
+              <div class="hero-actions">
+                <a class="btn btn-primary" href="#projects"
+                  >View selected work</a
+                >
+                <a
+                  class="btn btn-outline"
+                  href="assets/Muhammad-Abdullah-CV.pdf"
+                  download
+                  >Download CV</a
+                >
+              </div>
+              <div class="hero-social">
+                <a
+                  href="{{ profile.githubUrl }}"
+                  target="_blank"
+                  rel="me noreferrer"
+                  >GitHub</a
+                >
+                <a
+                  href="{{ profile.linkedinUrl }}"
+                  target="_blank"
+                  rel="me noreferrer"
+                  >LinkedIn</a
+                >
+                <a href="mailto:{{ profile.email }}">Email</a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
 
-  <div class="ai-assistant" id="ai-assistant" role="dialog" aria-label="Shehzada's AI Assistant" aria-hidden="true">
-    <div class="ai-backdrop" data-ai-close></div>
-    <div class="ai-panel">
-      <div class="ai-header">
-        <div class="ai-brand">Shehzada's AI</div>
-        <button class="ai-close" data-ai-close aria-label="Close AI">✕</button>
-      </div>
-      <div class="ai-messages" id="ai-messages" role="log" aria-live="polite"></div>
-      <div class="ai-input-area">
-        <div class="ai-suggestions" id="ai-suggestions"></div>
-        <form id="ai-form">
-          <input type="text" id="ai-input" placeholder="Ask about Muhammad's skills..." autocomplete="off">
-          <button type="submit" aria-label="Send message">➔</button>
-        </form>
+      <section id="projects" class="projects container">
+        <h2 class="section-header fade-in-up reveal">SELECTED WORK</h2>
+        <ul class="project-list">
+          <!-- TEMPLATE: PROJECTS -->
+        </ul>
+        <div class="hover-preview" id="hover-preview" aria-hidden="true">
+          <div id="hover-preview-art" class="project-art"></div>
+        </div>
+      </section>
+
+      <section id="about" class="about container">
+        <h2 class="section-header fade-in-up reveal">ABOUT</h2>
+        <div class="about-grid fade-in-up reveal">
+          <p class="about-statement">
+            I focus on web application security, application logic and practical
+            testing.
+          </p>
+          <div class="about-copy">{{ profile.aboutText }}</div>
+        </div>
+      </section>
+
+      <section id="experience" class="experience container">
+        <h2 class="section-header fade-in-up reveal">EXPERIENCE</h2>
+        <div class="timeline">
+          <!-- TEMPLATE: EXPERIENCE -->
+        </div>
+      </section>
+
+      <section id="skills" class="skills container">
+        <h2 class="section-header fade-in-up reveal">
+          Tools I use to explore,<br />test and understand systems.
+        </h2>
+        <div
+          class="keyboard-container fade-in-up reveal"
+          aria-label="Interactive skills keyboard"
+        >
+          <div class="skills-keyboard" role="list">
+            <!-- TEMPLATE: SKILLS -->
+          </div>
+          <p class="keyboard-instructions" aria-hidden="true">
+            Use your keyboard to highlight skills.
+          </p>
+        </div>
+      </section>
+
+      <section id="credentials" class="credentials container">
+        <h2 class="section-header fade-in-up reveal">CERTIFICATIONS</h2>
+        <div class="cert-list">
+          <!-- TEMPLATE: FEATURED_CERTIFICATES -->
+        </div>
+        <div class="additional-certs fade-in-up reveal">
+          <h3>Additional learning</h3>
+          <div class="supp-cert-list">
+            <!-- TEMPLATE: SUPPORTING_CERTIFICATES -->
+          </div>
+        </div>
+      </section>
+
+      <section id="achievements" class="achievements container">
+        <h2 class="section-header fade-in-up reveal">ACHIEVEMENTS</h2>
+        <div class="achievements-content fade-in-up reveal">
+          <!-- TEMPLATE: ACHIEVEMENTS -->
+        </div>
+      </section>
+
+      <section id="contact" class="contact container">
+        <h2 class="contact-hero fade-in-up reveal">
+          Have a security project,<br />internship opportunity<br />or CTF
+          collaboration?<br /><br />Let’s talk.
+        </h2>
+        <div class="contact-links fade-in-up reveal">
+          <a href="mailto:{{ profile.email }}">Email Muhammad</a>
+          <a href="{{ profile.githubUrl }}" target="_blank" rel="me noreferrer"
+            >GitHub</a
+          >
+          <a
+            href="{{ profile.linkedinUrl }}"
+            target="_blank"
+            rel="me noreferrer"
+            >LinkedIn</a
+          >
+          <a href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="container">
+      <span>&copy; <span id="year"></span> Muhammad Abdullah</span>
+      <a href="#top">Back to top</a>
+    </footer>
+
+    <div
+      class="ai-assistant"
+      id="ai-assistant"
+      role="dialog"
+      aria-label="Shehzada's AI Assistant"
+      aria-hidden="true"
+    >
+      <div class="ai-backdrop" data-ai-close></div>
+      <div class="ai-panel">
+        <div class="ai-header">
+          <div class="ai-brand">Shehzada's AI</div>
+          <button class="ai-close" data-ai-close aria-label="Close AI">
+            ✕
+          </button>
+        </div>
+        <div
+          class="ai-messages"
+          id="ai-messages"
+          role="log"
+          aria-live="polite"
+        ></div>
+        <div class="ai-input-area">
+          <div class="ai-suggestions" id="ai-suggestions"></div>
+          <form id="ai-form">
+            <input
+              type="text"
+              id="ai-input"
+              placeholder="Ask about Muhammad's skills..."
+              autocomplete="off"
+            />
+            <button type="submit" aria-label="Send message">➔</button>
+          </form>
+        </div>
       </div>
     </div>
-  </div>
 
-  <!-- Project Modals Container -->
-  <div id="modal-root"></div>
+    <!-- Project Modals Container -->
+    <div id="modal-root"></div>
 
-  <script type="module" src="/src/main.js"></script>
-</body>
+    <script type="module" src="/src/main.js"></script>
+  </body>
 </html>

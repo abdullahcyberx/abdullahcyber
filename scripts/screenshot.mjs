@@ -16,6 +16,7 @@ import fs from 'fs';
   });
   const pageMobile = await contextMobile.newPage();
   await pageMobile.goto('http://localhost:4173', { waitUntil: 'networkidle' });
+  await pageMobile.waitForTimeout(1200);
   await pageMobile.screenshot({ path: `screenshots/${prefix}-mobile-hero.png` });
 
   await pageMobile.evaluate(() => window.scrollBy(0, 800));
@@ -32,6 +33,7 @@ import fs from 'fs';
   });
   const pageDesktop = await contextDesktop.newPage();
   await pageDesktop.goto('http://localhost:4173', { waitUntil: 'networkidle' });
+  await pageDesktop.waitForTimeout(1200);
   await pageDesktop.screenshot({ path: `screenshots/${prefix}-desktop-hero.png` });
 
   await pageDesktop.evaluate(() => window.scrollBy(0, 800));

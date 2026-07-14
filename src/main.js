@@ -180,67 +180,45 @@
   }
 
   /* -------------------------
-     Interactive Skills Keyboard
+     Dynamic Data Initialization
      ------------------------- */
-  const skillKeys = document.querySelectorAll(".skill-key");
-  skillKeys.forEach((key) => {
-    key.addEventListener("pointerenter", () => {
-      skillKeys.forEach((k) => k.classList.remove("active"));
-      key.classList.add("active");
-    });
-    key.addEventListener("focus", () => {
-      skillKeys.forEach((k) => k.classList.remove("active"));
-      key.classList.add("active");
-    });
-  });
+  const aiDataElement = document.getElementById("ai-data");
+  let aiPayload = { config: {}, knowledge: {} };
+
+  if (aiDataElement) {
+    try {
+      const parsed = JSON.parse(aiDataElement.textContent || "{}");
+      aiPayload = {
+        config: parsed.config || {},
+        knowledge: parsed.knowledge || {},
+      };
+    } catch (error) {
+      console.error("Unable to parse portfolio AI data.", error);
+    }
+  }
+
+  const aiConfig = aiPayload.config;
+  const portfolioKnowledge = aiPayload.knowledge;
 
   /* -------------------------
      Case-study Modal
      ------------------------- */
-  const caseStudies = {
-    phishing: {
-      label: "Case study / Social engineering",
-      title: "Authorized Phishing Awareness Campaign",
-      summary:
-        "A controlled, academically supervised simulation designed to evaluate how users respond to realistic phishing cues without exposing participants to harmful content.",
-      objective:
-        "Assess awareness, observe interaction patterns and identify opportunities for better security education.",
-      environment:
-        "Gophish-based campaign conducted under academic supervision with an explicitly authorized scope.",
-      learning:
-        "Campaign configuration, ethical scoping, communication design, result interpretation and awareness-focused reporting.",
-      ethics:
-        "No unauthorized targeting. The activity was conducted as a supervised learning exercise with a defined audience and purpose.",
-    },
-    honeypot: {
-      label: "Case study / Threat observation",
-      title: "SSH Honeypot Deployment",
-      summary:
-        "A lab deployment created to expose a controlled SSH service and study automated brute-force behavior in an isolated environment.",
-      objective:
-        "Observe login attempts, attacker patterns and the value of deception systems for security learning.",
-      environment:
-        "sshesame deployed inside a VirtualBox lab with controlled networking and logging.",
-      learning:
-        "Linux services, SSH behavior, log review, safe exposure design and basic attacker-behavior analysis.",
-      ethics:
-        "Isolated lab setup with no offensive interaction against external systems.",
-    },
-  };
+  const projectsByKey = new Map();
+  for (const project of portfolioKnowledge.projects || []) {
+    if (project.slug) projectsByKey.set(project.slug, project);
+    if (project.id) projectsByKey.set(project.id, project);
+  }
 
   const modalRoot = document.getElementById("modal-root");
   if (modalRoot) {
     modalRoot.innerHTML = `
       <dialog id="case-modal" class="modal-dialog">
         <div class="modal-content">
-          <button class="modal-close" aria-label="Close modal">✕</button>
+          <button class="modal-close" aria-label="Close modal">Ã¢Å“â€¢</button>
           <div id="modal-label" class="modal-label"></div>
           <h2 id="modal-title"></h2>
           <p id="modal-summary"></p>
-          <h3>Objective</h3><p id="modal-objective"></p>
-          <h3>Environment</h3><p id="modal-environment"></p>
-          <h3>Learning</h3><p id="modal-learning"></p>
-          <h3>Ethics</h3><p id="modal-ethics"></p>
+          <div id="modal-details"></div>
         </div>
       </dialog>
     `;
@@ -251,19 +229,36 @@
     label: document.getElementById("modal-label"),
     title: document.getElementById("modal-title"),
     summary: document.getElementById("modal-summary"),
-    objective: document.getElementById("modal-objective"),
-    environment: document.getElementById("modal-environment"),
-    learning: document.getElementById("modal-learning"),
-    ethics: document.getElementById("modal-ethics"),
+    details: document.getElementById("modal-details"),
   };
 
   document.querySelectorAll("[data-modal]").forEach((button) => {
     button.addEventListener("click", () => {
-      const item = caseStudies[button.dataset.modal];
-      if (!item || !modal) return;
-      Object.entries(modalFields).forEach(([key, element]) => {
-        if (element) element.textContent = item[key];
-      });
+      const project = projectsByKey.get(button.dataset.modal);
+      if (!project || !modal) return;
+
+      if (modalFields.label)
+        modalFields.label.textContent = project.category || "";
+      if (modalFields.title)
+        modalFields.title.textContent = project.title || "";
+      if (modalFields.summary)
+        modalFields.summary.textContent = project.summary || "";
+
+      if (modalFields.details) {
+        let detailsHtml = "";
+        if (project.fullDescription)
+          detailsHtml += `<h3>Description</h3><p>${project.fullDescription}</p>`;
+        if (project.caseStudyContent)
+          detailsHtml += `<h3>Case Study</h3><p>${project.caseStudyContent}</p>`;
+        if (project.tools && project.tools.length)
+          detailsHtml += `<h3>Tools</h3><p>${project.tools.join(", ")}</p>`;
+        if (project.date) detailsHtml += `<h3>Date</h3><p>${project.date}</p>`;
+        if (project.ethicalDisclaimer)
+          detailsHtml += `<h3>Ethics</h3><p>${project.ethicalDisclaimer}</p>`;
+
+        modalFields.details.innerHTML = detailsHtml;
+      }
+
       modal.showModal();
     });
   });
@@ -282,21 +277,235 @@
   });
 
   /* -------------------------
+     Interactive Skills Keyboard
+     ------------------------- */
+  const skillsByKey = new Map(
+    (portfolioKnowledge.skills || []).map((skill) => [skill.skillKey, skill]),
+  );
+
+  const skillKeys = document.querySelectorAll(".skill-key");
+
+  // Note: the original index.template.html doesn't have the elements for skill details display anymore,
+  // but if it did or will be added, we'd update them here.
+  skillKeys.forEach((key) => {
+    const selectSkill = () => {
+      skillKeys.forEach((k) => k.classList.remove("active"));
+      key.classList.add("active");
+      const skill = skillsByKey.get(key.dataset.skill);
+      // If we had display elements, we'd update them using skill.name, skill.description, etc.
+    };
+
+    key.addEventListener("pointerenter", selectSkill);
+    key.addEventListener("focus", selectSkill);
+  });
+
+  /* -------------------------
      Shehzada's AI
      ------------------------- */
-  const aiDataScript = document.getElementById("ai-data");
-  let aiConfig = null;
-  if (aiDataScript) {
-    try {
-      aiConfig = JSON.parse(aiDataScript.textContent);
-    } catch (e) {}
-  }
-
   const aiPanel = document.getElementById("ai-assistant");
   const aiInput = document.getElementById("ai-input");
   const aiForm = document.getElementById("ai-form");
   const aiMessages = document.getElementById("ai-messages");
   const aiSuggestions = document.getElementById("ai-suggestions");
+
+  const state = {
+    greeted: false,
+    busy: false,
+    sound: false,
+    challengeStep: 0,
+    lastIntent: "",
+  };
+
+  const escapeHTML = (value) =>
+    String(value).replace(
+      /[&<>'"]/g,
+      (c) =>
+        ({
+          "&": "&amp;",
+          "<": "&lt;",
+          ">": "&gt;",
+          "'": "&#39;",
+          '"': "&quot;",
+        })[c],
+    );
+
+  const scrollMessages = () =>
+    requestAnimationFrame(() => {
+      if (aiMessages) aiMessages.scrollTop = aiMessages.scrollHeight;
+    });
+
+  const addMessage = (content, role = "ai", options = {}) => {
+    if (!aiMessages) return null;
+    const msg = document.createElement("div");
+    msg.className = `ai-message ai-${role}`;
+
+    let innerHtml = options.html ? content : escapeHTML(content);
+    if (options.source) {
+      innerHtml += `<div class="ai-source" style="font-size: 0.75rem; color: var(--text-muted); margin-top: 4px;">Source: ${escapeHTML(options.source)}</div>`;
+    }
+    msg.innerHTML = innerHtml;
+
+    aiMessages.appendChild(msg);
+    scrollMessages();
+    return msg;
+  };
+
+  const renderQuickActions = (items) => {
+    if (!aiSuggestions) return;
+    aiSuggestions.innerHTML = items
+      .map((item) => {
+        const specialAttr = item.special
+          ? `data-ai-special="${item.special}"`
+          : "";
+        return `<button type="button" class="ai-chip" ${specialAttr}>${escapeHTML(item.label)}</button>`;
+      })
+      .join("");
+
+    aiSuggestions.querySelectorAll(".ai-chip").forEach((chip) => {
+      chip.addEventListener("click", () => {
+        const special = chip.dataset.aiSpecial;
+        if (special) {
+          handleSpecial(special);
+        } else {
+          if (aiInput) aiInput.value = chip.textContent;
+          if (aiForm) aiForm.dispatchEvent(new Event("submit"));
+        }
+      });
+    });
+  };
+
+  const defaultActions = () => {
+    const questions = aiConfig.suggestedQuestions || [
+      "Why hire Muhammad?",
+      "Main certifications",
+    ];
+    const actions = questions.map((q) => ({ label: q }));
+    actions.push(
+      {
+        label: aiConfig.recruiterBriefingLabels?.[0] || "Recruiter briefing",
+        special: "brief",
+      },
+      { label: aiConfig.scanLabels?.[0] || "Evidence scan", special: "scan" },
+      { label: "CTF challenge", special: "challenge" },
+    );
+    renderQuickActions(actions);
+  };
+
+  const recruiterBriefing = () => {
+    let experienceText =
+      portfolioKnowledge.experience?.map((e) => e.role).join(", ") || "";
+    const brief = `<p><strong>Recruiter briefing</strong></p>
+      <p>Muhammad Abdullah is an entry-level cybersecurity candidate focused on web penetration testing.</p>
+      <p><strong>Experience:</strong> ${experienceText}</p>
+      <div style="margin-top: 8px;"><button type="button" class="ai-chip" data-ai-special="copy-brief">Copy summary</button></div>`;
+    addMessage(brief, "ai", {
+      html: true,
+      source: "Verified from portfolio content",
+    });
+    defaultActions();
+  };
+
+  const runScan = () => {
+    if (state.busy) return;
+    state.busy = true;
+    const msg = addMessage(`<p>Running Evidence scan...</p>`, "ai", {
+      html: true,
+    });
+    setTimeout(() => {
+      msg.innerHTML = `<p><strong>Evidence scan complete</strong></p><p>Found ${portfolioKnowledge.projects?.length || 0} projects and ${portfolioKnowledge.certificates?.length || 0} certificates.</p>`;
+      state.busy = false;
+      defaultActions();
+    }, 800);
+  };
+
+  const startChallenge = () => {
+    state.challengeStep = 1;
+    addMessage(
+      `<p><strong>CTF Challenge</strong></p><p>I can alter a database query when user input is handled unsafely. What am I?</p>`,
+      "ai",
+      { html: true },
+    );
+  };
+
+  const handleChallenge = (query) => {
+    const q = query.toLowerCase();
+    if (state.challengeStep === 1) {
+      if (q.includes("sql")) {
+        state.challengeStep = 2;
+        addMessage(
+          `<p>Correct. Next: I execute untrusted script in a visitor's browser. What am I?</p>`,
+          "ai",
+          { html: true },
+        );
+      } else {
+        addMessage(`<p>Incorrect. Try again.</p>`, "ai", { html: true });
+      }
+      return true;
+    }
+    if (state.challengeStep === 2) {
+      if (q.includes("xss") || q.includes("cross")) {
+        state.challengeStep = 0;
+        addMessage(
+          `<p><strong>Challenge Complete!</strong> Access granted.</p>`,
+          "ai",
+          { html: true },
+        );
+        defaultActions();
+      } else {
+        addMessage(`<p>Incorrect. Try again.</p>`, "ai", { html: true });
+      }
+      return true;
+    }
+    return false;
+  };
+
+  const handleSpecial = (special) => {
+    if (special === "brief") recruiterBriefing();
+    if (special === "scan") runScan();
+    if (special === "challenge") startChallenge();
+    if (special === "copy-brief") {
+      navigator.clipboard
+        .writeText(
+          "Muhammad Abdullah is an entry-level cybersecurity candidate...",
+        )
+        .catch(() => {});
+    }
+  };
+
+  const processQuery = (query) => {
+    if (handleChallenge(query)) return;
+
+    if (query.toLowerCase() === "/clear" || query.toLowerCase() === "clear") {
+      if (aiMessages) aiMessages.innerHTML = "";
+      state.greeted = false;
+      addMessage(aiConfig.greeting || "Hello. How can I help you?", "ai", {
+        html: true,
+      });
+      defaultActions();
+      return;
+    }
+
+    let found = false;
+    const customAnswers = Array.isArray(aiConfig.customAnswers) 
+      ? aiConfig.customAnswers 
+      : Object.values(aiConfig.customAnswers || {});
+      
+    for (const kb of customAnswers) {
+      if (kb.keywords && kb.keywords.some((kw) => query.toLowerCase().includes(kw.toLowerCase()))) {
+        addMessage(kb.response, 'ai', { html: true, source: 'Verified portfolio knowledge' });
+        found = true;
+        break;
+      }
+    }
+
+    if (!found) {
+      addMessage(
+        aiConfig.fallbackAnswer || "I don't have specific information on that.",
+        "ai",
+      );
+    }
+    defaultActions();
+  };
 
   const openAi = () => {
     if (!aiPanel) return;
@@ -304,22 +513,15 @@
     aiPanel.classList.add("open");
     if (aiInput) aiInput.focus();
 
-    if (aiMessages && aiMessages.children.length === 0 && aiConfig) {
-      appendMessage(
-        "ai",
-        aiConfig.greeting || "Hello. I am Shehzada's AI. How can I help you?",
-      );
-      if (aiConfig.suggestedQueries) {
-        aiSuggestions.innerHTML = aiConfig.suggestedQueries
-          .map((q) => `<button type="button" class="ai-chip">${q}</button>`)
-          .join("");
-        aiSuggestions.querySelectorAll(".ai-chip").forEach((chip) => {
-          chip.addEventListener("click", () => {
-            if (aiInput) aiInput.value = chip.textContent;
-            if (aiForm) aiForm.dispatchEvent(new Event("submit"));
-          });
-        });
+    if (!state.greeted) {
+      state.greeted = true;
+      if (aiConfig.privacyMessage) {
+        addMessage(aiConfig.privacyMessage, "ai", { html: true });
       }
+      addMessage(aiConfig.greeting || "Hello. How can I help you?", "ai", {
+        html: true,
+      });
+      defaultActions();
     }
   };
 
@@ -336,40 +538,14 @@
     .querySelectorAll("[data-ai-close]")
     .forEach((btn) => btn.addEventListener("click", closeAi));
 
-  const appendMessage = (role, text) => {
-    if (!aiMessages) return;
-    const msg = document.createElement("div");
-    msg.className = `ai-message ai-${role}`;
-    msg.textContent = text;
-    aiMessages.appendChild(msg);
-    aiMessages.scrollTop = aiMessages.scrollHeight;
-  };
-
   if (aiForm) {
     aiForm.addEventListener("submit", (e) => {
       e.preventDefault();
       const val = aiInput.value.trim();
       if (!val) return;
-      appendMessage("user", val);
+      addMessage(val, "user");
       aiInput.value = "";
-
-      const response = getAiResponse(val);
-      setTimeout(() => appendMessage("ai", response), 400);
+      setTimeout(() => processQuery(val), 300);
     });
   }
-
-  const getAiResponse = (query) => {
-    if (!aiConfig || !aiConfig.knowledgeBase)
-      return "I'm currently unable to answer that.";
-    const q = query.toLowerCase();
-    for (const kb of aiConfig.knowledgeBase) {
-      if (kb.keywords.some((kw) => q.includes(kw.toLowerCase()))) {
-        return kb.response;
-      }
-    }
-    return (
-      aiConfig.fallbackResponse ||
-      "I don't have specific information on that. Would you like to know about his latest projects?"
-    );
-  };
 })();

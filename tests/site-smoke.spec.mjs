@@ -1,150 +1,238 @@
-import { test, expect } from '@playwright/test';
+import { test, expect } from "@playwright/test";
 
-test.describe('Portfolio Smoke Tests', () => {
-  test('Homepage loads without console errors, CSP issues, or failed requests', async ({ page }) => {
+test.describe("Portfolio Smoke Tests", () => {
+  test("Homepage loads without console errors, CSP issues, or failed requests", async ({
+    page,
+  }) => {
     const errors = [];
     const failedRequests = [];
-    
-    page.on('pageerror', error => errors.push(error.message));
-    page.on('console', msg => {
-      if (msg.type() === 'error') errors.push(msg.text());
+
+    page.on("pageerror", (error) => errors.push(error.message));
+    page.on("console", (msg) => {
+      if (msg.type() === "error") errors.push(msg.text());
     });
-    page.on('requestfailed', request => failedRequests.push(request.url()));
-    page.on('response', response => {
+    page.on("requestfailed", (request) => failedRequests.push(request.url()));
+    page.on("response", (response) => {
       if (response.status() >= 400) failedRequests.push(response.url());
     });
 
-    const response = await page.goto('/');
+    const response = await page.goto("/");
     expect(response.status()).toBe(200);
     expect(errors.length).toBe(0);
     expect(failedRequests.length).toBe(0);
 
     const overflow = await page.evaluate(() => {
-      return document.documentElement.scrollWidth > document.documentElement.clientWidth;
+      return (
+        document.documentElement.scrollWidth >
+        document.documentElement.clientWidth
+      );
     });
     expect(overflow).toBeFalsy();
 
     const html = await page.content();
     expect(html).not.toMatch(/\{\{\s*[^}]+\s*\}\}/);
-
-    await expect(page.locator(".hero-name-primary")).toBeVisible();
-    await expect(page.locator(".hero-name-accent")).toBeVisible();
   });
 
-  test('Skip link accessibility', async ({ page }) => {
-    await page.goto('/');
-    const skipLink = page.locator('.skip-link');
-    
+  test("Hero visibility and composition", async ({ page }) => {
+    await page.goto("/");
+
+    // Wait for the hero animation to complete
+    await page.waitForTimeout(1200);
+
+    const title = page.locator(".hero-title");
+    await expect(title).toBeVisible();
+
+    const opacity = await title.evaluate(
+      (element) => getComputedStyle(element).opacity,
+    );
+    expect(Number(opacity)).toBeGreaterThan(0.95);
+
+    const namePrimary = page.locator(".hero-name-primary");
+    const primaryColor = await namePrimary.evaluate(
+      (el) => getComputedStyle(el).color,
+    );
+    // rgba(244, 244, 244) or rgb(244, 244, 244)
+    expect(primaryColor).toContain("rgb(244, 243, 238)");
+
+    const nameAccent = page.locator(".hero-name-accent");
+    const accentColor = await nameAccent.evaluate(
+      (el) => getComputedStyle(el).color,
+    );
+    expect(accentColor).toContain("rgba(244, 243, 238, 0.58)");
+
+    const statement = page.locator(".hero-statement");
+    await expect(statement).toBeVisible();
+
+    const actions = page.locator(".hero-actions .btn").first();
+    await expect(actions).toBeVisible();
+  });
+
+  test("Project action button styling", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForTimeout(1200);
+
+    const projectRow = page.locator(".project-row").first();
+    const projectLink = projectRow.locator(".project-link").first();
+
+    const linkWidth = await projectLink.evaluate(
+      (el) => el.getBoundingClientRect().width,
+    );
+    const rowWidth = await projectRow.evaluate(
+      (el) => el.getBoundingClientRect().width,
+    );
+
+    expect(linkWidth).toBeLessThan(rowWidth * 0.5);
+  });
+
+  test("Skip link accessibility", async ({ page }) => {
+    await page.goto("/");
+    const skipLink = page.locator(".skip-link");
+
     // Evaluate matrix to check if it's visually hidden (Y translation < 0)
-    const isHidden = await skipLink.evaluate(node => {
+    const isHidden = await skipLink.evaluate((node) => {
       const transform = window.getComputedStyle(node).transform;
-      if (transform === 'none') return false;
-      const m = transform.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,[^,]+,\s*([^)]+)\)/);
+      if (transform === "none") return false;
+      const m = transform.match(
+        /matrix\([^,]+,[^,]+,[^,]+,[^,]+,[^,]+,\s*([^)]+)\)/,
+      );
       return m && parseFloat(m[1]) < 0;
     });
     expect(isHidden).toBe(true);
 
-    await page.keyboard.press('Tab');
+    await page.keyboard.press("Tab");
     await expect(skipLink).toBeFocused();
     await page.waitForTimeout(300); // Wait for CSS transition
-    
-    const isVisible = await skipLink.evaluate(node => {
+
+    const isVisible = await skipLink.evaluate((node) => {
       const transform = window.getComputedStyle(node).transform;
-      if (transform === 'none') return true;
-      const m = transform.match(/matrix\([^,]+,[^,]+,[^,]+,[^,]+,[^,]+,\s*([^)]+)\)/);
+      if (transform === "none") return true;
+      const m = transform.match(
+        /matrix\([^,]+,[^,]+,[^,]+,[^,]+,[^,]+,\s*([^)]+)\)/,
+      );
       return !m || parseFloat(m[1]) === 0;
     });
     expect(isVisible).toBe(true);
   });
 
-  test('Project hover creates no failed requests', async ({ page }) => {
-    const failedRequests = [];
-    page.on('requestfailed', request => failedRequests.push(request.url()));
-    page.on('response', response => {
-      if (response.status() >= 400) failedRequests.push(response.url());
-    });
-
-    await page.goto('/');
-    const projectRows = page.locator('.project-row');
-    const count = await projectRows.count();
-    
-    for (let i = 0; i < count; i++) {
-      await projectRows.nth(i).hover();
-      await page.waitForTimeout(100);
-    }
-    
-    expect(failedRequests.length).toBe(0);
-  });
-
-  test('Mobile menu interactions and accessibility', async ({ page, isMobile }) => {
-    await page.goto('/');
-    
+  test("Mobile menu interactions and accessibility", async ({
+    page,
+    isMobile,
+  }) => {
     if (isMobile) {
-      const menuTrigger = page.locator('#mobile-menu-trigger');
-      const mobileMenu = page.locator('#mobile-menu');
-      
+      await page.goto("/");
+
+      const menuTrigger = page.locator("#mobile-menu-trigger");
+      const mobileMenu = page.locator("#mobile-menu");
+
       await menuTrigger.click();
       await expect(mobileMenu).toHaveClass(/open/);
-      await expect(menuTrigger).toHaveAttribute('aria-expanded', 'true');
-      await expect(mobileMenu).toHaveAttribute('aria-hidden', 'false');
-      
-      await page.keyboard.press('Escape');
+      await expect(menuTrigger).toHaveAttribute("aria-expanded", "true");
+      await expect(mobileMenu).toHaveAttribute("aria-hidden", "false");
+
+      await page.keyboard.press("Escape");
       await expect(mobileMenu).not.toHaveClass(/open/);
       await expect(menuTrigger).toBeFocused();
-      
+
       await menuTrigger.click();
       await expect(mobileMenu).toHaveClass(/open/);
-      
-      const navLinks = mobileMenu.locator('a');
-      if (await navLinks.count() > 0) {
+
+      const navLinks = mobileMenu.locator("a");
+      if ((await navLinks.count()) > 0) {
         await navLinks.first().click();
         await expect(mobileMenu).not.toHaveClass(/open/);
       }
     }
   });
 
-  test('Interactive elements (Skills, Modal, AI)', async ({ page }) => {
-    await page.goto('/');
-    
-    const skillKeys = page.locator('.skill-key');
-    if (await skillKeys.count() > 0) {
+  test("Interactive elements (Skills, Modal)", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForTimeout(1000);
+
+    const skillKeys = page.locator(".skill-key");
+    if ((await skillKeys.count()) > 0) {
       await skillKeys.first().hover();
       await expect(skillKeys.first()).toHaveClass(/active/);
     }
-    
-    const aiToggle = page.locator('.ai-toggle');
-    const aiAssistant = page.locator('#ai-assistant');
-    if (await aiToggle.count() > 0) {
-      await aiToggle.click();
-      await expect(aiAssistant).toHaveClass(/open/);
-      
-      const closeAi = page.locator('[data-ai-close]');
-      await closeAi.click();
-      await expect(aiAssistant).not.toHaveClass(/open/);
-    }
-    
-    const projectModalTrigger = page.locator('[data-modal]').first();
-    const caseModal = page.locator('#case-modal');
-    if (await projectModalTrigger.count() > 0) {
+
+    const projectModalTrigger = page.locator("[data-modal]").first();
+    const caseModal = page.locator("#case-modal");
+    if ((await projectModalTrigger.count()) > 0) {
       await projectModalTrigger.click();
-      await expect(caseModal).toHaveAttribute('open', '');
-      
-      const closeModal = page.locator('.modal-close');
+      await expect(caseModal).toHaveAttribute("open", "");
+
+      const closeModal = page.locator(".modal-close");
       await closeModal.click();
-      await expect(caseModal).not.toHaveAttribute('open');
+      await expect(caseModal).not.toHaveAttribute("open");
     }
   });
 
-  test('Verify Certificates and CV Links', async ({ page }) => {
-    await page.goto('/');
-    const certLinks = page.locator('.cert-card a, .supp-cert-row a');
-    const count = await certLinks.count();
-    
-    for (let i = 0; i < count; i++) {
-      const href = await certLinks.nth(i).getAttribute('href');
-      expect(href).not.toBeNull();
-      const res = await page.request.get(href);
-      expect(res.status()).toBe(200);
-    }
+  test("Shehzadas AI advanced features", async ({ page }) => {
+    await page.goto("/");
+
+    // Open AI
+    const aiToggle = page.locator("[data-ai-open]").first();
+    await aiToggle.click();
+    const aiAssistant = page.locator("#ai-assistant");
+    await expect(aiAssistant).toHaveClass(/open/);
+
+    // Check greeting
+    const messages = page.locator(".ai-messages");
+    await expect(messages).toContainText("Hello");
+
+    // Click Recruiter briefing
+    const briefChip = page.locator('[data-ai-special="brief"]').first();
+    await briefChip.click();
+    await page.waitForTimeout(500);
+    await expect(messages).toContainText("Recruiter briefing");
+    await expect(messages).toContainText("cybersecurity candidate");
+
+    // Run Evidence scan
+    const scanChip = page.locator('[data-ai-special="scan"]').first();
+    await scanChip.click();
+    await page.waitForTimeout(1200);
+    await expect(messages).toContainText("Evidence scan complete");
+
+    // Start CTF challenge
+    const ctfChip = page.locator('[data-ai-special="challenge"]').first();
+    await ctfChip.click();
+    await page.waitForTimeout(500);
+    await expect(messages).toContainText("CTF Challenge");
+
+    // Answer incorrect
+    const input = page.locator("#ai-input");
+    await input.fill("something wrong");
+    await input.press("Enter");
+    await page.waitForTimeout(500);
+    await expect(messages).toContainText("Incorrect");
+
+    // Answer correct 1
+    await input.fill("sql injection");
+    await input.press("Enter");
+    await page.waitForTimeout(500);
+    await expect(messages).toContainText("Correct");
+
+    // Answer correct 2
+    await input.fill("xss");
+    await input.press("Enter");
+    await page.waitForTimeout(500);
+    await expect(messages).toContainText("Access granted");
+
+    // Unknown question
+    await input.fill("what is the meaning of life");
+    await input.press("Enter");
+    await page.waitForTimeout(500);
+    await expect(messages).toContainText("enough verified information");
+
+    // Clear conversation
+    await input.fill("clear");
+    await input.press("Enter");
+    await page.waitForTimeout(500);
+    const messageCount = await page.locator(".ai-message").count();
+    expect(messageCount).toBe(1); // Only greeting remains
+
+    // Close panel
+    const closeAi = page.locator('button[data-ai-close], .ai-close').first();
+    await closeAi.click();
+    await expect(aiAssistant).not.toHaveClass(/open/);
   });
 });

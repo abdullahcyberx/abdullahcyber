@@ -22,3 +22,9 @@ node-v22.23.1-win-x64.zip
 private keys/
 tokens/
 temporary backups/
+*.backup.*
+*.old.*
+*.original.*
+append-css.cjs
+extract-modal.cjs
+new-main.cjs
