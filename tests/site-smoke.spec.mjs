@@ -75,7 +75,6 @@ test.describe("Portfolio Smoke Tests", () => {
       "projects",
       "about",
       "experience",
-      "skills",
       "credentials",
       "contact",
     ];
@@ -188,15 +187,9 @@ test.describe("Portfolio Smoke Tests", () => {
     }
   });
 
-  test("Interactive elements (Skills, Modal)", async ({ page }) => {
+  test("Interactive elements (Modal)", async ({ page }) => {
     await page.goto("/");
     await page.waitForTimeout(1000);
-
-    const skillKeys = page.locator(".skill-key");
-    if ((await skillKeys.count()) > 0) {
-      await skillKeys.first().hover();
-      await expect(skillKeys.first()).toHaveClass(/active/);
-    }
 
     const projectModalTrigger = page.locator("[data-modal]").first();
     const caseModal = page.locator("#case-modal");
