@@ -231,7 +231,7 @@ test.describe("Portfolio Smoke Tests", () => {
     expect(messageCount).toBe(1); // Only greeting remains
 
     // Close panel
-    const closeAi = page.locator('button[data-ai-close], .ai-close').first();
+    const closeAi = page.locator("button[data-ai-close], .ai-close").first();
     await closeAi.click();
     await expect(aiAssistant).not.toHaveClass(/open/);
   });

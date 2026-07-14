@@ -486,13 +486,19 @@
     }
 
     let found = false;
-    const customAnswers = Array.isArray(aiConfig.customAnswers) 
-      ? aiConfig.customAnswers 
+    const customAnswers = Array.isArray(aiConfig.customAnswers)
+      ? aiConfig.customAnswers
       : Object.values(aiConfig.customAnswers || {});
-      
+
     for (const kb of customAnswers) {
-      if (kb.keywords && kb.keywords.some((kw) => query.toLowerCase().includes(kw.toLowerCase()))) {
-        addMessage(kb.response, 'ai', { html: true, source: 'Verified portfolio knowledge' });
+      if (
+        kb.keywords &&
+        kb.keywords.some((kw) => query.toLowerCase().includes(kw.toLowerCase()))
+      ) {
+        addMessage(kb.response, "ai", {
+          html: true,
+          source: "Verified portfolio knowledge",
+        });
         found = true;
         break;
       }
