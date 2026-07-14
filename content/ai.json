@@ -17,6 +17,32 @@
     "summary": "Scanning portfolio for security artifacts..."
   },
   "ctfChallengeData": {
+    "title": "Web Security Mini Challenge",
+    "intro": "Solve two short web-security clues to complete the challenge.",
+    "questions": [
+      {
+        "id": "sql-injection",
+        "prompt": "I manipulate a database query when untrusted input is handled unsafely. What vulnerability am I?",
+        "answers": [
+          "sql injection",
+          "sqli"
+        ],
+        "hint": "Think about input being inserted into a database query."
+      },
+      {
+        "id": "cross-site-scripting",
+        "prompt": "I execute untrusted script inside another visitor's browser. What vulnerability am I?",
+        "answers": [
+          "xss",
+          "cross site scripting",
+          "cross-site scripting"
+        ],
+        "hint": "The attack runs in the victim's browser."
+      }
+    ],
+    "incorrectMessage": "Not quite. Try again or ask for a hint.",
+    "successMessage": "Challenge complete. You identified both vulnerabilities.",
+    "unavailableMessage": "The challenge is currently unavailable.",
     "flag": "FLAG{think_beyond_tools}"
   },
   "privacyMessage": "Answers are grounded only in this portfolio. Voice processing, when used, is handled by your browser."

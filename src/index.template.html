@@ -262,13 +262,14 @@
       class="ai-assistant"
       id="ai-assistant"
       role="dialog"
-      aria-label="Shehzada's AI Assistant"
+      aria-modal="true"
+      aria-labelledby="ai-assistant-title"
       aria-hidden="true"
     >
       <div class="ai-backdrop" data-ai-close></div>
       <div class="ai-panel">
         <div class="ai-header">
-          <div class="ai-brand">Shehzada's AI</div>
+          <div class="ai-brand" id="ai-assistant-title">Shehzada's AI</div>
           <button class="ai-close" data-ai-close aria-label="Close AI">
             ✕
           </button>
@@ -282,6 +283,16 @@
         <div class="ai-input-area">
           <div class="ai-suggestions" id="ai-suggestions"></div>
           <form id="ai-form">
+            <button
+              type="button"
+              id="ai-voice-input"
+              class="ai-action-btn"
+              aria-label="Start voice input"
+              aria-pressed="false"
+              hidden
+            >
+              🎤
+            </button>
             <input
               type="text"
               id="ai-input"
@@ -289,7 +300,18 @@
               autocomplete="off"
             />
             <button type="submit" aria-label="Send message">➔</button>
+            <button
+              type="button"
+              id="ai-voice-output"
+              class="ai-action-btn"
+              aria-label="Enable speech output"
+              aria-pressed="false"
+              hidden
+            >
+              🔊
+            </button>
           </form>
+          <div id="ai-live-region" class="visually-hidden" aria-live="polite"></div>
         </div>
       </div>
     </div>
