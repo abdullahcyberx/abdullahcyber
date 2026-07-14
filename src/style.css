@@ -770,15 +770,24 @@ footer {
   z-index: 2000;
   display: flex;
   flex-direction: column;
-  transform: translateY(20px);
+  visibility: hidden;
   opacity: 0;
   pointer-events: none;
-  transition: all var(--motion-fast) var(--ease-out);
+  transform: translateY(20px);
+  transition:
+    opacity var(--motion-fast) var(--ease-out),
+    transform var(--motion-fast) var(--ease-out),
+    visibility 0s linear var(--motion-fast);
 }
 .ai-assistant.open {
-  transform: translateY(0);
+  visibility: visible;
   opacity: 1;
   pointer-events: auto;
+  transform: translateY(0);
+  transition:
+    opacity var(--motion-fast) var(--ease-out),
+    transform var(--motion-fast) var(--ease-out),
+    visibility 0s;
 }
 .ai-header {
   padding: 1rem;

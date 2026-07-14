@@ -711,26 +711,32 @@
         aiInput.focus();
       }
       aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+      aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
     };
 
     recognition.onerror = (event) => {
       aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+      aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
     };
 
     recognition.onend = () => {
       aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+      aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
     };
 
     aiVoiceInputBtn.addEventListener("click", () => {
       if (aiVoiceInputBtn.getAttribute("aria-pressed") === "true") {
         recognition.stop();
         aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+        aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
       } else {
         try {
           recognition.start();
           aiVoiceInputBtn.setAttribute("aria-pressed", "true");
+          aiVoiceInputBtn.setAttribute("aria-label", "Stop voice input");
         } catch (e) {
           aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+          aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
         }
       }
     });
@@ -743,6 +749,10 @@
       aiVoiceOutputBtn.setAttribute(
         "aria-pressed",
         state.sound ? "true" : "false",
+      );
+      aiVoiceOutputBtn.setAttribute(
+        "aria-label",
+        state.sound ? "Disable speech output" : "Enable speech output"
       );
       if (!state.sound) {
         window.speechSynthesis.cancel();
@@ -791,6 +801,7 @@
     lastOpenedBy = document.activeElement;
     if (e && e.currentTarget) lastOpenedBy = e.currentTarget;
 
+    aiPanel.removeAttribute("inert");
     aiPanel.setAttribute("aria-hidden", "false");
     aiPanel.classList.add("open");
     document.body.classList.add("ai-open");
@@ -816,6 +827,7 @@
   const closeAi = () => {
     if (!aiPanel) return;
     aiPanel.setAttribute("aria-hidden", "true");
+    aiPanel.setAttribute("inert", "");
     aiPanel.classList.remove("open");
     document.body.classList.remove("ai-open");
 
@@ -828,6 +840,7 @@
     ) {
       recognition.stop();
       aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+      aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
     }
     if (window.speechSynthesis) {
       window.speechSynthesis.cancel();

@@ -236,15 +236,34 @@ test.describe("Portfolio Smoke Tests", () => {
   test("Shehzadas AI accessibility", async ({ page }) => {
     await page.goto("/");
 
+    const aiAssistant = page.locator("#ai-assistant");
     const aiToggle = page.locator("[data-ai-open]").first();
+    const input = page.locator("#ai-input");
+    const voiceInput = page.locator("#ai-voice-input");
+    const voiceOutput = page.locator("#ai-voice-output");
+    const sendBtn = page.locator("button[aria-label='Send message']");
+
+    // Before opening: Verify panel is inert and not focusable
+    await expect(aiAssistant).toHaveAttribute("aria-hidden", "true");
+    await expect(aiAssistant).toHaveAttribute("inert", "");
+    
+    // Verify inputs cannot receive focus
+    await input.focus({ force: true }).catch(() => {});
+    await expect(input).not.toBeFocused();
+    await voiceInput.focus({ force: true }).catch(() => {});
+    await expect(voiceInput).not.toBeFocused();
+    await sendBtn.focus({ force: true }).catch(() => {});
+    await expect(sendBtn).not.toBeFocused();
+
+    // Open AI panel
     await aiToggle.focus();
     await aiToggle.press("Enter");
 
-    const aiAssistant = page.locator("#ai-assistant");
+    // After opening: Verify inert is removed
     await expect(aiAssistant).toHaveClass(/open/);
+    await expect(aiAssistant).not.toHaveAttribute("inert");
+    await expect(aiAssistant).toHaveAttribute("aria-hidden", "false");
     await expect(page.locator("body")).toHaveClass(/ai-open/);
-
-    const input = page.locator("#ai-input");
     await expect(input).toBeFocused();
 
     // Tab trap
@@ -253,13 +272,13 @@ test.describe("Portfolio Smoke Tests", () => {
     await expect(input).toBeFocused();
 
     // Voice APIs gracefully hidden if unsupported in playwright
-    const voiceInput = page.locator("#ai-voice-input");
-    const voiceOutput = page.locator("#ai-voice-output");
     expect(await voiceInput.count()).toBe(1);
 
     // Escape closes panel and restores focus
     await page.keyboard.press("Escape");
     await expect(aiAssistant).not.toHaveClass(/open/);
+    await expect(aiAssistant).toHaveAttribute("aria-hidden", "true");
+    await expect(aiAssistant).toHaveAttribute("inert", "");
     await expect(page.locator("body")).not.toHaveClass(/ai-open/);
 
     // Focus should be restored
