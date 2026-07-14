@@ -198,7 +198,7 @@ test.describe("Portfolio Smoke Tests", () => {
     );
   });
 
-  test("Contact section Gmail action", async ({ page }) => {
+  test("Contact section Gmail action", async ({ page, isMobile }) => {
     await page.goto("/");
     await page.waitForTimeout(1000);
 
@@ -237,6 +237,21 @@ test.describe("Portfolio Smoke Tests", () => {
 
     const cvLink = page.locator("#contact a[download]");
     await expect(cvLink).toHaveCount(0);
+
+    if (isMobile) {
+      await page.locator("#contact").scrollIntoViewIfNeeded();
+      await page.waitForTimeout(500);
+
+      const aiButton = page.locator("[data-ai-open]");
+
+      await expect(aiButton).toHaveCSS("visibility", "hidden");
+      await expect(aiButton).toHaveCSS("pointer-events", "none");
+
+      // Scroll to About and verify
+      await page.locator("#about").scrollIntoViewIfNeeded();
+      await page.waitForTimeout(500);
+      await expect(aiButton).toHaveCSS("visibility", "visible");
+    }
   });
 
   test("Mobile menu interactions and accessibility", async ({
