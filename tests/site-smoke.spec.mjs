@@ -199,7 +199,7 @@ test.describe("Portfolio Smoke Tests", () => {
 
     await page.goto("/");
 
-    const aiToggle = page.locator("[data-ai-open]").first();
+    const aiToggle = page.locator(".ai-float-btn");
     await aiToggle.click();
     const aiAssistant = page.locator("#ai-assistant");
     await expect(aiAssistant).toHaveClass(/open/);
@@ -264,7 +264,7 @@ test.describe("Portfolio Smoke Tests", () => {
     await page.goto("/");
 
     const aiAssistant = page.locator("#ai-assistant");
-    const aiToggle = page.locator("[data-ai-open]").first();
+    const aiToggle = page.locator(".ai-float-btn");
     const input = page.locator("#ai-input");
     const voiceInput = page.locator("#ai-voice-input");
     const voiceOutput = page.locator("#ai-voice-output");

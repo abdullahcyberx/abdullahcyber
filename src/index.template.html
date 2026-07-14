@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#08090b" />
+    <meta name="theme-color" content="#070707" />
     <meta name="color-scheme" content="dark" />
     <meta
       name="robots"
@@ -55,7 +55,7 @@
     <header class="site-header" id="top">
       <div class="nav-container">
         <a class="brand" href="#home" aria-label="Muhammad Abdullah home"
-          >Abdullah Cyber.</a
+          >MA.</a
         >
 
         <nav id="main-nav" class="desktop-nav" aria-label="Main navigation">
@@ -72,11 +72,19 @@
             class="ai-trigger"
             type="button"
             data-ai-open
-            aria-label="Ask Shehzada’s AI"
-            title="Ask Shehzada’s AI"
+            aria-label="Ask Shehzada's AI"
+            title="Ask Shehzada's AI"
           >
             Shehzada's AI
           </button>
+          <a
+            class="nav-cv-btn"
+            href="assets/Muhammad-Abdullah-CV.pdf"
+            download
+            aria-label="Download CV"
+          >
+            Download CV
+          </a>
           <button
             class="menu-toggle"
             id="mobile-menu-trigger"
@@ -120,48 +128,79 @@
     <main id="main">
       <section id="home" class="hero container" aria-labelledby="hero-title">
         <div class="hero-grid">
-          <h1 id="hero-title" class="hero-title">
-            <span class="hero-name-primary">{{ profile.heroHeading }}</span>
-            <span class="hero-name-accent">{{ profile.heroAccent }}</span>
-          </h1>
-          <div class="hero-details">
-            <div>
-              <p class="hero-context">
-                {{ profile.location }} · {{ profile.professionalTitle }}
-              </p>
-              <p class="hero-statement">
-                Finding how web applications break, then learning how to secure
-                them.
-              </p>
+          <!-- Left: Name + details -->
+          <div class="hero-left">
+            <p class="hero-context">
+              {{ profile.location }} · {{ profile.professionalTitle }}
+            </p>
+            <h1 id="hero-title" class="hero-title">
+              <span class="hero-name-primary">{{ profile.heroHeading }}</span>
+              <span class="hero-name-accent">{{ profile.heroAccent }}</span>
+            </h1>
+            <div class="hero-details">
+              <div>
+                <p class="hero-statement">
+                  Finding how web applications break, then learning how to secure
+                  them.
+                </p>
+              </div>
+              <div class="hero-copy">
+                <p>{{ profile.heroIntroduction }}</p>
+                <div class="hero-actions">
+                  <a class="btn btn-primary" href="#projects"
+                    >View selected work</a
+                  >
+                  <a
+                    class="btn btn-outline"
+                    href="assets/Muhammad-Abdullah-CV.pdf"
+                    download
+                    >Download CV</a
+                  >
+                </div>
+                <div class="hero-social">
+                  <a
+                    href="{{ profile.githubUrl }}"
+                    target="_blank"
+                    rel="me noreferrer"
+                    >GitHub</a
+                  >
+                  <a
+                    href="{{ profile.linkedinUrl }}"
+                    target="_blank"
+                    rel="me noreferrer"
+                    >LinkedIn</a
+                  >
+                  <a href="mailto:{{ profile.email }}">Email</a>
+                </div>
+              </div>
             </div>
-            <div class="hero-copy">
-              <p>{{ profile.heroIntroduction }}</p>
-              <div class="hero-actions">
-                <a class="btn btn-primary" href="#projects"
-                  >View selected work</a
-                >
-                <a
-                  class="btn btn-outline"
-                  href="assets/Muhammad-Abdullah-CV.pdf"
-                  download
-                  >Download CV</a
-                >
+          </div>
+
+          <!-- Right: Evidence panel -->
+          <div class="hero-evidence-panel" aria-hidden="true">
+            <div class="hero-monogram">M<span>A</span>.</div>
+            <div class="hero-panel-stats">
+              <div class="hero-stat">
+                <div class="hero-stat-num">3+</div>
+                <div class="hero-stat-label">Projects</div>
               </div>
-              <div class="hero-social">
-                <a
-                  href="{{ profile.githubUrl }}"
-                  target="_blank"
-                  rel="me noreferrer"
-                  >GitHub</a
-                >
-                <a
-                  href="{{ profile.linkedinUrl }}"
-                  target="_blank"
-                  rel="me noreferrer"
-                  >LinkedIn</a
-                >
-                <a href="mailto:{{ profile.email }}">Email</a>
+              <div class="hero-stat">
+                <div class="hero-stat-num">18+</div>
+                <div class="hero-stat-label">Skills</div>
               </div>
+              <div class="hero-stat">
+                <div class="hero-stat-num">6+</div>
+                <div class="hero-stat-label">Certs</div>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-num">2x</div>
+                <div class="hero-stat-label">Internships</div>
+              </div>
+            </div>
+            <div class="hero-panel-edu">
+              <div class="hero-panel-edu-label">Currently Studying</div>
+              <div class="hero-panel-edu-name">Bachelor of Cyber Security</div>
+              <div class="hero-panel-edu-sub">Riphah International University · Pakistan</div>
             </div>
           </div>
         </div>
@@ -235,7 +274,7 @@
       <section id="contact" class="contact container">
         <h2 class="contact-hero fade-in-up reveal">
           Have a security project,<br />internship opportunity<br />or CTF
-          collaboration?<br /><br />Let’s talk.
+          collaboration?<br /><br />Let's talk.
         </h2>
         <div class="contact-links fade-in-up reveal">
           <a href="mailto:{{ profile.email }}">Email Muhammad</a>
@@ -257,6 +296,18 @@
       <span>&copy; <span id="year"></span> Muhammad Abdullah</span>
       <a href="#top">Back to top</a>
     </footer>
+
+    <!-- Floating AI trigger button -->
+    <button
+      class="ai-float-btn"
+      type="button"
+      data-ai-open
+      aria-label="Ask Shehzada's AI"
+      title="Open Shehzada's AI Assistant"
+    >
+      <span aria-hidden="true">✦</span>
+      <span class="ai-float-dot" aria-hidden="true"></span>
+    </button>
 
     <div
       class="ai-assistant"
