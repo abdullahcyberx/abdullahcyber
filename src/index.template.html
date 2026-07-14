@@ -68,15 +68,6 @@
         </nav>
 
         <div class="nav-actions">
-          <button
-            class="ai-trigger"
-            type="button"
-            data-ai-open
-            aria-label="Ask Shehzada's AI"
-            title="Ask Shehzada's AI"
-          >
-            Shehzada's AI
-          </button>
           <a
             class="nav-cv-btn"
             href="assets/Muhammad-Abdullah-CV.pdf"
@@ -106,23 +97,46 @@
       aria-modal="true"
       aria-label="Mobile navigation"
     >
-      <button
-        class="mobile-menu-close"
-        id="mobile-menu-close"
-        type="button"
-        aria-label="Close menu"
-      >
-        Close
-      </button>
+      <div class="mobile-menu-header">
+        <div class="brand">MA.</div>
+        <button
+          class="mobile-menu-close"
+          id="mobile-menu-close"
+          type="button"
+          aria-label="Close menu"
+        >
+          Close
+        </button>
+      </div>
       <nav class="mobile-nav">
-        <a href="#projects">Work</a>
-        <a href="#about">About</a>
-        <a href="#experience">Experience</a>
-        <a href="#skills">Skills</a>
-        <a href="#credentials">Certificates</a>
-        <a href="#contact">Contact</a>
-        <a href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
+        <a href="#projects"><span>01</span> Work</a>
+        <a href="#about"><span>02</span> About</a>
+        <a href="#experience"><span>03</span> Experience</a>
+        <a href="#skills"><span>04</span> Skills</a>
+        <a href="#credentials"><span>05</span> Certificates</a>
+        <a href="#contact"><span>06</span> Contact</a>
       </nav>
+      <div class="mobile-menu-footer">
+        <a
+          href="assets/Muhammad-Abdullah-CV.pdf"
+          download
+          class="btn btn-outline"
+          style="width: 100%; justify-content: center; margin-bottom: 24px"
+          >Download CV</a
+        >
+        <div class="hero-social" style="justify-content: center">
+          <a href="{{ profile.githubUrl }}" target="_blank" rel="me noreferrer"
+            >GitHub</a
+          >
+          <a
+            href="{{ profile.linkedinUrl }}"
+            target="_blank"
+            rel="me noreferrer"
+            >LinkedIn</a
+          >
+          <a href="mailto:{{ profile.email }}">Email</a>
+        </div>
+      </div>
     </div>
 
     <main id="main">
@@ -140,8 +154,8 @@
             <div class="hero-details">
               <div>
                 <p class="hero-statement">
-                  Finding how web applications break, then learning how to secure
-                  them.
+                  Finding how web applications break, then learning how to
+                  secure them.
                 </p>
               </div>
               <div class="hero-copy">
@@ -181,26 +195,28 @@
             <div class="hero-monogram">M<span>A</span>.</div>
             <div class="hero-panel-stats">
               <div class="hero-stat">
-                <div class="hero-stat-num">3+</div>
+                <div class="hero-stat-num">{{ projectsCount }}</div>
                 <div class="hero-stat-label">Projects</div>
               </div>
               <div class="hero-stat">
-                <div class="hero-stat-num">18+</div>
+                <div class="hero-stat-num">{{ skillsCount }}</div>
                 <div class="hero-stat-label">Skills</div>
               </div>
               <div class="hero-stat">
-                <div class="hero-stat-num">6+</div>
+                <div class="hero-stat-num">{{ certificatesCount }}</div>
                 <div class="hero-stat-label">Certs</div>
               </div>
               <div class="hero-stat">
-                <div class="hero-stat-num">2x</div>
+                <div class="hero-stat-num">{{ internshipsCount }}</div>
                 <div class="hero-stat-label">Internships</div>
               </div>
             </div>
             <div class="hero-panel-edu">
               <div class="hero-panel-edu-label">Currently Studying</div>
               <div class="hero-panel-edu-name">Bachelor of Cyber Security</div>
-              <div class="hero-panel-edu-sub">Riphah International University · Pakistan</div>
+              <div class="hero-panel-edu-sub">
+                Riphah International University · Pakistan
+              </div>
             </div>
           </div>
         </div>
@@ -238,16 +254,25 @@
         <h2 class="section-header fade-in-up reveal">
           Tools I use to explore,<br />test and understand systems.
         </h2>
-        <div
-          class="keyboard-container fade-in-up reveal"
-          aria-label="Interactive skills keyboard"
-        >
-          <div class="skills-keyboard" role="list">
-            <!-- TEMPLATE: SKILLS -->
+        <div class="skills-layout fade-in-up reveal">
+          <div
+            class="keyboard-container"
+            aria-label="Interactive skills keyboard"
+          >
+            <div class="skills-keyboard" role="list">
+              <!-- TEMPLATE: SKILLS -->
+            </div>
+            <p class="keyboard-instructions" aria-hidden="true">
+              Use your keyboard to highlight skills.
+            </p>
           </div>
-          <p class="keyboard-instructions" aria-hidden="true">
-            Use your keyboard to highlight skills.
-          </p>
+          <div class="skill-detail-panel" id="skill-detail" aria-live="polite">
+            <h3 id="skill-detail-title">Security Mindset</h3>
+            <p id="skill-detail-desc">
+              Approaching systems critically to identify weaknesses before they
+              can be exploited.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -363,7 +388,11 @@
               🔊
             </button>
           </form>
-          <div id="ai-live-region" class="visually-hidden" aria-live="polite"></div>
+          <div
+            id="ai-live-region"
+            class="visually-hidden"
+            aria-live="polite"
+          ></div>
         </div>
       </div>
     </div>

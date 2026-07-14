@@ -71,6 +71,13 @@ try {
   html = html.replaceAll('{{ seo.twitter.title }}', escapeHtml(seo.twitter.title));
   html = html.replaceAll('{{ seo.twitter.description }}', escapeHtml(seo.twitter.description));
 
+  // Stats
+  const internshipCount = experience.filter(exp => exp.workType === 'Internship').length;
+  html = html.replaceAll('{{ projectsCount }}', projects.length.toString());
+  html = html.replaceAll('{{ skillsCount }}', skills.length.toString());
+  html = html.replaceAll('{{ certificatesCount }}', certificates.length.toString());
+  html = html.replaceAll('{{ internshipsCount }}', internshipCount.toString());
+
   // EXPERIENCE
   const expHtml = experience.map(exp => `
     <article class="timeline-row fade-in-up reveal">
@@ -108,17 +115,77 @@ try {
   html = html.replaceAll('<!-- TEMPLATE: SKILLS -->', fullKeyboard);
 
   // PROJECTS
-  const projHtml = projects.map((p, idx) => `
-    <li class="project-row fade-in-up reveal" data-image="${escapeHtml(p.image)}">
-      <div class="project-number">0${idx+1}</div>
-      <div class="project-content">
-        <h3 class="project-title">${escapeHtml(p.title)}</h3>
-        <div class="project-tools">${p.tools.map(t => escapeHtml(t)).join(' · ')}</div>
-        <p class="project-desc">${escapeHtml(p.summary)}</p>
-        ${p.repositoryUrl ? `<a class="project-link" href="${escapeHtml(p.repositoryUrl)}" target="_blank" rel="noreferrer">Visit Repository <span>↗</span></a>` : `<button class="project-link" type="button" data-modal="${escapeHtml(p.slug)}">View case study <span>↗</span></button>`}
-      </div>
-    </li>
-  `).join('');
+  const projHtml = projects.map((p, idx) => {
+    let visualHtml = '';
+    let layoutClass = '';
+    
+    if (idx === 0) {
+      layoutClass = 'project-split';
+      visualHtml = `
+        <div class="project-visual proj-visual-1">
+          <div class="pv1-flow">
+            <div class="pv1-node">Email Campaign Setup</div>
+            <div class="pv1-arrow">↓</div>
+            <div class="pv1-node">Simulated Phishing</div>
+          </div>
+          <div class="pv1-report">
+            <div class="pv1-report-header">Awareness Report Panel</div>
+            <div class="pv1-report-bar"><div style="width: 45%;"></div></div>
+            <div class="pv1-report-bar"><div style="width: 75%;"></div></div>
+          </div>
+          <div class="pv1-label">Ethical Academic Scope</div>
+        </div>
+      `;
+    } else if (idx === 1) {
+      layoutClass = 'project-split-reverse';
+      visualHtml = `
+        <div class="project-visual proj-visual-2">
+          <div class="pv2-logs">
+            <div class="pv2-log"><span class="pv2-time">14:02:01</span> <span class="pv2-ip">192.168.1.***</span> Failed password for root</div>
+            <div class="pv2-log"><span class="pv2-time">14:05:33</span> <span class="pv2-ip">10.0.0.***</span> Disconnected</div>
+            <div class="pv2-log"><span class="pv2-time">14:12:45</span> <span class="pv2-ip">172.16.***.***</span> Connection closed</div>
+          </div>
+          <div class="pv2-labels">
+            <span class="pv2-label">SSHesame</span>
+            <span class="pv2-label">VirtualBox</span>
+            <span class="pv2-label">Linux</span>
+          </div>
+        </div>
+      `;
+    } else if (idx === 2) {
+      layoutClass = 'project-horizontal';
+      visualHtml = `
+        <div class="project-visual proj-visual-3">
+          <div class="pv3-board">
+            <div class="pv3-cat">Web</div>
+            <div class="pv3-cat">Crypto</div>
+            <div class="pv3-cat">Forensics</div>
+            <div class="pv3-cat">OSINT</div>
+          </div>
+          <div class="pv3-roles">
+            <span class="pv3-role">Organizer</span>
+            <span class="pv3-role">Player</span>
+          </div>
+        </div>
+      `;
+    }
+    
+    return `
+      <li class="project-row ${layoutClass} fade-in-up reveal" data-image="${escapeHtml(p.image)}">
+        <div class="project-number">0${idx+1}</div>
+        <div class="project-visual-container">
+          ${visualHtml}
+        </div>
+        <div class="project-content">
+          <div class="project-category">${escapeHtml(p.category)}</div>
+          <h3 class="project-title">${escapeHtml(p.title)}</h3>
+          <p class="project-desc">${escapeHtml(p.summary)}</p>
+          <div class="project-tools">${p.tools.map(t => escapeHtml(t)).join(' · ')}</div>
+          ${p.repositoryUrl ? `<a class="project-link" href="${escapeHtml(p.repositoryUrl)}" target="_blank" rel="noreferrer">Visit Repository <span>↗</span></a>` : `<button class="project-link" type="button" data-modal="${escapeHtml(p.slug)}">View case study <span>↗</span></button>`}
+        </div>
+      </li>
+    `;
+  }).join('');
   html = html.replaceAll('<!-- TEMPLATE: PROJECTS -->', projHtml);
 
   // CERTIFICATES

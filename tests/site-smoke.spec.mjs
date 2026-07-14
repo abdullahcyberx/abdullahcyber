@@ -71,7 +71,14 @@ test.describe("Portfolio Smoke Tests", () => {
     await page.goto("/");
     await page.waitForTimeout(1000);
 
-    const sections = ["projects", "about", "experience", "skills", "credentials", "contact"];
+    const sections = [
+      "projects",
+      "about",
+      "experience",
+      "skills",
+      "credentials",
+      "contact",
+    ];
 
     for (const sectionId of sections) {
       // Find a link that targets this section
@@ -80,15 +87,25 @@ test.describe("Portfolio Smoke Tests", () => {
       if (await link.isVisible()) {
         await link.click();
       } else {
-        await page.evaluate((id) => document.querySelector(`a[href="#${id}"]`).click(), sectionId);
+        await page.evaluate(
+          (id) => document.querySelector(`a[href="#${id}"]`).click(),
+          sectionId,
+        );
       }
 
       await page.waitForTimeout(500); // Wait for smooth scroll
 
-      const headerBottom = await page.locator(".site-header").evaluate((el) => el.getBoundingClientRect().bottom);
+      const headerBottom = await page
+        .locator(".site-header")
+        .evaluate((el) => el.getBoundingClientRect().bottom);
       // Contact has a different header element
-      const headingSelector = sectionId === "contact" ? ".contact-hero" : `#${sectionId} .section-header`;
-      const headingTop = await page.locator(headingSelector).evaluate((el) => el.getBoundingClientRect().top);
+      const headingSelector =
+        sectionId === "contact"
+          ? ".contact-hero"
+          : `#${sectionId} .section-header`;
+      const headingTop = await page
+        .locator(headingSelector)
+        .evaluate((el) => el.getBoundingClientRect().top);
 
       expect(headingTop).toBeGreaterThanOrEqual(headerBottom - 2); // 2px tolerance for fractional pixels
     }
@@ -220,7 +237,7 @@ test.describe("Portfolio Smoke Tests", () => {
     const scanChip = page.locator('[data-ai-special="scan"]').first();
     await scanChip.click();
     await page.waitForTimeout(1200);
-    await expect(messages).toContainText('Evidence Scan');
+    await expect(messages).toContainText("Evidence Scan");
     await expect(messages).toContainText("Found");
 
     // CTF challenge
@@ -273,7 +290,7 @@ test.describe("Portfolio Smoke Tests", () => {
     // Before opening: Verify panel is inert and not focusable
     await expect(aiAssistant).toHaveAttribute("aria-hidden", "true");
     await expect(aiAssistant).toHaveAttribute("inert", "");
-    
+
     // Verify inputs cannot receive focus
     await input.focus({ force: true }).catch(() => {});
     await expect(input).not.toBeFocused();
