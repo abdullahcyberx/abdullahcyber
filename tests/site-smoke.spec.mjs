@@ -200,20 +200,40 @@ test.describe("Portfolio Smoke Tests", () => {
 
   test("Contact section Gmail action", async ({ page }) => {
     await page.goto("/");
+    await page.waitForTimeout(1000);
+
+    // Scroll to contact to trigger reveal
+    await page.evaluate(() => {
+      document
+        .getElementById("contact")
+        ?.scrollIntoView({ behavior: "auto", block: "start" });
+    });
+    await page.waitForTimeout(1200);
 
     const contactLinks = page.locator("#contact a");
     expect(await contactLinks.count()).toBe(1);
 
-    const gmailContact = page.locator(".gmail-contact");
-    await expect(gmailContact).toBeVisible();
-    const href = await gmailContact.getAttribute("href");
+    const gmailCard = page.locator(".gmail-contact");
+    await expect(gmailCard).toBeVisible();
+
+    const gmailOpacity = await gmailCard.evaluate((element) =>
+      Number.parseFloat(getComputedStyle(element).opacity),
+    );
+    expect(gmailOpacity).toBeGreaterThanOrEqual(0.95);
+
+    const gmailStrongColor = await gmailCard
+      .locator(".gmail-contact-copy strong")
+      .evaluate((el) => getComputedStyle(el).color);
+    expect(gmailStrongColor).toContain("rgb(245, 245, 242)"); // #f5f5f2
+
+    const href = await gmailCard.getAttribute("href");
     expect(href).toMatch(/^mailto:abdullahcyberx@gmail\.com/);
 
-    await expect(gmailContact).toHaveAttribute(
+    await expect(gmailCard).toHaveAttribute(
       "aria-label",
       expect.stringContaining("abdullahcyberx@gmail.com"),
     );
-    await expect(gmailContact.locator("strong")).toHaveText("Email Muhammad");
+    await expect(gmailCard.locator("strong")).toHaveText("Email Muhammad");
 
     const cvLink = page.locator("#contact a[download]");
     await expect(cvLink).toHaveCount(0);

@@ -66,7 +66,19 @@ import fs from "fs";
       .getElementById("contact")
       ?.scrollIntoView({ behavior: "auto", block: "start" });
   });
-  await pageMobile.waitForTimeout(800);
+  await pageMobile.waitForTimeout(1200);
+
+  // Confirm opacity
+  const gmailOpacity = await pageMobile.evaluate(() => {
+    const el = document.querySelector(".gmail-contact");
+    return el ? parseFloat(getComputedStyle(el).opacity) : 0;
+  });
+  if (gmailOpacity < 0.95) {
+    console.warn(
+      `Mobile Gmail card opacity is ${gmailOpacity}, expected >= 0.95`,
+    );
+  }
+
   await pageMobile.screenshot({ path: "screenshots/gmail-contact-mobile.png" });
 
   await contextMobile.close();
