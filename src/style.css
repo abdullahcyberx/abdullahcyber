@@ -1364,50 +1364,265 @@ body.menu-open {
   max-width: none;
 }
 
+/* ---- About Links --------------------------------------------- */
+.about-links-block {
+  grid-column: 1 / -1;
+  margin-top: clamp(64px, 8vw, 110px);
+  padding-top: clamp(30px, 4vw, 48px);
+  border-top: 1px solid var(--border);
+}
+
+.about-links-list {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  margin-top: 32px;
+  border-top: 1px solid var(--border);
+}
+
+.profile-link {
+  position: relative;
+  display: grid;
+  grid-template-columns: 48px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 16px;
+  min-height: 108px;
+  padding: 22px 24px;
+  color: var(--text);
+  text-decoration: none;
+  border-right: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background: transparent;
+  transition:
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 180ms ease;
+}
+
+.profile-link:hover,
+.profile-link:focus-visible {
+  background: rgba(129, 103, 255, 0.07);
+  border-color: rgba(129, 103, 255, 0.32);
+}
+
+.profile-link:hover .profile-link-arrow,
+.profile-link:focus-visible .profile-link-arrow {
+  transform: translate(3px, -3px);
+  color: var(--accent-light);
+}
+
+.profile-link-number {
+  color: var(--accent-light);
+  font-size: 0.75rem;
+  letter-spacing: 0.12em;
+}
+
+.profile-link-main {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.profile-link-main strong {
+  font-size: clamp(1.1rem, 1.5vw, 1.35rem);
+}
+
+.profile-link-main small {
+  color: var(--text-secondary);
+  font-size: 0.9rem;
+}
+
+.profile-link-arrow {
+  font-size: 1.2rem;
+  transition:
+    transform 180ms ease,
+    color 180ms ease;
+}
+
 /* ---- Contact --------------------------------------------- */
+.contact-section {
+  position: relative;
+  overflow: hidden;
+  padding-block: var(--space-section-desktop);
+  background:
+    radial-gradient(
+      circle at 78% 44%,
+      rgba(129, 103, 255, 0.1),
+      transparent 32%
+    ),
+    var(--bg-soft);
+}
+
+.contact-inner {
+  max-width: 1100px;
+}
+
 .contact-hero {
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(3rem, 7vw, 6.5rem);
   line-height: 1.1;
   letter-spacing: -0.02em;
   color: var(--text);
-  margin-bottom: 24px;
   font-weight: 800;
 }
 
-.contact-links {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
-}
-
-.contact-links a {
-  display: inline-flex;
+.gmail-contact {
+  position: relative;
+  isolation: isolate;
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border: 1px solid var(--border);
-  border-radius: 8px;
+  gap: clamp(18px, 3vw, 30px);
+  width: min(100%, 820px);
+  min-height: 150px;
+  margin-top: clamp(42px, 6vw, 72px);
+  padding: clamp(24px, 4vw, 42px);
+  overflow: hidden;
   color: var(--text);
-  font-size: 0.9375rem;
-  font-weight: 600;
-  transition: all 200ms var(--ease);
+  text-decoration: none;
+  border: 1px solid rgba(129, 103, 255, 0.55);
+  border-radius: 22px;
+  background: linear-gradient(
+    135deg,
+    rgba(129, 103, 255, 0.13),
+    rgba(17, 17, 19, 0.96) 38%,
+    rgba(10, 10, 11, 0.98)
+  );
+  box-shadow:
+    0 0 0 1px rgba(129, 103, 255, 0.08),
+    0 20px 70px rgba(0, 0, 0, 0.36),
+    0 0 48px rgba(129, 103, 255, 0.13);
+  transition:
+    transform 220ms cubic-bezier(0.22, 1, 0.36, 1),
+    border-color 220ms ease,
+    box-shadow 220ms ease;
+  animation: gmail-breathe 4.5s infinite ease-in-out;
 }
 
-.contact-links a:hover {
-  border-color: var(--border-strong);
-  background: var(--surface);
-  color: var(--text);
+@keyframes gmail-breathe {
+  0%,
+  100% {
+    box-shadow:
+      0 20px 70px rgba(0, 0, 0, 0.36),
+      0 0 42px rgba(129, 103, 255, 0.11);
+  }
+
+  50% {
+    box-shadow:
+      0 22px 76px rgba(0, 0, 0, 0.4),
+      0 0 58px rgba(129, 103, 255, 0.19);
+  }
 }
 
-.contact-links a:first-child {
-  background: var(--text);
-  color: var(--bg);
-  border-color: var(--text);
+.gmail-contact::before {
+  content: "";
+  position: absolute;
+  inset: -40%;
+  z-index: -1;
+  background: radial-gradient(
+    circle,
+    rgba(129, 103, 255, 0.22),
+    transparent 56%
+  );
+  opacity: 0.55;
+  transform: translate3d(-24%, 16%, 0);
+  transition:
+    opacity 260ms ease,
+    transform 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-.contact-links a:first-child:hover {
-  background: transparent;
-  color: var(--text);
+.gmail-contact::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    110deg,
+    transparent 20%,
+    rgba(255, 255, 255, 0.08) 45%,
+    transparent 70%
+  );
+  transform: translateX(-130%);
+  transition: transform 650ms cubic-bezier(0.22, 1, 0.36, 1);
+  pointer-events: none;
+}
+
+.gmail-contact:hover,
+.gmail-contact:focus-visible {
+  transform: translateY(-3px);
+  border-color: rgba(169, 152, 255, 0.9);
+  box-shadow:
+    0 0 0 1px rgba(129, 103, 255, 0.18),
+    0 24px 85px rgba(0, 0, 0, 0.45),
+    0 0 65px rgba(129, 103, 255, 0.24);
+}
+
+.gmail-contact:hover::before,
+.gmail-contact:focus-visible::before {
+  opacity: 0.9;
+  transform: translate3d(10%, -8%, 0);
+}
+
+.gmail-contact:hover::after,
+.gmail-contact:focus-visible::after {
+  transform: translateX(130%);
+}
+
+.gmail-contact:hover .gmail-contact-arrow,
+.gmail-contact:focus-visible .gmail-contact-arrow {
+  transform: translate(4px, -4px);
+}
+
+.gmail-contact:focus-visible {
+  outline: 3px solid rgba(169, 152, 255, 0.8);
+  outline-offset: 5px;
+}
+
+.gmail-contact-copy {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  min-width: 0;
+}
+
+.gmail-contact-copy small {
+  color: var(--accent-light);
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+}
+
+.gmail-contact-copy strong {
+  font-size: clamp(1.6rem, 3.5vw, 3rem);
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+.gmail-contact-copy span {
+  color: var(--text-secondary);
+  font-size: clamp(0.9rem, 1.5vw, 1.05rem);
+  overflow-wrap: anywhere;
+}
+
+.gmail-contact-icon {
+  display: grid;
+  place-items: center;
+  width: clamp(54px, 6vw, 74px);
+  aspect-ratio: 1;
+  border: 1px solid rgba(129, 103, 255, 0.35);
+  border-radius: 18px;
+  background: rgba(129, 103, 255, 0.1);
+  color: var(--accent-light);
+}
+
+.gmail-contact-icon svg {
+  width: 44%;
+  height: auto;
+}
+
+.gmail-contact-arrow {
+  font-size: clamp(1.5rem, 3vw, 2.3rem);
+  color: var(--accent-light);
+  transition: transform 220ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 /* ---- Footer ----------------------------------------------- */
@@ -2004,8 +2219,28 @@ body.ai-open {
     grid-row: 2;
   }
 
-  .contact-hero {
-    font-size: clamp(1.75rem, 8vw, 2.5rem);
+  .about-links-list {
+    grid-template-columns: 1fr;
+  }
+
+  .profile-link {
+    grid-template-columns: 34px minmax(0, 1fr) auto;
+    min-height: 88px;
+    padding: 18px 4px;
+    border-right: 0;
+  }
+
+  .gmail-contact {
+    grid-template-columns: auto minmax(0, 1fr);
+    min-height: auto;
+    padding: 24px 20px;
+    border-radius: 18px;
+  }
+
+  .gmail-contact-arrow {
+    grid-column: 2;
+    justify-self: start;
+    margin-top: 8px;
   }
 
   .ai-assistant {

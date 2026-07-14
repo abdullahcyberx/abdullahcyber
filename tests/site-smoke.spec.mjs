@@ -157,6 +157,68 @@ test.describe("Portfolio Smoke Tests", () => {
     expect(isVisible).toBe(true);
   });
 
+  test("About links section", async ({ page }) => {
+    await page.goto("/");
+
+    const aboutLinksBlock = page.locator(".about-links-block");
+    await expect(aboutLinksBlock).toBeVisible();
+    await expect(aboutLinksBlock.locator(".eyebrow")).toHaveText(
+      "Find me online",
+    );
+
+    const links = aboutLinksBlock.locator(".profile-link");
+    expect(await links.count()).toBe(4);
+
+    // Verify order
+    await expect(links.nth(0).locator("strong")).toHaveText("GitHub");
+    await expect(links.nth(1).locator("strong")).toHaveText("TryHackMe");
+    await expect(links.nth(2).locator("strong")).toHaveText("LinkedIn");
+    await expect(links.nth(3).locator("strong")).toHaveText("Personal profile");
+
+    for (let i = 0; i < 4; i++) {
+      await expect(links.nth(i)).toHaveAttribute("target", "_blank");
+      await expect(links.nth(i)).toHaveAttribute("rel", "noopener noreferrer");
+    }
+
+    await expect(links.nth(0)).toHaveAttribute(
+      "href",
+      "https://github.com/abdullahcyberx",
+    );
+    await expect(links.nth(1)).toHaveAttribute(
+      "href",
+      "https://tryhackme.com/p/HAFIZABDULLAH",
+    );
+    await expect(links.nth(2)).toHaveAttribute(
+      "href",
+      "https://www.linkedin.com/in/abdullahcyberx/",
+    );
+    await expect(links.nth(3)).toHaveAttribute(
+      "href",
+      "https://guns.lol/abdullahcyberx",
+    );
+  });
+
+  test("Contact section Gmail action", async ({ page }) => {
+    await page.goto("/");
+
+    const contactLinks = page.locator("#contact a");
+    expect(await contactLinks.count()).toBe(1);
+
+    const gmailContact = page.locator(".gmail-contact");
+    await expect(gmailContact).toBeVisible();
+    const href = await gmailContact.getAttribute("href");
+    expect(href).toMatch(/^mailto:abdullahcyberx@gmail\.com/);
+
+    await expect(gmailContact).toHaveAttribute(
+      "aria-label",
+      expect.stringContaining("abdullahcyberx@gmail.com"),
+    );
+    await expect(gmailContact.locator("strong")).toHaveText("Email Muhammad");
+
+    const cvLink = page.locator("#contact a[download]");
+    await expect(cvLink).toHaveCount(0);
+  });
+
   test("Mobile menu interactions and accessibility", async ({
     page,
     isMobile,
