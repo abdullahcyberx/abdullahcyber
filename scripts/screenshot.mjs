@@ -23,9 +23,10 @@ import fs from 'fs';
   await pageMobile.waitForTimeout(500);
   await pageMobile.screenshot({ path: `screenshots/${prefix}-mobile-scroll.png` });
 
-  await pageMobile.evaluate(() => window.scrollBy(0, 1500));
+  await pageMobile.click('#mobile-menu-trigger');
   await pageMobile.waitForTimeout(500);
-  await pageMobile.screenshot({ path: `screenshots/${prefix}-mobile-skills.png` });
+  await pageMobile.screenshot({ path: `screenshots/${prefix}-mobile-menu.png` });
+  await pageMobile.click('#mobile-menu-close');
 
   // Desktop
   const contextDesktop = await browser.newContext({
@@ -42,7 +43,7 @@ import fs from 'fs';
 
   await pageDesktop.evaluate(() => window.scrollBy(0, 2000));
   await pageDesktop.waitForTimeout(500);
-  await pageDesktop.screenshot({ path: `screenshots/${prefix}-desktop-skills.png` });
+  await pageDesktop.screenshot({ path: `screenshots/${prefix}-desktop-projects.png` });
 
   await browser.close();
   console.log(`Screenshots captured for ${prefix}`);

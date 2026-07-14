@@ -307,13 +307,22 @@
   const aiForm = document.getElementById("ai-form");
   const aiMessages = document.getElementById("ai-messages");
   const aiSuggestions = document.getElementById("ai-suggestions");
+  const aiVoiceInputBtn = document.getElementById("ai-voice-input");
+  const aiVoiceOutputBtn = document.getElementById("ai-voice-output");
+  const aiLiveRegion = document.getElementById("ai-live-region");
+  const aiFocusableSelectors =
+    'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select';
+
+  let lastOpenedBy = null;
 
   const state = {
     greeted: false,
     busy: false,
     sound: false,
-    challengeStep: 0,
-    lastIntent: "",
+    challengeActive: false,
+    challengeIndex: 0,
+    challengeAttempts: 0,
+    challengeHintShown: false,
   };
 
   const escapeHTML = (value) =>
@@ -329,10 +338,86 @@
         })[c],
     );
 
+  // Dynamic Recruiter Briefing
+  const buildRecruiterBriefing = (knowledge) => {
+    let text = `Muhammad Abdullah is a Cyber Security student focused on web penetration testing, application security and practical security testing.`;
+
+    if (knowledge.experience && knowledge.experience.length > 0) {
+      text += `\n\nHis experience includes:\n`;
+      const expSlice = knowledge.experience.slice(0, 3);
+      text += expSlice
+        .map((e) => `- ${e.role} at ${e.company}`)
+        .join("\n");
+    }
+
+    let hasPortfolio = false;
+    let portfolioText = `\n\nHis portfolio includes:\n`;
+    if (knowledge.projects && knowledge.projects.length > 0) {
+      portfolioText += `- ${knowledge.projects.length} practical projects\n`;
+      hasPortfolio = true;
+    }
+    if (knowledge.skills && knowledge.skills.length > 0) {
+      portfolioText += `- ${knowledge.skills.length} documented technical skills\n`;
+      hasPortfolio = true;
+    }
+    if (knowledge.certificates && knowledge.certificates.length > 0) {
+      portfolioText += `- ${knowledge.certificates.length} certifications\n`;
+      hasPortfolio = true;
+    }
+    if (knowledge.achievements && knowledge.achievements.length > 0) {
+      portfolioText += `- ${knowledge.achievements.length} achievements\n`;
+      hasPortfolio = true;
+    }
+    if (hasPortfolio) text += portfolioText.trimEnd();
+
+    if (knowledge.projects && knowledge.projects.length > 0) {
+      text += `\n\nSelected projects:\n`;
+      const projSlice = knowledge.projects.slice(0, 3);
+      text += projSlice.map((p) => `- ${p.title}: ${p.summary}`).join("\n");
+    }
+
+    if (knowledge.certificates && knowledge.certificates.length > 0) {
+      text += `\n\nKey certifications:\n`;
+      const featured = knowledge.certificates.filter((c) => c.featured);
+      const others = knowledge.certificates.filter((c) => !c.featured);
+      let certsToShow = featured.concat(others).slice(0, featured.length + 2);
+      text += certsToShow
+        .map((c) => `- ${c.title} from ${c.issuer}`)
+        .join("\n");
+    }
+
+    if (knowledge.education && knowledge.education.length > 0) {
+      text += `\n\nEducation:\n`;
+      text += knowledge.education
+        .map(
+          (e) =>
+            `- ${e.degree}, ${e.institution} (${e.expectedCompletion || e.date})`,
+        )
+        .join("\n");
+    }
+
+    return text.trim();
+  };
+
+  const recruiterBriefingText = buildRecruiterBriefing(portfolioKnowledge);
+
   const scrollMessages = () =>
     requestAnimationFrame(() => {
       if (aiMessages) aiMessages.scrollTop = aiMessages.scrollHeight;
     });
+
+  const speakText = (text) => {
+    if (!state.sound || !window.speechSynthesis) return;
+    window.speechSynthesis.cancel();
+
+    // Strip HTML before speaking
+    const temp = document.createElement("div");
+    temp.innerHTML = text;
+    const plainText = temp.textContent || temp.innerText || "";
+
+    const utterance = new SpeechSynthesisUtterance(plainText);
+    window.speechSynthesis.speak(utterance);
+  };
 
   const addMessage = (content, role = "ai", options = {}) => {
     if (!aiMessages) return null;
@@ -347,6 +432,11 @@
 
     aiMessages.appendChild(msg);
     scrollMessages();
+
+    if (role === "ai" && state.sound) {
+      speakText(content);
+    }
+
     return msg;
   };
 
@@ -382,25 +472,25 @@
     const actions = questions.map((q) => ({ label: q }));
     actions.push(
       {
-        label: aiConfig.recruiterBriefingLabels?.[0] || "Recruiter briefing",
+        label: aiConfig.recruiterBriefingLabels?.title || "Recruiter briefing",
         special: "brief",
       },
-      { label: aiConfig.scanLabels?.[0] || "Evidence scan", special: "scan" },
+      { label: aiConfig.scanLabels?.title || "Evidence scan", special: "scan" },
       { label: "CTF challenge", special: "challenge" },
     );
     renderQuickActions(actions);
   };
 
-  const recruiterBriefing = () => {
-    let experienceText =
-      portfolioKnowledge.experience?.map((e) => e.role).join(", ") || "";
-    const brief = `<p><strong>Recruiter briefing</strong></p>
-      <p>Muhammad Abdullah is an entry-level cybersecurity candidate focused on web penetration testing.</p>
-      <p><strong>Experience:</strong> ${experienceText}</p>
-      <div style="margin-top: 8px;"><button type="button" class="ai-chip" data-ai-special="copy-brief">Copy summary</button></div>`;
-    addMessage(brief, "ai", {
+  const displayRecruiterBriefing = () => {
+    const briefHtml = `<p><strong>${aiConfig.recruiterBriefingLabels?.title || "Recruiter Briefing"}</strong></p>
+      <div style="white-space: pre-wrap; font-size: 0.9em;">${escapeHTML(recruiterBriefingText)}</div>
+      <div style="margin-top: 8px;">
+        <button type="button" class="ai-chip" data-ai-special="copy-brief">Copy summary</button>
+        <span id="copy-status" style="font-size: 0.8em; color: var(--text-muted); margin-left: 8px; display: none;">Copied!</span>
+      </div>`;
+    addMessage(briefHtml, "ai", {
       html: true,
-      source: "Verified from portfolio content",
+      source: "Generated from verified portfolio knowledge",
     });
     defaultActions();
   };
@@ -408,68 +498,159 @@
   const runScan = () => {
     if (state.busy) return;
     state.busy = true;
-    const msg = addMessage(`<p>Running Evidence scan...</p>`, "ai", {
-      html: true,
-    });
+    const msg = addMessage(
+      `<p>${aiConfig.scanLabels?.summary || "Scanning..."}</p>`,
+      "ai",
+      {
+        html: true,
+      },
+    );
     setTimeout(() => {
-      msg.innerHTML = `<p><strong>Evidence scan complete</strong></p><p>Found ${portfolioKnowledge.projects?.length || 0} projects and ${portfolioKnowledge.certificates?.length || 0} certificates.</p>`;
+      msg.innerHTML = `<p><strong>${aiConfig.scanLabels?.title || "Evidence Scan Complete"}</strong></p><p>Found ${portfolioKnowledge.projects?.length || 0} projects and ${portfolioKnowledge.certificates?.length || 0} certificates.</p>`;
       state.busy = false;
       defaultActions();
     }, 800);
   };
 
+  const challengeConfig = aiConfig.ctfChallengeData || {};
+  const challengeQuestions = Array.isArray(challengeConfig.questions)
+    ? challengeConfig.questions
+    : [];
+
   const startChallenge = () => {
-    state.challengeStep = 1;
+    if (challengeQuestions.length === 0) {
+      addMessage(
+        `<p>${challengeConfig.unavailableMessage || "Challenge currently unavailable."}</p>`,
+        "ai",
+        { html: true },
+      );
+      defaultActions();
+      return;
+    }
+    state.challengeActive = true;
+    state.challengeIndex = 0;
+    state.challengeAttempts = 0;
+    state.challengeHintShown = false;
+
     addMessage(
-      `<p><strong>CTF Challenge</strong></p><p>I can alter a database query when user input is handled unsafely. What am I?</p>`,
+      `<p><strong>${challengeConfig.title || "CTF Challenge"}</strong></p><p>${challengeConfig.intro || ""}</p>`,
       "ai",
       { html: true },
     );
+
+    setTimeout(() => {
+      addMessage(`<p>${challengeQuestions[0].prompt}</p>`, "ai", {
+        html: true,
+      });
+      renderQuickActions([
+        { label: "Hint", special: "hint" },
+        { label: "Quit", special: "quit-challenge" },
+      ]);
+    }, 400);
   };
 
+  const normalizeAnswer = (value) =>
+    String(value)
+      .trim()
+      .toLowerCase()
+      .replace(/[-_]+/g, " ")
+      .replace(/\s+/g, " ");
+
   const handleChallenge = (query) => {
-    const q = query.toLowerCase();
-    if (state.challengeStep === 1) {
-      if (q.includes("sql")) {
-        state.challengeStep = 2;
-        addMessage(
-          `<p>Correct. Next: I execute untrusted script in a visitor's browser. What am I?</p>`,
-          "ai",
-          { html: true },
-        );
-      } else {
-        addMessage(`<p>Incorrect. Try again.</p>`, "ai", { html: true });
-      }
+    if (!state.challengeActive) return false;
+
+    const q = query.trim().toLowerCase();
+
+    if (q === "quit" || q === "/quit") {
+      state.challengeActive = false;
+      addMessage("Challenge exited.", "ai");
+      defaultActions();
       return true;
     }
-    if (state.challengeStep === 2) {
-      if (q.includes("xss") || q.includes("cross")) {
-        state.challengeStep = 0;
+
+    if (q === "hint" || q === "give me a hint" || q === "/help") {
+      const qData = challengeQuestions[state.challengeIndex];
+      addMessage(`<p><em>Hint:</em> ${qData.hint}</p>`, "ai", { html: true });
+      return true;
+    }
+
+    const qData = challengeQuestions[state.challengeIndex];
+    const normalizedQuery = normalizeAnswer(query);
+    const isCorrect =
+      Array.isArray(qData.answers) &&
+      qData.answers.some((ans) => normalizeAnswer(ans) === normalizedQuery);
+
+    if (isCorrect) {
+      state.challengeIndex++;
+      state.challengeAttempts = 0;
+      state.challengeHintShown = false;
+
+      if (state.challengeIndex >= challengeQuestions.length) {
+        state.challengeActive = false;
         addMessage(
-          `<p><strong>Challenge Complete!</strong> Access granted.</p>`,
+          `<p><strong>${challengeConfig.successMessage || "Challenge Complete!"}</strong></p><p style="font-family: monospace; padding: 8px; background: var(--surface); border-radius: 4px;">${challengeConfig.flag}</p>`,
           "ai",
           { html: true },
         );
         defaultActions();
       } else {
-        addMessage(`<p>Incorrect. Try again.</p>`, "ai", { html: true });
+        addMessage(
+          `<p>Correct. Next: ${challengeQuestions[state.challengeIndex].prompt}</p>`,
+          "ai",
+          { html: true },
+        );
       }
-      return true;
+    } else {
+      state.challengeAttempts++;
+      addMessage(
+        `<p>${challengeConfig.incorrectMessage || "Incorrect. Try again."}</p>`,
+        "ai",
+        { html: true },
+      );
     }
-    return false;
+    return true;
+  };
+
+  const copyRecruiterBriefing = () => {
+    const onSuccess = () => {
+      if (aiLiveRegion)
+        aiLiveRegion.textContent = "Summary copied to clipboard";
+      const statusEl = document.getElementById("copy-status");
+      if (statusEl) {
+        statusEl.style.display = "inline";
+        setTimeout(() => {
+          statusEl.style.display = "none";
+        }, 3000);
+      }
+    };
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard
+        .writeText(recruiterBriefingText)
+        .then(onSuccess)
+        .catch(() => {});
+    } else {
+      const textarea = document.createElement("textarea");
+      textarea.value = recruiterBriefingText;
+      textarea.style.position = "fixed";
+      textarea.style.opacity = "0";
+      document.body.appendChild(textarea);
+      textarea.select();
+      try {
+        document.execCommand("copy");
+        onSuccess();
+      } catch (err) {}
+      document.body.removeChild(textarea);
+    }
   };
 
   const handleSpecial = (special) => {
-    if (special === "brief") recruiterBriefing();
+    if (special === "brief") displayRecruiterBriefing();
     if (special === "scan") runScan();
     if (special === "challenge") startChallenge();
-    if (special === "copy-brief") {
-      navigator.clipboard
-        .writeText(
-          "Muhammad Abdullah is an entry-level cybersecurity candidate...",
-        )
-        .catch(() => {});
-    }
+    if (special === "copy-brief") copyRecruiterBriefing();
+    if (special === "hint") handleChallenge("hint");
+    if (special === "quit-challenge") handleChallenge("quit");
   };
 
   const processQuery = (query) => {
@@ -513,11 +694,112 @@
     defaultActions();
   };
 
-  const openAi = () => {
+  // Voice Features
+  let recognition = null;
+  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (SpeechRec && aiVoiceInputBtn) {
+    aiVoiceInputBtn.hidden = false;
+    recognition = new SpeechRec();
+    recognition.continuous = false;
+    recognition.interimResults = false;
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      if (aiInput) {
+        aiInput.value = transcript;
+        aiInput.focus();
+      }
+      aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+    };
+
+    recognition.onerror = (event) => {
+      aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+    };
+
+    recognition.onend = () => {
+      aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+    };
+
+    aiVoiceInputBtn.addEventListener("click", () => {
+      if (aiVoiceInputBtn.getAttribute("aria-pressed") === "true") {
+        recognition.stop();
+        aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+      } else {
+        try {
+          recognition.start();
+          aiVoiceInputBtn.setAttribute("aria-pressed", "true");
+        } catch (e) {
+          aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+        }
+      }
+    });
+  }
+
+  if (window.speechSynthesis && aiVoiceOutputBtn) {
+    aiVoiceOutputBtn.hidden = false;
+    aiVoiceOutputBtn.addEventListener("click", () => {
+      state.sound = !state.sound;
+      aiVoiceOutputBtn.setAttribute(
+        "aria-pressed",
+        state.sound ? "true" : "false",
+      );
+      if (!state.sound) {
+        window.speechSynthesis.cancel();
+      }
+    });
+  }
+
+  // Accessibility Focus Trap
+  const trapFocus = (e) => {
+    if (e.key === "Tab" && aiPanel.classList.contains("open")) {
+      const focusables = Array.from(
+        aiPanel.querySelectorAll(aiFocusableSelectors),
+      ).filter(
+        (el) =>
+          !el.disabled &&
+          el.offsetParent !== null &&
+          !el.hidden &&
+          el.getAttribute("tabindex") !== "-1",
+      );
+
+      if (!focusables.length) return;
+      const first = focusables[0];
+      const last = focusables[focusables.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) {
+          e.preventDefault();
+          last.focus();
+        }
+      } else {
+        if (document.activeElement === last) {
+          e.preventDefault();
+          first.focus();
+        }
+      }
+    }
+
+    if (e.key === "Escape" && aiPanel.classList.contains("open")) {
+      e.preventDefault();
+      closeAi();
+    }
+  };
+
+  const openAi = (e) => {
     if (!aiPanel) return;
+    lastOpenedBy = document.activeElement;
+    if (e && e.currentTarget) lastOpenedBy = e.currentTarget;
+
     aiPanel.setAttribute("aria-hidden", "false");
     aiPanel.classList.add("open");
-    if (aiInput) aiInput.focus();
+    document.body.classList.add("ai-open");
+
+    if (aiInput) {
+      setTimeout(() => aiInput.focus(), 50);
+    }
+
+    document.addEventListener("keydown", trapFocus);
 
     if (!state.greeted) {
       state.greeted = true;
@@ -535,6 +817,25 @@
     if (!aiPanel) return;
     aiPanel.setAttribute("aria-hidden", "true");
     aiPanel.classList.remove("open");
+    document.body.classList.remove("ai-open");
+
+    document.removeEventListener("keydown", trapFocus);
+
+    if (
+      recognition &&
+      aiVoiceInputBtn &&
+      aiVoiceInputBtn.getAttribute("aria-pressed") === "true"
+    ) {
+      recognition.stop();
+      aiVoiceInputBtn.setAttribute("aria-pressed", "false");
+    }
+    if (window.speechSynthesis) {
+      window.speechSynthesis.cancel();
+    }
+
+    if (lastOpenedBy && typeof lastOpenedBy.focus === "function") {
+      lastOpenedBy.focus();
+    }
   };
 
   document

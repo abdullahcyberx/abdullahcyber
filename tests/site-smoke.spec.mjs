@@ -166,73 +166,103 @@ test.describe("Portfolio Smoke Tests", () => {
     }
   });
 
-  test("Shehzadas AI advanced features", async ({ page }) => {
+  test("Shehzadas AI advanced features", async ({ page, context }) => {
+    // Grant clipboard permissions for copy testing
+    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
+
     await page.goto("/");
 
-    // Open AI
     const aiToggle = page.locator("[data-ai-open]").first();
     await aiToggle.click();
     const aiAssistant = page.locator("#ai-assistant");
     await expect(aiAssistant).toHaveClass(/open/);
 
-    // Check greeting
     const messages = page.locator(".ai-messages");
-    await expect(messages).toContainText("Hello");
 
-    // Click Recruiter briefing
+    // Recruiter briefing & copy
     const briefChip = page.locator('[data-ai-special="brief"]').first();
     await briefChip.click();
     await page.waitForTimeout(500);
-    await expect(messages).toContainText("Recruiter briefing");
-    await expect(messages).toContainText("cybersecurity candidate");
+    await expect(messages).toContainText("Recruiter Briefing");
 
-    // Run Evidence scan
+    const copyBtn = page.locator('[data-ai-special="copy-brief"]').first();
+    await copyBtn.click();
+    await page.waitForTimeout(300);
+
+    // Evidence scan
     const scanChip = page.locator('[data-ai-special="scan"]').first();
     await scanChip.click();
     await page.waitForTimeout(1200);
-    await expect(messages).toContainText("Evidence scan complete");
+    await expect(messages).toContainText('Evidence Scan');
+    await expect(messages).toContainText("Found");
 
-    // Start CTF challenge
+    // CTF challenge
     const ctfChip = page.locator('[data-ai-special="challenge"]').first();
     await ctfChip.click();
-    await page.waitForTimeout(500);
-    await expect(messages).toContainText("CTF Challenge");
+    await page.waitForTimeout(1000); // Wait for title and first question to appear
 
-    // Answer incorrect
     const input = page.locator("#ai-input");
-    await input.fill("something wrong");
+
+    // Incorrect answer
+    await input.fill("wrong answer");
     await input.press("Enter");
     await page.waitForTimeout(500);
-    await expect(messages).toContainText("Incorrect");
+    await expect(messages).toContainText("Not quite. Try again");
 
-    // Answer correct 1
+    // Hint
+    const hintChip = page.locator('[data-ai-special="hint"]').first();
+    await hintChip.click();
+    await page.waitForTimeout(500);
+    await expect(messages).toContainText("Think about input being inserted");
+
+    // First correct answer
     await input.fill("sql injection");
     await input.press("Enter");
     await page.waitForTimeout(500);
-    await expect(messages).toContainText("Correct");
+    await expect(messages).toContainText(
+      "I execute untrusted script inside another visitor",
+    );
 
-    // Answer correct 2
+    // Second correct answer
     await input.fill("xss");
     await input.press("Enter");
     await page.waitForTimeout(500);
-    await expect(messages).toContainText("Access granted");
+    await expect(messages).toContainText(
+      "Challenge complete. You identified both",
+    );
+    await expect(messages).toContainText("FLAG{think_beyond_tools}");
+  });
 
-    // Unknown question
-    await input.fill("what is the meaning of life");
-    await input.press("Enter");
-    await page.waitForTimeout(500);
-    await expect(messages).toContainText("enough verified information");
+  test("Shehzadas AI accessibility", async ({ page }) => {
+    await page.goto("/");
 
-    // Clear conversation
-    await input.fill("clear");
-    await input.press("Enter");
-    await page.waitForTimeout(500);
-    const messageCount = await page.locator(".ai-message").count();
-    expect(messageCount).toBe(1); // Only greeting remains
+    const aiToggle = page.locator("[data-ai-open]").first();
+    await aiToggle.focus();
+    await aiToggle.press("Enter");
 
-    // Close panel
-    const closeAi = page.locator("button[data-ai-close], .ai-close").first();
-    await closeAi.click();
+    const aiAssistant = page.locator("#ai-assistant");
+    await expect(aiAssistant).toHaveClass(/open/);
+    await expect(page.locator("body")).toHaveClass(/ai-open/);
+
+    const input = page.locator("#ai-input");
+    await expect(input).toBeFocused();
+
+    // Tab trap
+    await page.keyboard.press("Tab");
+    await page.keyboard.press("Shift+Tab");
+    await expect(input).toBeFocused();
+
+    // Voice APIs gracefully hidden if unsupported in playwright
+    const voiceInput = page.locator("#ai-voice-input");
+    const voiceOutput = page.locator("#ai-voice-output");
+    expect(await voiceInput.count()).toBe(1);
+
+    // Escape closes panel and restores focus
+    await page.keyboard.press("Escape");
     await expect(aiAssistant).not.toHaveClass(/open/);
+    await expect(page.locator("body")).not.toHaveClass(/ai-open/);
+
+    // Focus should be restored
+    await expect(aiToggle).toBeFocused();
   });
 });

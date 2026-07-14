@@ -48,3 +48,19 @@ The portfolio has been completely overhauled from a "cosmic dashboard" theme int
   - Keyboard interactions tested (including focus traps and skip links).
   - No failed local resources observed in Playwright.
   - Full support for `prefers-reduced-motion: reduce`, ensuring all fades and transforms are instantly resolved for users with vestibular disorders.
+
+## 5. Shehzada's AI Assistant
+- **Dynamic Features**: Generates customized recruiter briefings directly from portfolio JSON data and offers an evidence scan.
+- **Voice Accessibility**: Incorporates SpeechRecognition and speechSynthesis for voice input and output. These degrade gracefully and hide completely when unsupported (e.g., Firefox).
+- **Interactive CTF Challenge**: Includes a data-driven web-security mini CTF.
+  - *Limitation*: Because this is a static client-side application without a backend, the CTF is designed as a portfolio easter egg. The #ai-data JSON (including answers and the flag) is fully inspectable by technically knowledgeable visitors. There is no obfuscation, and it does not simulate a secure backend.
+- **Panel Accessibility**: Uses proper dialog semantics (role='dialog', aria-modal, aria-hidden), focus traps (Tab and Shift+Tab inside), Escape key closure, and scroll locks.
+
+## 6. Authoritative Screenshots
+- Desktop Hero: ![Desktop Hero](screenshots/after-desktop-hero.png)
+- Mobile Hero: ![Mobile Hero](screenshots/after-mobile-hero.png)
+- Desktop Scroll: ![Desktop Scroll](screenshots/after-desktop-scroll.png)
+- Mobile Scroll: ![Mobile Scroll](screenshots/after-mobile-scroll.png)
+- Desktop Projects: ![Desktop Projects](screenshots/after-desktop-projects.png)
+- Mobile Menu: ![Mobile Menu](screenshots/after-mobile-menu.png)
+
