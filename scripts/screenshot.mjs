@@ -8,7 +8,37 @@ import fs from 'fs';
     fs.mkdirSync('screenshots');
   }
 
-  const prefix = process.argv[2] || 'before';
+  // Desktop
+  const contextDesktop = await browser.newContext({
+    viewport: { width: 1440, height: 900 }
+  });
+  const pageDesktop = await contextDesktop.newPage();
+  await pageDesktop.goto('http://localhost:4173', { waitUntil: 'networkidle' });
+  await pageDesktop.waitForTimeout(1500);
+  await pageDesktop.screenshot({ path: 'screenshots/final-black-desktop-hero.png', fullPage: false });
+
+  // Scroll to projects
+  await pageDesktop.evaluate(() => {
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'auto', block: 'start' });
+  });
+  await pageDesktop.waitForTimeout(800);
+  await pageDesktop.screenshot({ path: 'screenshots/final-black-desktop-projects.png' });
+
+  // Scroll to skills
+  await pageDesktop.evaluate(() => {
+    document.getElementById('skills')?.scrollIntoView({ behavior: 'auto', block: 'start' });
+  });
+  await pageDesktop.waitForTimeout(800);
+  await pageDesktop.screenshot({ path: 'screenshots/final-black-desktop-skills.png' });
+
+  // Scroll to contact
+  await pageDesktop.evaluate(() => {
+    document.getElementById('contact')?.scrollIntoView({ behavior: 'auto', block: 'start' });
+  });
+  await pageDesktop.waitForTimeout(800);
+  await pageDesktop.screenshot({ path: 'screenshots/final-black-desktop-contact.png' });
+
+  await contextDesktop.close();
 
   // Mobile
   const contextMobile = await browser.newContext({
@@ -16,42 +46,26 @@ import fs from 'fs';
   });
   const pageMobile = await contextMobile.newPage();
   await pageMobile.goto('http://localhost:4173', { waitUntil: 'networkidle' });
-  await pageMobile.waitForTimeout(1200);
-  await pageMobile.screenshot({ path: `screenshots/${prefix}-mobile-hero.png` });
+  await pageMobile.waitForTimeout(1500);
+  await pageMobile.screenshot({ path: 'screenshots/final-black-mobile-hero.png' });
 
-  await pageMobile.evaluate(() => window.scrollBy(0, 800));
-  await pageMobile.waitForTimeout(500);
-  await pageMobile.screenshot({ path: `screenshots/${prefix}-mobile-scroll.png` });
+  // Mobile projects
+  await pageMobile.evaluate(() => {
+    document.getElementById('projects')?.scrollIntoView({ behavior: 'auto', block: 'start' });
+  });
+  await pageMobile.waitForTimeout(600);
+  await pageMobile.screenshot({ path: 'screenshots/final-black-mobile-projects.png' });
 
+  // Mobile menu
+  await pageMobile.evaluate(() => window.scrollTo(0, 0));
+  await pageMobile.waitForTimeout(300);
   await pageMobile.click('#mobile-menu-trigger');
   await pageMobile.waitForTimeout(500);
-  await pageMobile.screenshot({ path: `screenshots/${prefix}-mobile-menu.png` });
+  await pageMobile.screenshot({ path: 'screenshots/final-black-mobile-menu.png' });
   await pageMobile.click('#mobile-menu-close');
+  await pageMobile.waitForTimeout(300);
 
-  // Desktop
-  const contextDesktop = await browser.newContext({
-    viewport: { width: 1440, height: 900 }
-  });
-  const pageDesktop = await contextDesktop.newPage();
-  await pageDesktop.goto('http://localhost:4173', { waitUntil: 'networkidle' });
-  await pageDesktop.waitForTimeout(1200);
-  await pageDesktop.screenshot({ path: `screenshots/${prefix}-desktop-hero.png` });
-
-  await pageDesktop.evaluate(() => window.scrollBy(0, 800));
-  await pageDesktop.waitForTimeout(500);
-  await pageDesktop.screenshot({ path: `screenshots/${prefix}-desktop-scroll.png` });
-
-  await pageDesktop.evaluate(() => {
-    document
-      .getElementById("projects")
-      ?.scrollIntoView({
-        behavior: "auto",
-        block: "start"
-      });
-  });
-  await pageDesktop.waitForTimeout(1000); // Wait for smooth scroll and animations
-  await pageDesktop.screenshot({ path: `screenshots/${prefix}-desktop-projects.png` });
-
+  await contextMobile.close();
   await browser.close();
-  console.log(`Screenshots captured for ${prefix}`);
+  console.log('Screenshots captured: final-black-* series');
 })();

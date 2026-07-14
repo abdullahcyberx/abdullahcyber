@@ -345,9 +345,7 @@
     if (knowledge.experience && knowledge.experience.length > 0) {
       text += `\n\nHis experience includes:\n`;
       const expSlice = knowledge.experience.slice(0, 3);
-      text += expSlice
-        .map((e) => `- ${e.role} at ${e.company}`)
-        .join("\n");
+      text += expSlice.map((e) => `- ${e.role} at ${e.company}`).join("\n");
     }
 
     let hasPortfolio = false;
@@ -752,7 +750,7 @@
       );
       aiVoiceOutputBtn.setAttribute(
         "aria-label",
-        state.sound ? "Disable speech output" : "Enable speech output"
+        state.sound ? "Disable speech output" : "Enable speech output",
       );
       if (!state.sound) {
         window.speechSynthesis.cancel();

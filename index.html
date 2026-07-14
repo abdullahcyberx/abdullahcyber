@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#08090b" />
+    <meta name="theme-color" content="#070707" />
     <meta name="color-scheme" content="dark" />
     <meta
       name="robots"
@@ -58,7 +58,7 @@
     <header class="site-header" id="top">
       <div class="nav-container">
         <a class="brand" href="#home" aria-label="Muhammad Abdullah home"
-          >Abdullah Cyber.</a
+          >MA.</a
         >
 
         <nav id="main-nav" class="desktop-nav" aria-label="Main navigation">
@@ -71,15 +71,14 @@
         </nav>
 
         <div class="nav-actions">
-          <button
-            class="ai-trigger"
-            type="button"
-            data-ai-open
-            aria-label="Ask Shehzada’s AI"
-            title="Ask Shehzada’s AI"
+          <a
+            class="nav-cv-btn"
+            href="assets/Muhammad-Abdullah-CV.pdf"
+            download
+            aria-label="Download CV"
           >
-            Shehzada's AI
-          </button>
+            Download CV
+          </a>
           <button
             class="menu-toggle"
             id="mobile-menu-trigger"
@@ -101,69 +100,125 @@
       aria-modal="true"
       aria-label="Mobile navigation"
     >
-      <button
-        class="mobile-menu-close"
-        id="mobile-menu-close"
-        type="button"
-        aria-label="Close menu"
-      >
-        Close
-      </button>
+      <div class="mobile-menu-header">
+        <div class="brand">MA.</div>
+        <button
+          class="mobile-menu-close"
+          id="mobile-menu-close"
+          type="button"
+          aria-label="Close menu"
+        >
+          Close
+        </button>
+      </div>
       <nav class="mobile-nav">
-        <a href="#projects">Work</a>
-        <a href="#about">About</a>
-        <a href="#experience">Experience</a>
-        <a href="#skills">Skills</a>
-        <a href="#credentials">Certificates</a>
-        <a href="#contact">Contact</a>
-        <a href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
+        <a href="#projects"><span>01</span> Work</a>
+        <a href="#about"><span>02</span> About</a>
+        <a href="#experience"><span>03</span> Experience</a>
+        <a href="#skills"><span>04</span> Skills</a>
+        <a href="#credentials"><span>05</span> Certificates</a>
+        <a href="#contact"><span>06</span> Contact</a>
       </nav>
+      <div class="mobile-menu-footer">
+        <a
+          href="assets/Muhammad-Abdullah-CV.pdf"
+          download
+          class="btn btn-outline"
+          style="width: 100%; justify-content: center; margin-bottom: 24px"
+          >Download CV</a
+        >
+        <div class="hero-social" style="justify-content: center">
+          <a href="https://github.com/abdullahcyberx" target="_blank" rel="me noreferrer"
+            >GitHub</a
+          >
+          <a
+            href="https://www.linkedin.com/in/hafizabdullahx"
+            target="_blank"
+            rel="me noreferrer"
+            >LinkedIn</a
+          >
+          <a href="mailto:abdullahcyberx@gmail.com">Email</a>
+        </div>
+      </div>
     </div>
 
     <main id="main">
       <section id="home" class="hero container" aria-labelledby="hero-title">
         <div class="hero-grid">
-          <h1 id="hero-title" class="hero-title">
-            <span class="hero-name-primary">Muhammad</span>
-            <span class="hero-name-accent">Abdullah</span>
-          </h1>
-          <div class="hero-details">
-            <div>
-              <p class="hero-context">
-                Pakistan · Penetration Tester
-              </p>
-              <p class="hero-statement">
-                Finding how web applications break, then learning how to secure
-                them.
-              </p>
-            </div>
-            <div class="hero-copy">
-              <p>I’m Muhammad Abdullah, also known online as Abdullah Cyber—a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing, practical labs and CTF challenges.</p>
-              <div class="hero-actions">
-                <a class="btn btn-primary" href="#projects"
-                  >View selected work</a
-                >
-                <a
-                  class="btn btn-outline"
-                  href="assets/Muhammad-Abdullah-CV.pdf"
-                  download
-                  >Download CV</a
-                >
+          <!-- Left: Name + details -->
+          <div class="hero-left">
+            <p class="hero-context">
+              Pakistan · Penetration Tester
+            </p>
+            <h1 id="hero-title" class="hero-title">
+              <span class="hero-name-primary">Muhammad</span>
+              <span class="hero-name-accent">Abdullah</span>
+            </h1>
+            <div class="hero-details">
+              <div>
+                <p class="hero-statement">
+                  Finding how web applications break, then learning how to
+                  secure them.
+                </p>
               </div>
-              <div class="hero-social">
-                <a
-                  href="https://github.com/abdullahcyberx"
-                  target="_blank"
-                  rel="me noreferrer"
-                  >GitHub</a
-                >
-                <a
-                  href="https://www.linkedin.com/in/hafizabdullahx"
-                  target="_blank"
-                  rel="me noreferrer"
-                  >LinkedIn</a
-                >
-                <a href="mailto:abdullahcyberx@gmail.com">Email</a>
+              <div class="hero-copy">
+                <p>I’m Muhammad Abdullah, also known online as Abdullah Cyber—a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing, practical labs and CTF challenges.</p>
+                <div class="hero-actions">
+                  <a class="btn btn-primary" href="#projects"
+                    >View selected work</a
+                  >
+                  <a
+                    class="btn btn-outline"
+                    href="assets/Muhammad-Abdullah-CV.pdf"
+                    download
+                    >Download CV</a
+                  >
+                </div>
+                <div class="hero-social">
+                  <a
+                    href="https://github.com/abdullahcyberx"
+                    target="_blank"
+                    rel="me noreferrer"
+                    >GitHub</a
+                  >
+                  <a
+                    href="https://www.linkedin.com/in/hafizabdullahx"
+                    target="_blank"
+                    rel="me noreferrer"
+                    >LinkedIn</a
+                  >
+                  <a href="mailto:abdullahcyberx@gmail.com">Email</a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right: Evidence panel -->
+          <div class="hero-evidence-panel" aria-hidden="true">
+            <div class="hero-monogram">M<span>A</span>.</div>
+            <div class="hero-panel-stats">
+              <div class="hero-stat">
+                <div class="hero-stat-num">3</div>
+                <div class="hero-stat-label">Projects</div>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-num">18</div>
+                <div class="hero-stat-label">Skills</div>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-num">17</div>
+                <div class="hero-stat-label">Certs</div>
+              </div>
+              <div class="hero-stat">
+                <div class="hero-stat-num">2</div>
+                <div class="hero-stat-label">Internships</div>
+              </div>
+            </div>
+            <div class="hero-panel-edu">
+              <div class="hero-panel-edu-label">Currently Studying</div>
+              <div class="hero-panel-edu-name">Bachelor of Cyber Security</div>
+              <div class="hero-panel-edu-sub">
+                Riphah International University · Pakistan
               </div>
             </div>
           </div>
@@ -174,36 +229,88 @@
         <h2 class="section-header fade-in-up reveal">SELECTED WORK</h2>
         <ul class="project-list">
           
-    <li class="project-row fade-in-up reveal" data-image="phishing-art">
-      <div class="project-number">01</div>
-      <div class="project-content">
-        <h3 class="project-title">Authorized Phishing Awareness Campaign</h3>
-        <div class="project-tools">Gophish · Campaign design · Awareness testing · Ethical scope</div>
-        <p class="project-desc">Designed and conducted an authorized Gophish simulation to assess real-world phishing awareness among students in a controlled academic setting.</p>
-        <button class="project-link" type="button" data-modal="phishing">View case study <span>↗</span></button>
-      </div>
-    </li>
-  
-    <li class="project-row fade-in-up reveal" data-image="honeypot-art">
-      <div class="project-number">02</div>
-      <div class="project-content">
-        <h3 class="project-title">SSH Honeypot Deployment</h3>
-        <div class="project-tools">sshesame · VirtualBox · SSH · Attack analysis</div>
-        <p class="project-desc">Deployed an SSH honeypot using sshesame inside VirtualBox to observe brute-force behavior and study attacker interaction patterns.</p>
-        <button class="project-link" type="button" data-modal="honeypot">View case study <span>↗</span></button>
-      </div>
-    </li>
-  
-    <li class="project-row fade-in-up reveal" data-image="ctf-art">
-      <div class="project-number">03</div>
-      <div class="project-content">
-        <h3 class="project-title">CTF Challenge Practice &amp; Organization</h3>
-        <div class="project-tools">Web challenges · Challenge design · Team play · Write-ups</div>
-        <p class="project-desc">Solving and organizing security challenges that encourage structured thinking across offensive and defensive cybersecurity concepts.</p>
-        <a class="project-link" href="https://github.com/abdullahcyberx" target="_blank" rel="noreferrer">Visit Repository <span>↗</span></a>
-      </div>
-    </li>
-  
+      <li class="project-row project-split fade-in-up reveal" data-image="phishing-art">
+        <div class="project-number">01</div>
+        <div class="project-visual-container">
+          
+        <div class="project-visual proj-visual-1">
+          <div class="pv1-flow">
+            <div class="pv1-node">Email Campaign Setup</div>
+            <div class="pv1-arrow">↓</div>
+            <div class="pv1-node">Simulated Phishing</div>
+          </div>
+          <div class="pv1-report">
+            <div class="pv1-report-header">Awareness Report Panel</div>
+            <div class="pv1-report-bar"><div style="width: 45%;"></div></div>
+            <div class="pv1-report-bar"><div style="width: 75%;"></div></div>
+          </div>
+          <div class="pv1-label">Ethical Academic Scope</div>
+        </div>
+      
+        </div>
+        <div class="project-content">
+          <div class="project-category">Social engineering</div>
+          <h3 class="project-title">Authorized Phishing Awareness Campaign</h3>
+          <p class="project-desc">Designed and conducted an authorized Gophish simulation to assess real-world phishing awareness among students in a controlled academic setting.</p>
+          <div class="project-tools">Gophish · Campaign design · Awareness testing · Ethical scope</div>
+          <button class="project-link" type="button" data-modal="phishing">View case study <span>↗</span></button>
+        </div>
+      </li>
+    
+      <li class="project-row project-split-reverse fade-in-up reveal" data-image="honeypot-art">
+        <div class="project-number">02</div>
+        <div class="project-visual-container">
+          
+        <div class="project-visual proj-visual-2">
+          <div class="pv2-logs">
+            <div class="pv2-log"><span class="pv2-time">14:02:01</span> <span class="pv2-ip">192.168.1.***</span> Failed password for root</div>
+            <div class="pv2-log"><span class="pv2-time">14:05:33</span> <span class="pv2-ip">10.0.0.***</span> Disconnected</div>
+            <div class="pv2-log"><span class="pv2-time">14:12:45</span> <span class="pv2-ip">172.16.***.***</span> Connection closed</div>
+          </div>
+          <div class="pv2-labels">
+            <span class="pv2-label">SSHesame</span>
+            <span class="pv2-label">VirtualBox</span>
+            <span class="pv2-label">Linux</span>
+          </div>
+        </div>
+      
+        </div>
+        <div class="project-content">
+          <div class="project-category">Threat observation</div>
+          <h3 class="project-title">SSH Honeypot Deployment</h3>
+          <p class="project-desc">Deployed an SSH honeypot using sshesame inside VirtualBox to observe brute-force behavior and study attacker interaction patterns.</p>
+          <div class="project-tools">sshesame · VirtualBox · SSH · Attack analysis</div>
+          <button class="project-link" type="button" data-modal="honeypot">View case study <span>↗</span></button>
+        </div>
+      </li>
+    
+      <li class="project-row project-horizontal fade-in-up reveal" data-image="ctf-art">
+        <div class="project-number">03</div>
+        <div class="project-visual-container">
+          
+        <div class="project-visual proj-visual-3">
+          <div class="pv3-board">
+            <div class="pv3-cat">Web</div>
+            <div class="pv3-cat">Crypto</div>
+            <div class="pv3-cat">Forensics</div>
+            <div class="pv3-cat">OSINT</div>
+          </div>
+          <div class="pv3-roles">
+            <span class="pv3-role">Organizer</span>
+            <span class="pv3-role">Player</span>
+          </div>
+        </div>
+      
+        </div>
+        <div class="project-content">
+          <div class="project-category">CTF operations</div>
+          <h3 class="project-title">CTF Challenge Practice &amp; Organization</h3>
+          <p class="project-desc">Solving and organizing security challenges that encourage structured thinking across offensive and defensive cybersecurity concepts.</p>
+          <div class="project-tools">Web challenges · Challenge design · Team play · Write-ups</div>
+          <a class="project-link" href="https://github.com/abdullahcyberx" target="_blank" rel="noreferrer">Visit Repository <span>↗</span></a>
+        </div>
+      </li>
+    
         </ul>
         <div class="hover-preview" id="hover-preview" aria-hidden="true">
           <div id="hover-preview-art" class="project-art"></div>
@@ -262,21 +369,30 @@
         <h2 class="section-header fade-in-up reveal">
           Tools I use to explore,<br />test and understand systems.
         </h2>
-        <div
-          class="keyboard-container fade-in-up reveal"
-          aria-label="Interactive skills keyboard"
-        >
-          <div class="skills-keyboard" role="list">
-            
+        <div class="skills-layout fade-in-up reveal">
+          <div
+            class="keyboard-container"
+            aria-label="Interactive skills keyboard"
+          >
+            <div class="skills-keyboard" role="list">
+              
     <div class="key-row key-row-one"><button class="skill-key" data-skill="burp" role="listitem"><span>BURP</span><small>01</small></button><button class="skill-key" data-skill="nmap" role="listitem"><span>NMAP</span><small>02</small></button><button class="skill-key" data-skill="gobuster" role="listitem"><span>GOBUSTER</span><small>03</small></button><button class="skill-key" data-skill="wireshark" role="listitem"><span>WIRESHARK</span><small>04</small></button><button class="skill-key wide" data-skill="web" role="listitem"><span>WEB TESTING</span><small>05</small></button></div>
     <div class="key-row key-row-two"><button class="skill-key" data-skill="linux" role="listitem"><span>LINUX</span><small>06</small></button><button class="skill-key" data-skill="docker" role="listitem"><span>DOCKER</span><small>07</small></button><button class="skill-key wide" data-skill="vulnerability" role="listitem"><span>VULN ASSESS</span><small>08</small></button><button class="skill-key" data-skill="sqli" role="listitem"><span>SQLi</span><small>09</small></button><button class="skill-key" data-skill="xss" role="listitem"><span>XSS</span><small>10</small></button></div>
     <div class="key-row key-row-three"><button class="skill-key wide" data-skill="networking" role="listitem"><span>NETWORKING</span><small>11</small></button><button class="skill-key" data-skill="firewall" role="listitem"><span>FIREWALL</span><small>12</small></button><button class="skill-key" data-skill="ids" role="listitem"><span>IDS</span><small>13</small></button><button class="skill-key" data-skill="gophish" role="listitem"><span>GOPHISH</span><small>14</small></button><button class="skill-key" data-skill="honeypot" role="listitem"><span>HONEYPOT</span><small>15</small></button></div>
     <div class="key-row key-row-four"><button class="skill-key" data-skill="ctf" role="listitem"><span>CTF</span><small>16</small></button><button class="skill-key space-key active" data-skill="mindset" role="listitem"><span>SECURITY MINDSET</span><small>SPACE</small></button><button class="skill-key" data-skill="osint" role="listitem"><span>OSINT</span><small>17</small></button></div>
   
+            </div>
+            <p class="keyboard-instructions" aria-hidden="true">
+              Use your keyboard to highlight skills.
+            </p>
           </div>
-          <p class="keyboard-instructions" aria-hidden="true">
-            Use your keyboard to highlight skills.
-          </p>
+          <div class="skill-detail-panel" id="skill-detail" aria-live="polite">
+            <h3 id="skill-detail-title">Security Mindset</h3>
+            <p id="skill-detail-desc">
+              Approaching systems critically to identify weaknesses before they
+              can be exploited.
+            </p>
+          </div>
         </div>
       </section>
 
@@ -425,7 +541,7 @@
       <section id="contact" class="contact container">
         <h2 class="contact-hero fade-in-up reveal">
           Have a security project,<br />internship opportunity<br />or CTF
-          collaboration?<br /><br />Let’s talk.
+          collaboration?<br /><br />Let's talk.
         </h2>
         <div class="contact-links fade-in-up reveal">
           <a href="mailto:abdullahcyberx@gmail.com">Email Muhammad</a>
@@ -447,6 +563,18 @@
       <span>&copy; <span id="year"></span> Muhammad Abdullah</span>
       <a href="#top">Back to top</a>
     </footer>
+
+    <!-- Floating AI trigger button -->
+    <button
+      class="ai-float-btn"
+      type="button"
+      data-ai-open
+      aria-label="Ask Shehzada's AI"
+      title="Open Shehzada's AI Assistant"
+    >
+      <span aria-hidden="true">✦</span>
+      <span class="ai-float-dot" aria-hidden="true"></span>
+    </button>
 
     <div
       class="ai-assistant"
@@ -502,7 +630,11 @@
               🔊
             </button>
           </form>
-          <div id="ai-live-region" class="visually-hidden" aria-live="polite"></div>
+          <div
+            id="ai-live-region"
+            class="visually-hidden"
+            aria-live="polite"
+          ></div>
         </div>
       </div>
     </div>
