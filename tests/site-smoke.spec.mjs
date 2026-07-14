@@ -67,6 +67,33 @@ test.describe("Portfolio Smoke Tests", () => {
     await expect(actions).toBeVisible();
   });
 
+  test("Anchor navigation offset", async ({ page }) => {
+    await page.goto("/");
+    await page.waitForTimeout(1000);
+
+    const sections = ["projects", "about", "experience", "skills", "credentials", "contact"];
+
+    for (const sectionId of sections) {
+      // Find a link that targets this section
+      const link = page.locator(`a[href="#${sectionId}"]`).first();
+      // If it's visible (e.g. desktop nav), click it, otherwise scroll to the section programmatically to simulate anchor
+      if (await link.isVisible()) {
+        await link.click();
+      } else {
+        await page.evaluate((id) => document.querySelector(`a[href="#${id}"]`).click(), sectionId);
+      }
+
+      await page.waitForTimeout(500); // Wait for smooth scroll
+
+      const headerBottom = await page.locator(".site-header").evaluate((el) => el.getBoundingClientRect().bottom);
+      // Contact has a different header element
+      const headingSelector = sectionId === "contact" ? ".contact-hero" : `#${sectionId} .section-header`;
+      const headingTop = await page.locator(headingSelector).evaluate((el) => el.getBoundingClientRect().top);
+
+      expect(headingTop).toBeGreaterThanOrEqual(headerBottom - 2); // 2px tolerance for fractional pixels
+    }
+  });
+
   test("Project action button styling", async ({ page }) => {
     await page.goto("/");
     await page.waitForTimeout(1200);

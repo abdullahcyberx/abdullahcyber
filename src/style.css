@@ -38,9 +38,14 @@
 
 html {
   scroll-behavior: smooth;
+  scroll-padding-top: 96px;
   font-size: 16px;
   background: var(--bg);
   color: var(--text-secondary);
+}
+
+section[id] {
+  scroll-margin-top: 96px;
 }
 
 body {
@@ -677,6 +682,14 @@ footer {
 }
 
 @media (max-width: 767px) {
+  html {
+    scroll-padding-top: 88px;
+  }
+
+  section[id] {
+    scroll-margin-top: 88px;
+  }
+
   .desktop-nav {
     display: none;
   }

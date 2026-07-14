@@ -42,8 +42,12 @@ import fs from 'fs';
   await pageDesktop.screenshot({ path: `screenshots/${prefix}-desktop-scroll.png` });
 
   await pageDesktop.evaluate(() => {
-    const el = document.getElementById('projects');
-    if (el) el.scrollIntoView();
+    document
+      .getElementById("projects")
+      ?.scrollIntoView({
+        behavior: "auto",
+        block: "start"
+      });
   });
   await pageDesktop.waitForTimeout(1000); // Wait for smooth scroll and animations
   await pageDesktop.screenshot({ path: `screenshots/${prefix}-desktop-projects.png` });
