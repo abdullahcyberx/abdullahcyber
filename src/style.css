@@ -24,6 +24,10 @@
   --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
   --max-width: 1380px;
 
+  --space-section-desktop: clamp(100px, 10vw, 140px);
+  --space-section-mobile: 80px;
+  --space-heading-content: clamp(40px, 5vw, 72px);
+
   /* Legacy compat aliases */
   --text-primary: #f4f3ee;
   --surface-soft: #17171a;
@@ -140,12 +144,17 @@ ul {
 }
 
 /* ---- Animations ------------------------------------------- */
-.fade-in-up {
+.fade-in-up.reveal {
   opacity: 0;
-  transform: translateY(24px);
+  transform: translateY(18px);
+}
+
+.reveal.entered {
+  opacity: 1;
+  transform: translateY(0);
   transition:
-    opacity 640ms var(--ease),
-    transform 640ms var(--ease);
+    opacity 600ms cubic-bezier(0.22, 1, 0.36, 1),
+    transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
   will-change: opacity, transform;
 }
 
@@ -205,7 +214,7 @@ ul {
 }
 
 section {
-  padding: 120px 0;
+  padding: var(--space-section-desktop) 0;
   position: relative;
 }
 
@@ -732,10 +741,13 @@ body.menu-open {
 /* ---- Section Header --------------------------------------- */
 .section-header {
   font-size: clamp(2.25rem, 5.5vw, 5.5rem);
-  line-height: 0.95;
+  line-height: 0.9;
   letter-spacing: -0.045em;
-  margin-bottom: 72px;
   color: var(--text);
+  border-top: 1px solid var(--border);
+  padding-top: clamp(32px, 4vw, 52px);
+  margin-bottom: var(--space-heading-content);
+  margin-top: 0;
 }
 
 /* ---- Projects -------------------------------------------- */
@@ -847,23 +859,6 @@ body.menu-open {
   transform: translateX(3px);
 }
 
-/* Hover preview */
-.hover-preview {
-  position: fixed;
-  pointer-events: none;
-  z-index: 100;
-  width: 400px;
-  height: 240px;
-  border-radius: 10px;
-  overflow: hidden;
-  opacity: 0;
-  transform: scale(0.95);
-  transition:
-    opacity 260ms var(--ease),
-    transform 260ms var(--ease);
-  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.6);
-  display: none;
-}
 .project-split {
   grid-template-columns: 1fr;
 }
@@ -1194,153 +1189,6 @@ body.menu-open {
   padding: 3px 10px;
   border-radius: 100px;
   font-weight: 500;
-}
-
-/* ---- Skills / Keyboard ------------------------------------ */
-.skills-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 32px;
-}
-
-@media (min-width: 992px) {
-  .skills-layout {
-    flex-direction: row;
-    align-items: flex-start;
-    justify-content: space-between;
-  }
-}
-
-.keyboard-container {
-  flex: 1;
-  max-width: 800px;
-}
-
-.skill-detail-panel {
-  flex: 0 0 320px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  padding: 32px;
-  border-radius: 12px;
-  min-height: 200px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.skill-detail-panel h3 {
-  color: var(--accent-light);
-  font-size: 1.25rem;
-  font-weight: 600;
-  letter-spacing: -0.01em;
-  border-bottom: 1px solid var(--border);
-  padding-bottom: 12px;
-}
-
-.skill-detail-panel p {
-  color: var(--text-secondary);
-  font-size: 0.9375rem;
-  line-height: 1.6;
-}
-
-@media (min-width: 992px) {
-  .skill-key {
-    min-width: 72px;
-    height: 72px;
-    font-size: 0.75rem;
-  }
-  .skill-key.wide {
-    min-width: 110px;
-  }
-  .skill-key.space-key {
-    min-width: 290px;
-  }
-  .skill-key span {
-    font-size: 0.75rem;
-  }
-  .skill-key small {
-    font-size: 0.55rem;
-  }
-}
-
-.skills-keyboard {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  margin-bottom: 24px;
-}
-
-.key-row {
-  display: flex;
-  gap: 6px;
-  flex-wrap: wrap;
-}
-
-.skill-key {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: 2px;
-  min-width: 64px;
-  height: 64px;
-  padding: 8px 10px;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: 8px;
-  color: var(--text-secondary);
-  font-family: var(--font);
-  font-size: 0.6875rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition:
-    background 160ms var(--ease),
-    border-color 160ms var(--ease),
-    color 160ms var(--ease),
-    transform 120ms var(--ease);
-  box-shadow: 0 2px 0 rgba(0, 0, 0, 0.4);
-  position: relative;
-}
-
-.skill-key span {
-  font-size: 0.625rem;
-  letter-spacing: 0.04em;
-  text-align: center;
-  line-height: 1.2;
-}
-
-.skill-key small {
-  font-size: 0.5rem;
-  color: var(--text-muted);
-  letter-spacing: 0.02em;
-  position: absolute;
-  bottom: 5px;
-  right: 6px;
-}
-
-.skill-key:hover,
-.skill-key:focus,
-.skill-key.active {
-  background: var(--surface-light);
-  border-color: var(--accent);
-  color: var(--text);
-  transform: translateY(-2px);
-  box-shadow: 0 4px 0 rgba(129, 103, 255, 0.3);
-}
-
-.skill-key.wide {
-  min-width: 100px;
-}
-
-.skill-key.space-key {
-  min-width: 260px;
-  height: 64px;
-}
-
-.keyboard-instructions {
-  font-size: 0.75rem;
-  color: var(--text-muted);
-  letter-spacing: 0.04em;
 }
 
 /* ---- Certificates ----------------------------------------- */
@@ -2021,11 +1869,10 @@ body.ai-open {
   }
 
   section {
-    padding: 80px 0;
+    padding: var(--space-section-mobile) 0;
   }
 
   .section-header {
-    margin-bottom: 48px;
     font-size: clamp(2rem, 8vw, 3.5rem);
   }
 
@@ -2061,20 +1908,6 @@ body.ai-open {
     font-size: clamp(1.75rem, 8vw, 2.5rem);
   }
 
-  .skill-key {
-    min-width: 52px;
-    height: 52px;
-    font-size: 0.5625rem;
-  }
-
-  .skill-key.space-key {
-    min-width: 180px;
-  }
-
-  .skill-key.wide {
-    min-width: 80px;
-  }
-
   .ai-assistant {
     bottom: 84px;
     right: 16px;
@@ -2100,8 +1933,6 @@ body.ai-open {
   .site-header,
   .mobile-menu,
   .ai-assistant,
-  .ai-float-btn,
-  .hover-preview,
   .skip-link {
     display: none !important;
   }

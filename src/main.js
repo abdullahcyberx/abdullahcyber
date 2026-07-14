@@ -23,50 +23,6 @@
   document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
 
   /* -------------------------
-     Project Desktop Preview
-     ------------------------- */
-  const projectRows = document.querySelectorAll(".project-row");
-  const hoverPreview = document.getElementById("hover-preview");
-  if (
-    hoverPreview &&
-    window.matchMedia("(hover: hover) and (min-width: 768px)").matches
-  ) {
-    const artDiv = hoverPreview.querySelector("#hover-preview-art");
-    let hoverTimeout;
-
-    projectRows.forEach((row) => {
-      row.addEventListener("pointerenter", (e) => {
-        const imageSrc = row.getAttribute("data-image");
-        if (imageSrc) {
-          if (artDiv) artDiv.className = "project-art " + imageSrc;
-          hoverPreview.style.display = "block";
-          clearTimeout(hoverTimeout);
-          hoverTimeout = setTimeout(() => {
-            hoverPreview.style.opacity = "1";
-            hoverPreview.style.transform = "scale(1) translate(-50%, -50%)";
-          }, 10);
-        }
-      });
-
-      row.addEventListener("pointermove", (e) => {
-        hoverPreview.style.left = e.clientX + 50 + "px";
-        hoverPreview.style.top = e.clientY + "px";
-        hoverPreview.style.transform = "translate(0, -50%) scale(1)";
-      });
-
-      row.addEventListener("pointerleave", () => {
-        clearTimeout(hoverTimeout);
-        hoverPreview.style.opacity = "0";
-        hoverPreview.style.transform = "scale(0.95)";
-        setTimeout(() => {
-          if (hoverPreview.style.opacity === "0")
-            hoverPreview.style.display = "none";
-        }, 280);
-      });
-    });
-  }
-
-  /* -------------------------
      Header & Active Navigation
      ------------------------- */
   const header = document.querySelector(".site-header");
@@ -274,29 +230,6 @@
       event.clientY < rect.top ||
       event.clientY > rect.bottom;
     if (outside) modal.close();
-  });
-
-  /* -------------------------
-     Interactive Skills Keyboard
-     ------------------------- */
-  const skillsByKey = new Map(
-    (portfolioKnowledge.skills || []).map((skill) => [skill.skillKey, skill]),
-  );
-
-  const skillKeys = document.querySelectorAll(".skill-key");
-
-  // Note: the original index.template.html doesn't have the elements for skill details display anymore,
-  // but if it did or will be added, we'd update them here.
-  skillKeys.forEach((key) => {
-    const selectSkill = () => {
-      skillKeys.forEach((k) => k.classList.remove("active"));
-      key.classList.add("active");
-      const skill = skillsByKey.get(key.dataset.skill);
-      // If we had display elements, we'd update them using skill.name, skill.description, etc.
-    };
-
-    key.addEventListener("pointerenter", selectSkill);
-    key.addEventListener("focus", selectSkill);
   });
 
   /* -------------------------
