@@ -41,17 +41,6 @@ import fs from "fs";
   await pageDesktop.waitForTimeout(500);
   await pageDesktop.screenshot({ path: "screenshots/gmail-contact-hover.png" });
 
-  // Navigation screenshots desktop
-  const sectionsToScreenshot = ["about", "experience", "credentials", "contact"];
-  for (const section of sectionsToScreenshot) {
-    await pageDesktop.evaluate((s) => {
-      document.querySelector(`.desktop-nav a[href="#${s}"]`)?.click();
-    }, section);
-    await pageDesktop.waitForTimeout(1000);
-    const fileName = section === "credentials" ? "certificates" : section;
-    await pageDesktop.screenshot({ path: `screenshots/navigation-${fileName}-desktop.png` });
-  }
-
   await contextDesktop.close();
 
   // Mobile
@@ -91,13 +80,6 @@ import fs from "fs";
   }
 
   await pageMobile.screenshot({ path: "screenshots/gmail-contact-mobile.png" });
-
-  // Navigation about mobile
-  await pageMobile.evaluate(() => {
-    document.querySelector('.mobile-nav a[href="#about"]')?.click();
-  });
-  await pageMobile.waitForTimeout(1000);
-  await pageMobile.screenshot({ path: "screenshots/navigation-about-mobile.png" });
 
   await contextMobile.close();
   await browser.close();
