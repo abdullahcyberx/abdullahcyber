@@ -5,6 +5,8 @@
 
 /* ---- Design tokens ---------------------------------------- */
 :root {
+  --fixed-header-height: 72px;
+  --section-anchor-gap: 24px;
   --bg: #070707;
   --bg-soft: #0c0c0d;
   --surface: #111113;
@@ -45,7 +47,9 @@
 
 html {
   scroll-behavior: smooth;
-  scroll-padding-top: 96px;
+  scroll-padding-top: calc(
+    var(--fixed-header-height) + var(--section-anchor-gap)
+  );
   font-size: 16px;
   background: var(--bg);
   color: var(--text-secondary);
@@ -53,7 +57,11 @@ html {
 }
 
 section[id] {
-  scroll-margin-top: 96px;
+  scroll-margin-top: 0;
+}
+
+[data-section-anchor] {
+  /* Removed to prevent double-offset with html scroll-padding-top during scrollIntoView */
 }
 
 body {
@@ -210,7 +218,7 @@ ul {
   width: 100%;
   max-width: var(--max-width);
   margin: 0 auto;
-  padding: 0 32px;
+  padding-inline: 32px;
 }
 
 section {
@@ -1444,6 +1452,7 @@ body.menu-open {
   position: relative;
   overflow: hidden;
   padding-block: var(--space-section-desktop);
+  min-height: 100svh;
   background:
     radial-gradient(
       circle at 78% 44%,
@@ -2070,16 +2079,12 @@ body.ai-open {
 
 /* ---- Mobile breakpoint ------------------------------------ */
 @media (max-width: 767px) {
-  html {
-    scroll-padding-top: 88px;
-  }
-
-  section[id] {
-    scroll-margin-top: 88px;
+  :root {
+    --section-anchor-gap: 16px;
   }
 
   .container {
-    padding: 0 20px;
+    padding-inline: 20px;
   }
 
   .nav-container {
