@@ -67,47 +67,228 @@ test.describe("Portfolio Smoke Tests", () => {
     await expect(actions).toBeVisible();
   });
 
-  test("Anchor navigation offset", async ({ page }) => {
-    await page.goto("/");
-    await page.waitForTimeout(1000);
-
-    const sections = [
-      "projects",
-      "about",
-      "experience",
-      "credentials",
-      "contact",
+  test.describe("Section Navigation", () => {
+    const navTests = [
+      {
+        name: "Work",
+        hash: "#projects",
+        selector: "#projects",
+        prevSelector: null,
+      },
+      {
+        name: "About",
+        hash: "#about",
+        selector: "#about",
+        prevSelector: "#projects",
+      },
+      {
+        name: "Experience",
+        hash: "#experience",
+        selector: "#experience",
+        prevSelector: "#about",
+      },
+      {
+        name: "Certificates",
+        hash: "#credentials",
+        selector: "#credentials",
+        prevSelector: "#experience",
+      },
+      {
+        name: "Contact",
+        hash: "#contact",
+        selector: "#contact",
+        prevSelector: "#achievements",
+      },
     ];
 
-    for (const sectionId of sections) {
-      // Find a link that targets this section
-      const link = page.locator(`a[href="#${sectionId}"]`).first();
-      // If it's visible (e.g. desktop nav), click it, otherwise scroll to the section programmatically to simulate anchor
-      if (await link.isVisible()) {
-        await link.click();
-      } else {
-        await page.evaluate(
-          (id) => document.querySelector(`a[href="#${id}"]`).click(),
-          sectionId,
-        );
-      }
+    for (const nav of navTests) {
+      test(`Desktop navigation to ${nav.name}`, async ({ page, isMobile }) => {
+        if (isMobile) test.skip();
+        await page.goto("/");
+        await page.waitForTimeout(1000);
 
-      await page.waitForTimeout(500); // Wait for smooth scroll
+        const link = page.locator(`.desktop-nav a[href="${nav.hash}"]`);
+        await link.click();
+        await page.waitForTimeout(2000); // Wait longer for smooth scroll to settle
+
+        const headerBottom = await page
+          .locator(".site-header")
+          .evaluate((element) => element.getBoundingClientRect().bottom);
+
+        const anchorTop = await page
+          .locator(`${nav.selector} [data-section-anchor]`)
+          .evaluate((element) => element.getBoundingClientRect().top);
+
+        expect(anchorTop).toBeGreaterThanOrEqual(headerBottom + 12);
+        expect(anchorTop).toBeLessThanOrEqual(headerBottom + 36);
+
+        if (nav.prevSelector) {
+          const previousBottom = await page
+            .locator(nav.prevSelector)
+            .evaluate((element) => element.getBoundingClientRect().bottom);
+
+          expect(previousBottom).toBeLessThanOrEqual(headerBottom + 2);
+        }
+
+        await expect(page.locator(".desktop-nav a.active")).toHaveCount(1);
+        await expect(
+          page.locator(`.desktop-nav a[href="${nav.hash}"]`),
+        ).toHaveClass(/active/);
+      });
+    }
+
+    test("Clicking About immediately removes active from Work", async ({
+      page,
+      isMobile,
+    }) => {
+      if (isMobile) test.skip();
+      await page.goto("/");
+      await page.waitForTimeout(1000);
+
+      const workLink = page.locator('.desktop-nav a[href="#projects"]');
+      const aboutLink = page.locator('.desktop-nav a[href="#about"]');
+
+      await workLink.click();
+      await expect(workLink).toHaveClass(/active/);
+
+      await aboutLink.click();
+      await expect(workLink).not.toHaveClass(/active/);
+      await expect(aboutLink).toHaveClass(/active/);
+    });
+
+    test("Manual scrolling updates the active item correctly", async ({
+      page,
+      isMobile,
+    }) => {
+      if (isMobile) test.skip();
+      await page.goto("/");
+      await page.waitForTimeout(1000);
+
+      await page.evaluate(() => {
+        document
+          .querySelector("#about [data-section-anchor]")
+          ?.scrollIntoView({ behavior: "auto", block: "start" });
+      });
+      await page.waitForTimeout(500);
+
+      await expect(page.locator('.desktop-nav a[href="#about"]')).toHaveClass(
+        /active/,
+      );
+      await expect(
+        page.locator('.desktop-nav a[href="#projects"]'),
+      ).not.toHaveClass(/active/);
+    });
+
+    test("Direct loading with #about positions About correctly", async ({
+      page,
+    }) => {
+      await page.goto("/#about");
+      await page.waitForTimeout(2000);
 
       const headerBottom = await page
         .locator(".site-header")
-        .evaluate((el) => el.getBoundingClientRect().bottom);
-      // Contact has a different header element
-      const headingSelector =
-        sectionId === "contact"
-          ? ".contact-hero"
-          : `#${sectionId} .section-header`;
-      const headingTop = await page
-        .locator(headingSelector)
-        .evaluate((el) => el.getBoundingClientRect().top);
+        .evaluate((element) => element.getBoundingClientRect().bottom);
 
-      expect(headingTop).toBeGreaterThanOrEqual(headerBottom - 2); // 2px tolerance for fractional pixels
-    }
+      const anchorTop = await page
+        .locator("#about [data-section-anchor]")
+        .evaluate((element) => element.getBoundingClientRect().top);
+
+      expect(anchorTop).toBeGreaterThanOrEqual(headerBottom + 12);
+      expect(anchorTop).toBeLessThanOrEqual(headerBottom + 36);
+    });
+
+    test("Browser Back restores the previous section", async ({
+      page,
+      isMobile,
+    }) => {
+      if (isMobile) test.skip();
+      await page.goto("/");
+      await page.waitForTimeout(1000);
+
+      await page.locator('.desktop-nav a[href="#projects"]').click();
+      await page.waitForTimeout(1000);
+
+      await page.locator('.desktop-nav a[href="#about"]').click();
+      await page.waitForTimeout(1000);
+
+      await page.goBack();
+      await page.waitForTimeout(1000);
+
+      await expect(
+        page.locator('.desktop-nav a[href="#projects"]'),
+      ).toHaveClass(/active/);
+      await expect(
+        page.locator('.desktop-nav a[href="#about"]'),
+      ).not.toHaveClass(/active/);
+    });
+
+    test("Reduced-motion uses immediate scrolling", async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto("/");
+      await page.waitForTimeout(1000);
+
+      await page.evaluate(() => {
+        window.scrollTriggered = false;
+        window.addEventListener(
+          "scroll",
+          () => {
+            window.scrollTriggered = true;
+          },
+          { once: true },
+        );
+      });
+
+      // Try scrolling to about via link
+      if (await page.locator(".desktop-nav").isVisible()) {
+        await page.locator('.desktop-nav a[href="#about"]').click();
+      } else {
+        await page.evaluate(() =>
+          document.querySelector('.mobile-nav a[href="#about"]')?.click(),
+        );
+      }
+
+      // Wait a short tick, if it was immediate, it finishes fast.
+      await page.waitForTimeout(200);
+
+      const headerBottom = await page
+        .locator(".site-header")
+        .evaluate((element) => element.getBoundingClientRect().bottom);
+
+      const anchorTop = await page
+        .locator("#about [data-section-anchor]")
+        .evaluate((element) => element.getBoundingClientRect().top);
+
+      expect(anchorTop).toBeGreaterThanOrEqual(headerBottom + 12);
+      expect(anchorTop).toBeLessThanOrEqual(headerBottom + 36);
+    });
+
+    test("Mobile menu navigation reaches the same clean position", async ({
+      page,
+      isMobile,
+    }) => {
+      if (!isMobile) test.skip();
+      await page.goto("/");
+      await page.waitForTimeout(1000);
+
+      await page.locator("#mobile-menu-trigger").click();
+      await expect(page.locator("#mobile-menu")).toHaveClass(/open/);
+
+      await page.locator('.mobile-nav a[href="#about"]').click();
+      await page.waitForTimeout(2000);
+
+      await expect(page.locator("#mobile-menu")).not.toHaveClass(/open/);
+
+      const headerBottom = await page
+        .locator(".site-header")
+        .evaluate((element) => element.getBoundingClientRect().bottom);
+
+      const anchorTop = await page
+        .locator("#about [data-section-anchor]")
+        .evaluate((element) => element.getBoundingClientRect().top);
+
+      expect(anchorTop).toBeGreaterThanOrEqual(headerBottom + 12);
+      expect(anchorTop).toBeLessThanOrEqual(headerBottom + 36);
+    });
   });
 
   test("Project action button styling", async ({ page }) => {
