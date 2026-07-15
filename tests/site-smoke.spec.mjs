@@ -70,7 +70,7 @@ test.describe("Portfolio Smoke Tests", () => {
   test.describe("Section Navigation", () => {
     const navTests = [
       {
-        name: "Work",
+        name: "Project",
         hash: "#projects",
         selector: "#projects",
         prevSelector: null,
