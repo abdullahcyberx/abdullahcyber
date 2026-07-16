@@ -1,5 +1,29 @@
 [
   {
+    "id": "proj-modular-recon-tool",
+    "slug": "modular-recon-tool",
+    "title": "Modular Recon Tool",
+    "summary": "A modular Python reconnaissance CLI that combines WHOIS and DNS enumeration, passive subdomain discovery, TCP port scanning, banner collection, technology detection, and structured security reporting in one workflow.",
+    "fullDescription": "Modular Recon Tool automates common information-gathering tasks used during authorized security assessments. Its modular command-line workflow allows individual reconnaissance checks to be executed separately or combined into a complete scan, with results consolidated into structured TXT or HTML reports.",
+    "category": "Offensive Security · Tool Development",
+    "tools": [
+      "Python",
+      "DNS & WHOIS",
+      "Passive OSINT",
+      "Socket Programming",
+      "Docker",
+      "HTML Reporting"
+    ],
+    "date": "2026",
+    "image": "recon-art",
+    "repositoryUrl": "https://github.com/abdullahcyberx/modular-recon-tool",
+    "liveUrl": "",
+    "caseStudyContent": "<strong>PROBLEM</strong><br>The reconnaissance phase of a security assessment commonly involves several separate commands, tools, public data sources, and manually organized results. This makes the process repetitive and can produce inconsistent reporting.<br><br><strong>SOLUTION</strong><br>Modular Recon Tool provides one Python command-line workflow for passive information gathering and explicitly authorized active reconnaissance. Users can select individual modules or run the complete workflow, while each result is collected into a consistent report.<br><br><strong>VERIFIED CAPABILITIES</strong><ul><li>WHOIS information gathering</li><li>DNS record enumeration</li><li>A, AAAA, MX, TXT, NS, CNAME, and SOA record collection</li><li>Passive subdomain discovery</li><li>Certificate Transparency data collection through crt.sh</li><li>Passive DNS information through AlienVault OTX</li><li>Subdomain normalization and de-duplication</li><li>Threaded TCP connect port scanning</li><li>Configurable port lists</li><li>Configurable connection timeout</li><li>Service-name identification</li><li>Banner collection from discovered open services</li><li>Basic web technology detection</li><li>Header, cookie, and HTML signature analysis</li><li>Individual module execution</li><li>Complete workflow execution</li><li>Logging and verbosity controls</li><li>TXT report generation</li><li>HTML report generation</li><li>Docker support</li><li>Graceful handling of timeouts, unavailable services, DNS failures, and API rate limits</li></ul><br><strong>ENGINEERING DECISIONS</strong><ul><li>Each reconnaissance technique is isolated in its own Python module.</li><li>Modules return structured results for centralized reporting.</li><li>The port scanner uses Python sockets and concurrent workers.</li><li>Passive subdomain sources reduce unnecessary direct interaction with the target.</li><li>Individual module failures do not terminate the complete workflow.</li><li>Centralized logging supports normal and debug output.</li><li>Reports are available in readable TXT and HTML formats.</li><li>Docker provides a portable execution option.</li></ul><br><strong>OUTCOME</strong><br>The project demonstrates practical Python development, network programming, public-data API integration, command-line interface design, concurrent execution, structured reporting, error handling, Docker packaging, and responsible security-tool development.",
+    "featured": true,
+    "displayOrder": 1,
+    "ethicalDisclaimer": "This tool is intended only for education and explicitly authorized security testing. Active reconnaissance must only be performed against systems the user owns or has written permission to assess."
+  },
+  {
     "id": "proj-1",
     "slug": "phishing",
     "title": "Authorized Phishing Awareness Campaign",
@@ -18,7 +42,7 @@
     "liveUrl": "",
     "caseStudyContent": "",
     "featured": true,
-    "displayOrder": 1,
+    "displayOrder": 2,
     "ethicalDisclaimer": "Every security test, simulation and demonstration shown here was performed in an authorized, isolated or educational environment. No unauthorized systems were targeted."
   },
   {
@@ -40,7 +64,7 @@
     "liveUrl": "",
     "caseStudyContent": "",
     "featured": true,
-    "displayOrder": 2,
+    "displayOrder": 3,
     "ethicalDisclaimer": ""
   },
   {
@@ -62,7 +86,7 @@
     "liveUrl": "",
     "caseStudyContent": "",
     "featured": true,
-    "displayOrder": 3,
+    "displayOrder": 4,
     "ethicalDisclaimer": ""
   }
 ]

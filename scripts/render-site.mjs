@@ -208,7 +208,31 @@ try {
       let visualHtml = "";
       let layoutClass = "";
 
-      if (idx === 0) {
+      if (p.image === "recon-art") {
+        layoutClass = "project-split";
+        visualHtml = `
+        <div class="project-visual proj-visual-recon">
+          <div class="pv2-logs" style="margin-bottom: 12px; max-width: 100%;">
+            <div class="pv2-log" style="border-left-color: #61afef;">$ python recon.py example.com --all</div>
+            <div class="pv2-log" style="border-left-color: #98c379;">[✓] WHOIS information collected</div>
+            <div class="pv2-log" style="border-left-color: #98c379;">[✓] DNS records enumerated</div>
+            <div class="pv2-log" style="border-left-color: #98c379;">[✓] Subdomains discovered</div>
+            <div class="pv2-log" style="border-left-color: #98c379;">[✓] Open ports identified</div>
+            <div class="pv2-log" style="border-left-color: #98c379;">[✓] Technology signals detected</div>
+            <div class="pv2-log" style="border-left-color: #98c379;">[✓] HTML report generated</div>
+          </div>
+          <div class="pv2-labels" style="flex-wrap: wrap; justify-content: flex-start; gap: 8px; display: flex;">
+            <span class="pv2-label">WHOIS</span>
+            <span class="pv2-label">DNS</span>
+            <span class="pv2-label">SUBDOMAINS</span>
+            <span class="pv2-label">PORTS</span>
+            <span class="pv2-label">BANNERS</span>
+            <span class="pv2-label">TECH</span>
+            <span class="pv2-label">REPORT</span>
+          </div>
+        </div>
+      `;
+      } else if (p.image === "phishing-art") {
         layoutClass = "project-split";
         visualHtml = `
         <div class="project-visual proj-visual-1">
@@ -225,7 +249,7 @@ try {
           <div class="pv1-label">Ethical Academic Scope</div>
         </div>
       `;
-      } else if (idx === 1) {
+      } else if (p.image === "honeypot-art") {
         layoutClass = "project-split-reverse";
         visualHtml = `
         <div class="project-visual proj-visual-2">
@@ -241,7 +265,7 @@ try {
           </div>
         </div>
       `;
-      } else if (idx === 2) {
+      } else if (p.image === "ctf-art") {
         layoutClass = "project-horizontal";
         visualHtml = `
         <div class="project-visual proj-visual-3">
@@ -270,7 +294,7 @@ try {
           <h3 class="project-title">${escapeHtml(p.title)}</h3>
           <p class="project-desc">${escapeHtml(p.summary)}</p>
           <div class="project-tools">${p.tools.map((t) => escapeHtml(t)).join(" · ")}</div>
-          ${p.repositoryUrl ? `<a class="project-link" href="${escapeHtml(p.repositoryUrl)}" target="_blank" rel="noreferrer">Visit Repository <span>↗</span></a>` : `<button class="project-link" type="button" data-modal="${escapeHtml(p.slug)}">View case study <span>↗</span></button>`}
+          ${p.repositoryUrl ? `<a class="project-link" href="${escapeHtml(p.repositoryUrl)}" target="_blank" rel="noopener noreferrer">Visit Repository <span>↗</span></a>` : `<button class="project-link" type="button" data-modal="${escapeHtml(p.slug)}">View case study <span>↗</span></button>`}
         </div>
       </li>
     `;
