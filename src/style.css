@@ -2077,6 +2077,12 @@ body.ai-open {
   }
 }
 
+@media (min-width: 1024px) {
+  .cert-list {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
 /* ---- Mobile breakpoint ------------------------------------ */
 @media (max-width: 767px) {
   :root {

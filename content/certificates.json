@@ -270,5 +270,37 @@
     "skills": [],
     "description": "",
     "icon": "NC"
+  },
+  {
+    "id": "cert-18",
+    "slug": "certified-cybersecurity-foundations-core",
+    "title": "Certified Cybersecurity Foundations (CORE)",
+    "issuer": "Hackviser",
+    "issueDate": "July 11, 2026",
+    "credentialId": "HV-CORE-EWBM8F9D",
+    "verificationUrl": "https://hackviser.com/verify?id=HV-CORE-EWBM8F9D",
+    "certificateFile": "/assets/certificates/hackviser-certified-cybersecurity-foundations-core.pdf",
+    "thumbnail": "",
+    "featured": true,
+    "displayOrder": 18,
+    "skills": [],
+    "description": "Earned by completing cybersecurity training modules and practical security exercises, demonstrating foundational competence in cybersecurity.",
+    "icon": "CORE"
+  },
+  {
+    "id": "cert-19",
+    "slug": "deloitte-australia-cyber-job-simulation",
+    "title": "Deloitte Australia Cyber Job Simulation",
+    "issuer": "Deloitte Australia via Forage",
+    "issueDate": "July 11, 2026",
+    "credentialId": "6a5121c0445253abf8683ade",
+    "verificationUrl": "",
+    "certificateFile": "/assets/certificates/deloitte-australia-cyber-job-simulation.pdf",
+    "thumbnail": "",
+    "featured": false,
+    "displayOrder": 19,
+    "skills": [],
+    "description": "Completed practical cybersecurity tasks as part of Deloitte Australia's Cyber Job Simulation delivered through Forage.",
+    "icon": "D"
   }
 ]
