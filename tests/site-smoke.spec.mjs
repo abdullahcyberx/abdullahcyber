@@ -890,15 +890,19 @@ test.describe("Portfolio Smoke Tests", () => {
       const linksBlock = page.locator(".about-links-block");
       const profileLinks = page.locator(".profile-link");
 
+      // Wait for reveal animations to settle
+      await page.waitForTimeout(800);
+
       // Bounding box checks
       const statementBox = await statement.boundingBox();
       const linksBox = await linksBlock.boundingBox();
       const copyBox = await copy.boundingBox();
 
-      // Find me online is below statement
-      expect(linksBox.y).toBeGreaterThanOrEqual(statementBox.y + statementBox.height);
-      // Links and statement are left of copy
-      expect(statementBox.x + statementBox.width).toBeLessThanOrEqual(copyBox.x);
+      // Links block is to the left of copy
+      expect(linksBox.x + linksBox.width).toBeLessThanOrEqual(copyBox.x + 4);
+
+      // Statement is to the left of copy
+      expect(statementBox.x + statementBox.width).toBeLessThanOrEqual(copyBox.x + 4);
       
       // 2x2 grid for profile links
       const count = await profileLinks.count();
@@ -906,10 +910,25 @@ test.describe("Portfolio Smoke Tests", () => {
       const link1 = await profileLinks.nth(0).boundingBox();
       const link2 = await profileLinks.nth(1).boundingBox();
       const link3 = await profileLinks.nth(2).boundingBox();
-      // link 1 and 2 should be on same row or wrapped (y is close or greater)
-      expect(link2.y).toBeGreaterThanOrEqual(link1.y - 10);
-      // link 3 is either below link 1 or on the same row depending on screen width
-      expect(link3.y).toBeGreaterThanOrEqual(link1.y - 10);
+      const link4 = await profileLinks.nth(3).boundingBox();
+
+      // first and second cards have approximately equal top values
+      expect(Math.abs(link1.y - link2.y)).toBeLessThanOrEqual(4);
+
+      // third and fourth cards have approximately equal top values
+      expect(Math.abs(link3.y - link4.y)).toBeLessThanOrEqual(4);
+
+      // second row appears below the first row
+      expect(link3.y).toBeGreaterThanOrEqual(link1.y + link1.height - 10);
+
+      // cards in the same column have approximately equal x values
+      expect(Math.abs(link1.x - link3.x)).toBeLessThanOrEqual(4);
+      expect(Math.abs(link2.x - link4.x)).toBeLessThanOrEqual(4);
+
+      // Find me online is below statement (allow 2-4px tolerance or up to 80px gap)
+      // Actually, since statement is a `<p>`, it might not stretch to the bottom of the grid row
+      expect(linksBox.y).toBeGreaterThanOrEqual(statementBox.y + statementBox.height - 4);
+      expect(linksBox.y).toBeLessThanOrEqual(statementBox.y + statementBox.height + 80);
     });
 
     test("About mobile order and 1x4 link grid", async ({ page, isMobile }) => {
