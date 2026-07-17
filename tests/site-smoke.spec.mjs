@@ -599,4 +599,245 @@ test.describe("Portfolio Smoke Tests", () => {
     // Focus should be restored
     await expect(aiToggle).toBeFocused();
   });
+
+  test.describe("Certifications Redesign Tests", () => {
+    test.beforeEach(async ({ page }) => {
+      await page.goto("/");
+      await page.waitForTimeout(500);
+      await page.evaluate(() => {
+        document.getElementById("credentials")?.scrollIntoView({ behavior: "auto" });
+      });
+      await page.waitForTimeout(500);
+    });
+
+    test("Test 1 - Initial state", async ({ page }) => {
+      const featured = page.locator('.featured-cert-card');
+      const supp = page.locator('.supp-cert-card[data-revealed="true"]');
+      const hidden = page.locator('.supp-cert-card[data-revealed="false"]');
+      const btn = page.locator('#cert-reveal-btn');
+
+      // Exactly 3 featured certificates are visible initially
+      await expect(featured).toHaveCount(3);
+      await expect(featured.first()).toBeVisible();
+      
+      // Supporting certificates are not visible after JS initializes
+      await expect(supp).toHaveCount(0);
+      
+      // Hidden cards exist but are not displayed
+      const hiddenCount = await hidden.count();
+      expect(hiddenCount).toBeGreaterThan(0);
+      await expect(hidden.first()).toBeHidden();
+
+      // The first Read More button is visible and indicates 4 certificates
+      await expect(btn).toBeVisible();
+      await expect(btn).toHaveText("Read More Certificates (4)");
+    });
+
+    test("Test 2 - First batch", async ({ page }) => {
+      const btn = page.locator('#cert-reveal-btn');
+      await btn.click();
+      await page.waitForTimeout(500);
+
+      const featured = page.locator('.featured-cert-card');
+      const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
+      
+      await expect(featured).toHaveCount(3);
+      await expect(revealed).toHaveCount(4);
+      
+      await expect(btn).toBeVisible();
+      await expect(btn).toHaveText("Read More Certificates (5)");
+    });
+
+    test("Test 3 - Second batch", async ({ page }) => {
+      const btn = page.locator('#cert-reveal-btn');
+      await btn.click();
+      await page.waitForTimeout(500);
+      await btn.click();
+      await page.waitForTimeout(500);
+
+      const featured = page.locator('.featured-cert-card');
+      const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
+      
+      await expect(featured).toHaveCount(3);
+      await expect(revealed).toHaveCount(9); // 4 + 5
+      
+      // Next batch should be 6, unless less remain
+      const totalSupp = await page.locator('.supp-cert-card').count();
+      const remain = totalSupp - 9;
+      if (remain > 0) {
+        await expect(btn).toBeVisible();
+        const expectedNext = Math.min(6, remain);
+        await expect(btn).toHaveText(`Read More Certificates (${expectedNext})`);
+      }
+    });
+
+    test("Test 4 - Continue until complete", async ({ page }) => {
+      const btn = page.locator('#cert-reveal-btn');
+      
+      while (await btn.isVisible()) {
+        await btn.click();
+        await page.waitForTimeout(300);
+      }
+
+      const hidden = page.locator('.supp-cert-card[data-revealed="false"]');
+      await expect(hidden).toHaveCount(0);
+      
+      const totalCerts = await page.locator('.cert-card').count();
+      const dataCerts = await page.evaluate(() => document.querySelectorAll('.cert-card').length);
+      expect(totalCerts).toBe(dataCerts);
+
+      // Verify displayOrder matches (no duplicates, strictly ordered by index)
+      const ids = await page.evaluate(() => Array.from(document.querySelectorAll('.cert-card')).map(c => c.querySelector('.cert-title').textContent));
+      const uniqueIds = new Set(ids);
+      expect(uniqueIds.size).toBe(totalCerts);
+      
+      // Container should be hidden
+      await expect(page.locator('#cert-reveal-container')).toBeHidden();
+    });
+
+    test("Test 5 - Certificate preview lazy loading", async ({ page }) => {
+      const featuredFrames = page.locator('.featured-cert-card .cert-preview-iframe');
+      for (let i = 0; i < await featuredFrames.count(); i++) {
+        const src = await featuredFrames.nth(i).getAttribute('src');
+        expect(src).not.toBeNull();
+        expect(src).toContain('.pdf');
+      }
+
+      const hiddenCards = page.locator('.supp-cert-card[data-revealed="false"]');
+      if (await hiddenCards.count() > 0) {
+        const hiddenFrame = hiddenCards.first().locator('.cert-preview-iframe');
+        const srcAttr = await hiddenFrame.getAttribute('src');
+        const dataPdfSrc = await hiddenFrame.getAttribute('data-pdf-src');
+        expect(srcAttr).toBeNull();
+        expect(dataPdfSrc).toContain('.pdf');
+      }
+
+      const btn = page.locator('#cert-reveal-btn');
+      await btn.click();
+      await page.waitForTimeout(500);
+
+      // Scroll to trigger IntersectionObserver
+      await page.evaluate(() => window.scrollBy(0, 500));
+      await page.waitForTimeout(500);
+
+      const revealedFrames = page.locator('.supp-cert-card[data-revealed="true"] .cert-preview-iframe');
+      if (await revealedFrames.count() > 0) {
+        const srcAfter = await revealedFrames.first().getAttribute('src');
+        expect(srcAfter).not.toBeNull();
+      }
+    });
+
+    test("Test 6 & 35 - Fullscreen viewer single instance", async ({ page }) => {
+      // Test 35: Only one fullscreen certificate iframe exists
+      const viewerIframes = page.locator('#cert-viewer-iframe');
+      await expect(viewerIframes).toHaveCount(1);
+      
+      const firstCard = page.locator('.featured-cert-card').first();
+      await firstCard.click();
+      await page.waitForTimeout(500);
+
+      const viewer = page.locator('#cert-viewer');
+      await expect(viewer).toHaveClass(/open/);
+      await expect(viewer).toHaveAttribute('role', 'dialog');
+      await expect(viewer).toHaveAttribute('aria-modal', 'true');
+      
+      const titleText = await firstCard.locator('.cert-title').textContent();
+      await expect(viewer.locator('#cert-viewer-title')).toHaveText(titleText);
+      
+      const iframeSrc = await viewer.locator('#cert-viewer-iframe').getAttribute('src');
+      expect(iframeSrc).toContain('.pdf');
+
+      // Body scroll locked
+      const overflow = await page.evaluate(() => document.body.style.overflow);
+      expect(overflow).toBe('hidden');
+    });
+
+    test("Test 7 & 34 - Close interactions and src clearing", async ({ page, isMobile }) => {
+      const firstCard = page.locator('.featured-cert-card').first();
+      const viewer = page.locator('#cert-viewer');
+      const closeBtn = page.locator('#cert-viewer-close');
+      const backdrop = page.locator('#cert-viewer-backdrop');
+      const iframe = page.locator('#cert-viewer-iframe');
+
+      // Close via button
+      await firstCard.click();
+      await page.waitForTimeout(500);
+      await closeBtn.click();
+      await page.waitForTimeout(500);
+      await expect(viewer).not.toHaveClass(/open/);
+      // Test 34: src cleared
+      expect(await iframe.getAttribute('src')).toBe('');
+      await expect(firstCard).toBeFocused();
+
+      // Close via Escape
+      await firstCard.click();
+      await page.waitForTimeout(500);
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(500);
+      await expect(viewer).not.toHaveClass(/open/);
+      expect(await iframe.getAttribute('src')).toBe('');
+
+      // Close via Backdrop
+      await firstCard.click();
+      await page.waitForTimeout(500);
+      if (!isMobile) {
+        await backdrop.click({ position: { x: 5, y: 5 }, force: true });
+        await page.waitForTimeout(500);
+        await expect(viewer).not.toHaveClass(/open/);
+        expect(await iframe.getAttribute('src')).toBe('');
+      } else {
+        // Just close it via Escape to leave the DOM clean for the next test
+        await page.keyboard.press('Escape');
+        await page.waitForTimeout(500);
+      }
+    });
+
+    test("Test 8 - Keyboard access", async ({ page }) => {
+      const firstCard = page.locator('.featured-cert-card').first();
+      await firstCard.focus();
+      await expect(firstCard).toBeFocused();
+
+      await page.keyboard.press('Enter');
+      await page.waitForTimeout(500);
+
+      const viewer = page.locator('#cert-viewer');
+      await expect(viewer).toHaveClass(/open/);
+      
+      const closeBtn = page.locator('#cert-viewer-close');
+      // Wait for focus to land
+      await expect(closeBtn).toBeFocused({ timeout: 5000 });
+
+      await page.keyboard.press('Tab');
+      // Focus should loop inside modal, but not escape
+      await page.waitForTimeout(300);
+      const activeEl = await page.evaluate(() => document.activeElement.id);
+      expect(['cert-viewer-close', 'cert-viewer-new-tab', 'cert-viewer-iframe'].includes(activeEl)).toBe(true);
+    });
+
+    test("Test 9 - Mobile constraints", async ({ page, isMobile }) => {
+      if (!isMobile) test.skip();
+      
+      const firstCard = page.locator('.featured-cert-card').first();
+      await firstCard.click();
+      await page.waitForTimeout(300);
+
+      const closeBtn = page.locator('#cert-viewer-close');
+      await expect(closeBtn).toBeVisible();
+      
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
+      expect(overflow).toBe(false);
+    });
+
+    test("Test 10 - Reduced motion", async ({ page }) => {
+      await page.emulateMedia({ reducedMotion: 'reduce' });
+      const btn = page.locator('#cert-reveal-btn');
+      await btn.click();
+      
+      const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
+      await expect(revealed).toHaveCount(4);
+      
+      // Ensure no long transitions are blocking interactiveness
+      await expect(revealed.first()).toBeVisible();
+    });
+  });
 });

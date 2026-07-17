@@ -45,6 +45,7 @@
     <title>{{ seo.title }}</title>
     <!-- TEMPLATE: SCHEMA_ORG -->
     <link rel="stylesheet" href="/src/style.css" />
+    <script>document.documentElement.classList.add('js-enabled');</script>
     <script type="application/json" id="ai-data">
       <!-- TEMPLATE: AI_PAYLOAD -->
     </script>
@@ -321,13 +322,15 @@
         <h2 class="section-header fade-in-up reveal" data-section-anchor>
           CERTIFICATIONS
         </h2>
-        <div class="cert-list">
+        <div class="featured-cert-grid">
           <!-- TEMPLATE: FEATURED_CERTIFICATES -->
         </div>
-        <div class="additional-certs fade-in-up reveal">
-          <h3>Additional learning</h3>
-          <div class="supp-cert-list">
+        <div class="additional-certs fade-in-up reveal" id="additional-certs-container">
+          <div class="supp-cert-grid">
             <!-- TEMPLATE: SUPPORTING_CERTIFICATES -->
+          </div>
+          <div class="cert-reveal-action" id="cert-reveal-container">
+            <button class="btn btn-outline" id="cert-reveal-btn" type="button">Read More Certificates (4)</button>
           </div>
         </div>
       </section>
@@ -479,6 +482,34 @@
 
     <!-- Project Modals Container -->
     <div id="modal-root"></div>
+
+    <!-- Fullscreen Certificate Viewer -->
+    <div
+      class="cert-viewer"
+      id="cert-viewer"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cert-viewer-title"
+      aria-hidden="true"
+      inert
+    >
+      <div class="cert-viewer-backdrop" id="cert-viewer-backdrop"></div>
+      <div class="cert-viewer-panel">
+        <div class="cert-viewer-header">
+          <div class="cert-viewer-header-info">
+            <h2 class="cert-viewer-title" id="cert-viewer-title"></h2>
+            <div class="cert-viewer-issuer" id="cert-viewer-issuer"></div>
+          </div>
+          <div class="cert-viewer-actions">
+            <a href="#" id="cert-viewer-new-tab" class="btn btn-outline" target="_blank" rel="noopener noreferrer">Open PDF in New Tab</a>
+            <button class="cert-viewer-close" id="cert-viewer-close" aria-label="Close certificate viewer" type="button">×</button>
+          </div>
+        </div>
+        <div class="cert-viewer-body">
+          <iframe id="cert-viewer-iframe" class="cert-viewer-iframe" src="" title="Certificate PDF Viewer"></iframe>
+        </div>
+      </div>
+    </div>
 
     <script type="module" src="/src/main.js"></script>
   </body>

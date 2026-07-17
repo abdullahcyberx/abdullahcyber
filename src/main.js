@@ -1025,4 +1025,160 @@
       setTimeout(() => processQuery(val), 300);
     });
   }
+
+  /* -------------------------
+     Certificates - Lazy Load & Progressive Reveal
+     ------------------------- */
+  const suppCerts = Array.from(document.querySelectorAll('.supp-cert-card'));
+  const revealBtn = document.getElementById('cert-reveal-btn');
+  const revealContainer = document.getElementById('cert-reveal-container');
+
+  let currentBatchSize = 4;
+
+  const pdfObserver = new IntersectionObserver((entries, obs) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) {
+        const iframe = entry.target.querySelector('.cert-preview-iframe');
+        if (iframe && iframe.dataset.pdfSrc) {
+          iframe.src = iframe.dataset.pdfSrc;
+          delete iframe.dataset.pdfSrc;
+        }
+        obs.unobserve(entry.target);
+      }
+    });
+  }, { rootMargin: "0px 0px 200px 0px" });
+
+  // Initialize observer for already revealed cards (featured)
+  document.querySelectorAll('.cert-card[data-revealed="true"]').forEach(card => {
+    pdfObserver.observe(card);
+  });
+
+  const updateRevealButton = () => {
+    if (!revealBtn) return;
+    const hiddenCerts = suppCerts.filter(c => c.getAttribute('data-revealed') === 'false');
+    
+    if (hiddenCerts.length === 0) {
+      revealContainer.style.display = 'none';
+      return;
+    }
+    
+    const nextRevealCount = Math.min(currentBatchSize, hiddenCerts.length);
+    revealBtn.textContent = `Read More Certificates (${nextRevealCount})`;
+  };
+
+  if (revealBtn) {
+    updateRevealButton();
+    
+    revealBtn.addEventListener('click', () => {
+      const hiddenCerts = suppCerts.filter(c => c.getAttribute('data-revealed') === 'false');
+      const toReveal = hiddenCerts.slice(0, currentBatchSize);
+      
+      toReveal.forEach(card => {
+        card.setAttribute('data-revealed', 'true');
+        card.classList.add('fade-in-up', 'reveal');
+        // trigger reflow
+        void card.offsetWidth;
+        card.classList.add('entered');
+        pdfObserver.observe(card);
+      });
+      
+      currentBatchSize++;
+      updateRevealButton();
+    });
+  }
+
+  /* -------------------------
+     Certificates - Fullscreen Viewer
+     ------------------------- */
+  const certViewer = document.getElementById('cert-viewer');
+  const certViewerIframe = document.getElementById('cert-viewer-iframe');
+  const certViewerTitle = document.getElementById('cert-viewer-title');
+  const certViewerIssuer = document.getElementById('cert-viewer-issuer');
+  const certViewerNewTab = document.getElementById('cert-viewer-new-tab');
+  const certViewerClose = document.getElementById('cert-viewer-close');
+  const certViewerBackdrop = document.getElementById('cert-viewer-backdrop');
+  
+  let certLastFocus = null;
+
+  const openCertViewer = (card) => {
+    if (!certViewer) return;
+    certLastFocus = card;
+    const pdfUrl = card.getAttribute('data-pdf-full');
+    const title = card.querySelector('.cert-title').textContent;
+    const issuer = card.querySelector('.cert-meta span:first-child').textContent;
+    
+    certViewerTitle.textContent = title;
+    certViewerIssuer.textContent = issuer;
+    certViewerNewTab.href = pdfUrl;
+    certViewerIframe.src = pdfUrl;
+    
+    certViewer.classList.add('open');
+    certViewer.setAttribute('aria-hidden', 'false');
+    certViewer.removeAttribute('inert');
+    document.body.style.overflow = 'hidden';
+    
+    setTimeout(() => {
+      certViewerClose.focus();
+    }, 150);
+  };
+
+  const closeCertViewer = () => {
+    if (!certViewer) return;
+    certViewer.classList.remove('open');
+    certViewer.setAttribute('aria-hidden', 'true');
+    certViewer.setAttribute('inert', '');
+    document.body.style.overflow = '';
+    
+    // Clear iframe src
+    certViewerIframe.src = '';
+    
+    if (certLastFocus) {
+      certLastFocus.focus();
+    }
+  };
+
+  if (certViewerClose && certViewerBackdrop) {
+    certViewerClose.addEventListener('click', closeCertViewer);
+    certViewerBackdrop.addEventListener('click', closeCertViewer);
+  }
+
+  // Need to use document.body to delegate in case cards are dynamically created
+  // Though cards are rendered statically, it's safe.
+  document.querySelectorAll('.cert-card').forEach(card => {
+    card.addEventListener('click', () => openCertViewer(card));
+    card.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ') {
+        e.preventDefault();
+        openCertViewer(card);
+      }
+    });
+  });
+
+  if (certViewer) {
+    certViewer.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        e.preventDefault();
+        closeCertViewer();
+      }
+      
+      if (e.key === 'Tab') {
+        const focusables = Array.from(certViewer.querySelectorAll('a[href], button')).filter(el => !el.hidden && !el.disabled && el.offsetParent !== null);
+        if (!focusables.length) return;
+        const first = focusables[0];
+        const last = focusables[focusables.length - 1];
+        if (e.shiftKey) {
+          if (document.activeElement === first) {
+            e.preventDefault();
+            last.focus();
+          }
+        } else {
+          if (document.activeElement === last || document.activeElement === certViewerIframe) {
+            e.preventDefault();
+            first.focus();
+          }
+        }
+      }
+    });
+  }
+
 })();

@@ -306,39 +306,53 @@ try {
   const featuredCerts = certificates.filter((c) => c.featured);
   const supportCerts = certificates.filter((c) => !c.featured);
 
-  const featCertHtml = featuredCerts
-    .map(
-      (c) => `
-    <div class="cert-card fade-in-up reveal">
-      <h3 class="cert-title">${escapeHtml(c.title)}</h3>
-      <div class="cert-meta">
-        <span>${escapeHtml(c.issuer)}</span>
-        <span>${escapeHtml(c.issueDate)}</span>
+  const renderCertCard = (c, isFeatured, index) => {
+    const pdfSrc = `${escapeHtml(c.certificateFile)}#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
+    const fallbackId = c.credentialId ? ` · ${escapeHtml(c.credentialId)}` : '';
+    
+    // Featured loads initially, supporting is deferred
+    const iframeHtml = isFeatured 
+      ? `<iframe class="cert-preview-iframe" src="${pdfSrc}" title="${escapeHtml(c.title)} preview" tabindex="-1" loading="lazy"></iframe>`
+      : `<iframe class="cert-preview-iframe" data-pdf-src="${pdfSrc}" title="${escapeHtml(c.title)} preview" tabindex="-1"></iframe>`;
+
+    // Data attribute for progressive reveal order on supporting certs
+    const revealAttr = isFeatured ? 'data-revealed="true"' : `data-reveal-order="${index}" data-revealed="false"`;
+    const classNames = isFeatured ? 'cert-card featured-cert-card fade-in-up reveal' : 'cert-card supp-cert-card';
+
+    return `
+    <div class="${classNames}" ${revealAttr} data-pdf-full="${escapeHtml(c.certificateFile)}" tabindex="0" role="button" aria-label="Open ${escapeHtml(c.title)} certificate viewer">
+      <div class="cert-preview-viewport">
+        ${iframeHtml}
+        <div class="cert-preview-fallback" aria-hidden="true">
+          <span class="cert-fallback-title">${escapeHtml(c.title)}</span>
+          <span class="cert-fallback-issuer">${escapeHtml(c.issuer)}</span>
+          <span class="cert-fallback-cta">Click to view certificate</span>
+        </div>
       </div>
-      <a class="project-link" href="${escapeHtml(c.certificateFile)}" target="_blank" rel="noreferrer" aria-label="Open ${escapeHtml(c.title)}">View credential <span>↗</span></a>
+      <div class="cert-card-content">
+        <h3 class="cert-title">${escapeHtml(c.title)}</h3>
+        <div class="cert-meta">
+          <span>${escapeHtml(c.issuer)}</span>
+          <span>${escapeHtml(c.issueDate)}${fallbackId}</span>
+        </div>
+        <div class="cert-action" aria-hidden="true">
+          <span class="project-link">View Certificate <span>↗</span></span>
+        </div>
+      </div>
     </div>
-  `,
-    )
-    .join("");
+  `;
+  };
+
+  const featCertHtml = featuredCerts.map((c, i) => renderCertCard(c, true, i)).join("");
   html = html.replaceAll(
     "<!-- TEMPLATE: FEATURED_CERTIFICATES -->",
     featCertHtml,
   );
 
-  const suppCertHtml = supportCerts
-    .map(
-      (c) => `
-    <li class="supp-cert-row">
-      <span class="supp-cert-title"><a href="${escapeHtml(c.certificateFile)}" target="_blank" rel="noreferrer">${escapeHtml(c.title)}</a></span>
-      <span class="supp-cert-issuer">${escapeHtml(c.issuer)}</span>
-      <span class="supp-cert-date">${escapeHtml(c.issueDate)}</span>
-    </li>
-  `,
-    )
-    .join("");
+  const suppCertHtml = supportCerts.map((c, i) => renderCertCard(c, false, i)).join("");
   html = html.replaceAll(
     "<!-- TEMPLATE: SUPPORTING_CERTIFICATES -->",
-    `<ul>${suppCertHtml}</ul>`,
+    suppCertHtml,
   );
 
   // ACHIEVEMENTS
