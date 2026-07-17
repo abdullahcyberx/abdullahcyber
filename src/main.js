@@ -1035,13 +1035,13 @@
 
   let currentBatchSize = 4;
 
-  const pdfObserver = new IntersectionObserver((entries, obs) => {
+  const previewObserver = new IntersectionObserver((entries, obs) => {
     entries.forEach(entry => {
       if (entry.isIntersecting) {
-        const iframe = entry.target.querySelector('.cert-preview-iframe');
-        if (iframe && iframe.dataset.pdfSrc) {
-          iframe.src = iframe.dataset.pdfSrc;
-          delete iframe.dataset.pdfSrc;
+        const img = entry.target.querySelector('.cert-preview-image');
+        if (img && img.dataset.previewSrc) {
+          img.src = img.dataset.previewSrc;
+          delete img.dataset.previewSrc;
         }
         obs.unobserve(entry.target);
       }
@@ -1050,7 +1050,21 @@
 
   // Initialize observer for already revealed cards (featured)
   document.querySelectorAll('.cert-card[data-revealed="true"]').forEach(card => {
-    pdfObserver.observe(card);
+    previewObserver.observe(card);
+  });
+
+  // Attach load and error listeners to all preview images
+  document.querySelectorAll('.cert-preview-image').forEach(img => {
+    if (img.complete && img.naturalWidth > 0) {
+      img.classList.add("is-loaded");
+    } else {
+      img.addEventListener("load", () => img.classList.add("is-loaded"));
+      img.addEventListener("error", () => {
+        img.hidden = true;
+        const viewport = img.closest(".cert-preview-viewport");
+        if (viewport) viewport.classList.add("has-preview-error");
+      });
+    }
   });
 
   const updateRevealButton = () => {
@@ -1080,7 +1094,7 @@
         // trigger reflow
         void card.offsetWidth;
         card.classList.add('entered');
-        pdfObserver.observe(card);
+        previewObserver.observe(card);
       });
       
       currentBatchSize++;

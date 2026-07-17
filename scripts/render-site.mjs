@@ -308,13 +308,16 @@ try {
   const supportCerts = certificates.filter((c) => !c.featured);
 
   const renderCertCard = (c, isFeatured, index) => {
-    const pdfSrc = `${escapeHtml(c.certificateFile)}#page=1&toolbar=0&navpanes=0&scrollbar=0&view=FitH`;
     const fallbackId = c.credentialId ? ` · ${escapeHtml(c.credentialId)}` : '';
     
+    const webpPath = escapeHtml(c.certificateFile)
+      .replace(/\.pdf$/i, '.webp')
+      .replace('/assets/certificates/', '/assets/certificate-previews/');
+    
     // Featured loads initially, supporting is deferred
-    const iframeHtml = isFeatured 
-      ? `<iframe class="cert-preview-iframe" src="${pdfSrc}" title="${escapeHtml(c.title)} preview" tabindex="-1" loading="lazy"></iframe>`
-      : `<iframe class="cert-preview-iframe" data-pdf-src="${pdfSrc}" title="${escapeHtml(c.title)} preview" tabindex="-1"></iframe>`;
+    const imageHtml = isFeatured 
+      ? `<img class="cert-preview-image" src="${webpPath}" alt="Preview of ${escapeHtml(c.title)}" loading="lazy" decoding="async">`
+      : `<img class="cert-preview-image" data-preview-src="${webpPath}" alt="Preview of ${escapeHtml(c.title)}" loading="lazy" decoding="async">`;
 
     // Data attribute for progressive reveal order on supporting certs
     const revealAttr = isFeatured ? 'data-revealed="true"' : `data-reveal-order="${index}" data-revealed="false"`;
@@ -323,7 +326,7 @@ try {
     return `
     <div class="${classNames}" ${revealAttr} data-pdf-full="${escapeHtml(c.certificateFile)}" tabindex="0" role="button" aria-label="Open ${escapeHtml(c.title)} certificate viewer">
       <div class="cert-preview-viewport">
-        ${iframeHtml}
+        ${imageHtml}
         <div class="cert-preview-fallback" aria-hidden="true">
           <span class="cert-fallback-title">${escapeHtml(c.title)}</span>
           <span class="cert-fallback-issuer">${escapeHtml(c.issuer)}</span>

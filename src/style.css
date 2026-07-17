@@ -1283,27 +1283,36 @@ body.menu-open {
   border-bottom: 1px solid var(--border);
 }
 
-.cert-preview-iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
+.cert-preview-image {
   width: 100%;
-  height: 200%;
-  border: none;
-  pointer-events: none;
+  height: 100%;
+  object-fit: contain;
+  object-position: center;
+  display: block;
+  opacity: 0;
+  transition: opacity 300ms ease;
+  position: relative;
   z-index: 10;
+}
+
+.cert-preview-image.is-loaded {
+  opacity: 1;
 }
 
 .cert-preview-fallback {
   position: absolute;
   inset: 0;
   padding: 24px;
-  display: flex;
+  display: none;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-align: center;
   z-index: 1;
+}
+
+.has-preview-error .cert-preview-fallback {
+  display: flex;
 }
 
 .cert-fallback-title {

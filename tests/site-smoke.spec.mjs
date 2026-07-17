@@ -642,6 +642,34 @@ test.describe("Portfolio Smoke Tests", () => {
       // Hidden cards = 16 - 3 = 13
       await expect(hidden).toHaveCount(13);
 
+      // Verify no iframe, object, or embed in any cert preview
+      const previewViewports = page.locator('.cert-preview-viewport');
+      await expect(previewViewports.locator('iframe')).toHaveCount(0);
+      await expect(previewViewports.locator('object')).toHaveCount(0);
+      await expect(previewViewports.locator('embed')).toHaveCount(0);
+
+      // Verify featured images have src and naturalWidth > 0
+      const featuredImages = featured.locator('.cert-preview-image');
+      await expect(featuredImages).toHaveCount(3);
+      for (let i = 0; i < 3; i++) {
+        const src = await featuredImages.nth(i).getAttribute('src');
+        expect(src).toMatch(/\.webp$/);
+        
+        // Wait for image to load and check naturalWidth
+        const isLoaded = await featuredImages.nth(i).evaluate((img) => img.complete && img.naturalWidth > 0);
+        expect(isLoaded).toBe(true);
+      }
+
+      // Verify hidden supporting images don't have src
+      const hiddenImages = hidden.locator('.cert-preview-image');
+      const hiddenCount = await hiddenImages.count();
+      for (let i = 0; i < hiddenCount; i++) {
+        const src = await hiddenImages.nth(i).getAttribute('src');
+        expect(src).toBeNull();
+        const dataSrc = await hiddenImages.nth(i).getAttribute('data-preview-src');
+        expect(dataSrc).toMatch(/\.webp$/);
+      }
+
       // The first Explore More button is visible and indicates 4 certificates
       await expect(btn).toBeVisible();
       await expect(btn).toHaveText("Explore More");
@@ -649,11 +677,37 @@ test.describe("Portfolio Smoke Tests", () => {
 
     test("Test 2 - First batch", async ({ page }) => {
       const btn = page.locator('#cert-reveal-btn');
+      
+      // Setup listener to intercept image requests and check 200/content-type
+      const imageResponses = [];
+      page.on('response', response => {
+        if (response.url().includes('.webp')) {
+          imageResponses.push(response);
+        }
+      });
+      
       await btn.click();
-      await page.waitForTimeout(500);
+      await page.waitForTimeout(1000);
 
       const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
       await expect(revealed).toHaveCount(4);
+      
+      const revealedImages = revealed.locator('.cert-preview-image');
+      for (let i = 0; i < 4; i++) {
+        // Scroll into view so IntersectionObserver triggers
+        await revealedImages.nth(i).scrollIntoViewIfNeeded();
+        
+        // Wait for the src to be set
+        await expect(revealedImages.nth(i)).toHaveAttribute('src', /\.webp$/);
+        
+        // Ensure it eventually loads
+        await page.waitForFunction(img => img.complete && img.naturalWidth > 0, await revealedImages.nth(i).elementHandle());
+      }
+      
+      for (const res of imageResponses) {
+        expect(res.status()).toBe(200);
+        expect(res.headers()['content-type']).toMatch(/^image\//);
+      }
       
       await expect(btn).toHaveText("Explore More");
     });
