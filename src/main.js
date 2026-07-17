@@ -1063,7 +1063,8 @@
     }
     
     const nextRevealCount = Math.min(currentBatchSize, hiddenCerts.length);
-    revealBtn.textContent = `Read More Certificates (${nextRevealCount})`;
+    revealBtn.textContent = 'Read More';
+    revealBtn.setAttribute('aria-label', `Reveal ${nextRevealCount} more certificates`);
   };
 
   if (revealBtn) {

@@ -638,7 +638,7 @@ test.describe("Portfolio Smoke Tests", () => {
 
       // The first Read More button is visible and indicates 4 certificates
       await expect(btn).toBeVisible();
-      await expect(btn).toHaveText("Read More Certificates (4)");
+      await expect(btn).toHaveText("Read More");
     });
 
     test("Test 2 - First batch", async ({ page }) => {
@@ -649,7 +649,7 @@ test.describe("Portfolio Smoke Tests", () => {
       const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
       await expect(revealed).toHaveCount(4);
       
-      await expect(btn).toHaveText("Read More Certificates (5)");
+      await expect(btn).toHaveText("Read More");
     });
 
     test("Test 3 - Second batch", async ({ page }) => {
@@ -662,7 +662,7 @@ test.describe("Portfolio Smoke Tests", () => {
       const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
       await expect(revealed).toHaveCount(9); // 4 + 5
       
-      await expect(btn).toHaveText("Read More Certificates (4)");
+      await expect(btn).toHaveText("Read More");
     });
 
     test("Test 4 - Continue until complete", async ({ page }) => {
@@ -738,13 +738,13 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.waitForTimeout(500);
 
       // Test Achievement trigger (NaSCon)
-      const nasconBtn = page.locator('#achievements li', { hasText: 'NaSCon\'25 Participation' }).locator('button');
+      const nasconBtn = page.locator('#achievements li', { hasText: 'Typing Competition Nascon' }).locator('button');
       await expect(nasconBtn).toHaveText('View Participation Certificate');
       await nasconBtn.click();
       await page.waitForTimeout(500);
       await expect(viewer).toHaveClass(/open/);
       await expect(iframe).toHaveAttribute('src', /nascon-2025-participation\.pdf/);
-      await expect(viewerTitle).toHaveText('NaSCon\'25 Participation');
+      await expect(viewerTitle).toHaveText('Typing Competition Nascon');
       await closeBtn.click();
       await page.waitForTimeout(500);
 
