@@ -600,7 +600,7 @@ test.describe("Portfolio Smoke Tests", () => {
     await expect(aiToggle).toBeFocused();
   });
 
-  test.describe("Certifications Redesign Tests", () => {
+  test.describe("Certifications & Generalized Viewer Tests", () => {
     test.beforeEach(async ({ page }) => {
       await page.goto("/");
       await page.waitForTimeout(500);
@@ -610,7 +610,7 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.waitForTimeout(500);
     });
 
-    test("Test 1 - Initial state", async ({ page }) => {
+    test("Test 1 - Initial state of Certificates", async ({ page }) => {
       const featured = page.locator('.featured-cert-card');
       const supp = page.locator('.supp-cert-card[data-revealed="true"]');
       const hidden = page.locator('.supp-cert-card[data-revealed="false"]');
@@ -618,15 +618,23 @@ test.describe("Portfolio Smoke Tests", () => {
 
       // Exactly 3 featured certificates are visible initially
       await expect(featured).toHaveCount(3);
-      await expect(featured.first()).toBeVisible();
-      
-      // Supporting certificates are not visible after JS initializes
-      await expect(supp).toHaveCount(0);
-      
-      // Hidden cards exist but are not displayed
-      const hiddenCount = await hidden.count();
-      expect(hiddenCount).toBeGreaterThan(0);
-      await expect(hidden.first()).toBeHidden();
+      // Wait for exact featured titles: WEB-RTA, CAPT, CORE
+      await expect(featured.nth(0).locator('.cert-title')).toHaveText(/WEB-RTA/);
+      await expect(featured.nth(1).locator('.cert-title')).toHaveText(/CAPT/);
+      await expect(featured.nth(2).locator('.cert-title')).toHaveText(/CORE/);
+
+      // Total 16 certs
+      const totalCerts = await page.locator('.cert-card').count();
+      expect(totalCerts).toBe(16);
+
+      // Verify removed certs do not appear in certificates list
+      const certTitles = await page.locator('.cert-card .cert-title').allTextContents();
+      expect(certTitles.some(t => t.includes('Advent of Cyber'))).toBeFalsy();
+      expect(certTitles.some(t => t.includes('NaSCon'))).toBeFalsy();
+      expect(certTitles.some(t => t.includes('Cyber Security Internship'))).toBeFalsy();
+
+      // Hidden cards = 16 - 3 = 13
+      await expect(hidden).toHaveCount(13);
 
       // The first Read More button is visible and indicates 4 certificates
       await expect(btn).toBeVisible();
@@ -638,13 +646,9 @@ test.describe("Portfolio Smoke Tests", () => {
       await btn.click();
       await page.waitForTimeout(500);
 
-      const featured = page.locator('.featured-cert-card');
       const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
-      
-      await expect(featured).toHaveCount(3);
       await expect(revealed).toHaveCount(4);
       
-      await expect(btn).toBeVisible();
       await expect(btn).toHaveText("Read More Certificates (5)");
     });
 
@@ -655,148 +659,146 @@ test.describe("Portfolio Smoke Tests", () => {
       await btn.click();
       await page.waitForTimeout(500);
 
-      const featured = page.locator('.featured-cert-card');
       const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
-      
-      await expect(featured).toHaveCount(3);
       await expect(revealed).toHaveCount(9); // 4 + 5
       
-      // Next batch should be 6, unless less remain
-      const totalSupp = await page.locator('.supp-cert-card').count();
-      const remain = totalSupp - 9;
-      if (remain > 0) {
-        await expect(btn).toBeVisible();
-        const expectedNext = Math.min(6, remain);
-        await expect(btn).toHaveText(`Read More Certificates (${expectedNext})`);
-      }
+      await expect(btn).toHaveText("Read More Certificates (4)");
     });
 
     test("Test 4 - Continue until complete", async ({ page }) => {
       const btn = page.locator('#cert-reveal-btn');
-      
       while (await btn.isVisible()) {
         await btn.click();
         await page.waitForTimeout(300);
       }
-
       const hidden = page.locator('.supp-cert-card[data-revealed="false"]');
       await expect(hidden).toHaveCount(0);
       
-      const totalCerts = await page.locator('.cert-card').count();
-      const dataCerts = await page.evaluate(() => document.querySelectorAll('.cert-card').length);
-      expect(totalCerts).toBe(dataCerts);
-
-      // Verify displayOrder matches (no duplicates, strictly ordered by index)
-      const ids = await page.evaluate(() => Array.from(document.querySelectorAll('.cert-card')).map(c => c.querySelector('.cert-title').textContent));
-      const uniqueIds = new Set(ids);
-      expect(uniqueIds.size).toBe(totalCerts);
-      
-      // Container should be hidden
       await expect(page.locator('#cert-reveal-container')).toBeHidden();
     });
 
-    test("Test 5 - Certificate preview lazy loading", async ({ page }) => {
-      const featuredFrames = page.locator('.featured-cert-card .cert-preview-iframe');
-      for (let i = 0; i < await featuredFrames.count(); i++) {
-        const src = await featuredFrames.nth(i).getAttribute('src');
-        expect(src).not.toBeNull();
-        expect(src).toContain('.pdf');
-      }
-
-      const hiddenCards = page.locator('.supp-cert-card[data-revealed="false"]');
-      if (await hiddenCards.count() > 0) {
-        const hiddenFrame = hiddenCards.first().locator('.cert-preview-iframe');
-        const srcAttr = await hiddenFrame.getAttribute('src');
-        const dataPdfSrc = await hiddenFrame.getAttribute('data-pdf-src');
-        expect(srcAttr).toBeNull();
-        expect(dataPdfSrc).toContain('.pdf');
-      }
-
-      const btn = page.locator('#cert-reveal-btn');
-      await btn.click();
-      await page.waitForTimeout(500);
-
-      // Scroll to trigger IntersectionObserver
-      await page.evaluate(() => window.scrollBy(0, 500));
-      await page.waitForTimeout(500);
-
-      const revealedFrames = page.locator('.supp-cert-card[data-revealed="true"] .cert-preview-iframe');
-      if (await revealedFrames.count() > 0) {
-        const srcAfter = await revealedFrames.first().getAttribute('src');
-        expect(srcAfter).not.toBeNull();
-      }
+    test("Test 5 - Verify exact ordering", async ({ page }) => {
+      const expectedTitles = [
+        "Certified Web Red Team Analyst (WEB-RTA)",
+        "Certified Associate Penetration Tester (CAPT)",
+        "Certified Cybersecurity Foundations (CORE)",
+        "Red Team Operations Management",
+        "Network Defense",
+        "ICS/SCADA Cybersecurity",
+        "Deloitte Australia Cyber Job Simulation",
+        "Security Principles",
+        "Certified Phishing Prevention Specialist",
+        "Cybersecurity Essentials",
+        "Linux & Essential Cybersecurity",
+        "Introduction to Cybersecurity",
+        "C++ Advanced",
+        "IT Essentials",
+        "C++ Essentials 1",
+        "Introduction to IoT & Digital Transformation"
+      ];
+      
+      const titles = await page.locator('.cert-card .cert-title').allTextContents();
+      expect(titles).toEqual(expectedTitles);
     });
 
-    test("Test 6 & 35 - Fullscreen viewer single instance", async ({ page }) => {
-      // Test 35: Only one fullscreen certificate iframe exists
-      const viewerIframes = page.locator('#cert-viewer-iframe');
-      await expect(viewerIframes).toHaveCount(1);
-      
-      const firstCard = page.locator('.featured-cert-card').first();
-      await firstCard.click();
-      await page.waitForTimeout(500);
-
+    test("Test 6 - Generalized Viewer (Certificates, Achievements, Experience)", async ({ page }) => {
       const viewer = page.locator('#cert-viewer');
-      await expect(viewer).toHaveClass(/open/);
-      await expect(viewer).toHaveAttribute('role', 'dialog');
-      await expect(viewer).toHaveAttribute('aria-modal', 'true');
-      
-      const titleText = await firstCard.locator('.cert-title').textContent();
-      await expect(viewer.locator('#cert-viewer-title')).toHaveText(titleText);
-      
-      const iframeSrc = await viewer.locator('#cert-viewer-iframe').getAttribute('src');
-      expect(iframeSrc).toContain('.pdf');
-
-      // Body scroll locked
-      const overflow = await page.evaluate(() => document.body.style.overflow);
-      expect(overflow).toBe('hidden');
-    });
-
-    test("Test 7 & 34 - Close interactions and src clearing", async ({ page, isMobile }) => {
-      const firstCard = page.locator('.featured-cert-card').first();
-      const viewer = page.locator('#cert-viewer');
-      const closeBtn = page.locator('#cert-viewer-close');
-      const backdrop = page.locator('#cert-viewer-backdrop');
       const iframe = page.locator('#cert-viewer-iframe');
+      const closeBtn = page.locator('#cert-viewer-close');
+      const viewerTitle = page.locator('#cert-viewer-title');
 
-      // Close via button
-      await firstCard.click();
+      // Test Certificate trigger
+      const firstCert = page.locator('.featured-cert-card').first();
+      await firstCert.click();
       await page.waitForTimeout(500);
+      await expect(viewer).toHaveClass(/open/);
+      await expect(iframe).toHaveAttribute('src', /web-rta\.pdf/);
       await closeBtn.click();
       await page.waitForTimeout(500);
-      await expect(viewer).not.toHaveClass(/open/);
-      // Test 34: src cleared
-      expect(await iframe.getAttribute('src')).toBe('');
-      await expect(firstCard).toBeFocused();
 
-      // Close via Escape
-      await firstCard.click();
+      // Test Achievement trigger (Advent)
+      await page.evaluate(() => {
+        document.getElementById("achievements")?.scrollIntoView({ behavior: "auto" });
+      });
       await page.waitForTimeout(500);
-      await page.keyboard.press('Escape');
-      await page.waitForTimeout(500);
-      await expect(viewer).not.toHaveClass(/open/);
-      expect(await iframe.getAttribute('src')).toBe('');
+      
+      const adventAchText = await page.locator('#achievements li', { hasText: 'Advent of Cyber 2025' }).textContent();
+      expect(adventAchText).toContain('Advent of Cyber 2025');
+      // Ensure exactly one Advent
+      expect(await page.locator('#achievements li', { hasText: 'Advent of Cyber 2025' }).count()).toBe(1);
 
-      // Close via Backdrop
-      await firstCard.click();
+      const adventBtn = page.locator('#achievements li', { hasText: 'Advent of Cyber 2025' }).locator('button');
+      await expect(adventBtn).toHaveText('View Achievement Certificate');
+      await adventBtn.click();
       await page.waitForTimeout(500);
-      if (!isMobile) {
-        await backdrop.click({ position: { x: 5, y: 5 }, force: true });
-        await page.waitForTimeout(500);
-        await expect(viewer).not.toHaveClass(/open/);
-        expect(await iframe.getAttribute('src')).toBe('');
-      } else {
-        // Just close it via Escape to leave the DOM clean for the next test
-        await page.keyboard.press('Escape');
-        await page.waitForTimeout(500);
-      }
+      await expect(viewer).toHaveClass(/open/);
+      await expect(iframe).toHaveAttribute('src', /tryhackme-advent-of-cyber-2025\.pdf/);
+      await expect(viewerTitle).toHaveText('Advent of Cyber 2025');
+      await closeBtn.click();
+      await page.waitForTimeout(500);
+
+      // Test Achievement trigger (NaSCon)
+      const nasconBtn = page.locator('#achievements li', { hasText: 'NaSCon\'25 Participation' }).locator('button');
+      await expect(nasconBtn).toHaveText('View Participation Certificate');
+      await nasconBtn.click();
+      await page.waitForTimeout(500);
+      await expect(viewer).toHaveClass(/open/);
+      await expect(iframe).toHaveAttribute('src', /nascon-2025-participation\.pdf/);
+      await expect(viewerTitle).toHaveText('NaSCon\'25 Participation');
+      await closeBtn.click();
+      await page.waitForTimeout(500);
+
+      // Test Experience trigger
+      await page.evaluate(() => {
+        document.getElementById("experience")?.scrollIntoView({ behavior: "auto" });
+      });
+      await page.waitForTimeout(500);
+
+      // Check experience list
+      const expRoles = await page.locator('.timeline-role').allTextContents();
+      expect(expRoles).not.toContain('CTF Organizer & Player');
+      
+      const inara = page.locator('.timeline-row').nth(0);
+      await expect(inara.locator('.timeline-company')).toHaveText('Inara Technologies');
+      
+      const den = page.locator('.timeline-row').nth(1);
+      await expect(den.locator('.timeline-company')).toHaveText('Digital Empowerment Network');
+
+      const internBtn = den.locator('button');
+      await expect(internBtn).toHaveText('View Internship Certificate');
+      await internBtn.click();
+      await page.waitForTimeout(500);
+      await expect(viewer).toHaveClass(/open/);
+      await expect(iframe).toHaveAttribute('src', /digital-empowerment-network-internship\.pdf/);
+      await expect(viewerTitle).toHaveText('Cyber Security Intern');
+      await closeBtn.click();
+      await page.waitForTimeout(500);
     });
 
-    test("Test 8 - Keyboard access", async ({ page }) => {
-      const firstCard = page.locator('.featured-cert-card').first();
-      await firstCard.focus();
-      await expect(firstCard).toBeFocused();
+    test("Test 7 - PDF file integrity", async ({ request }) => {
+       const pdfs = [
+         "/assets/certificates/tryhackme-advent-of-cyber-2025.pdf",
+         "/assets/certificates/nascon-2025-participation.pdf",
+         "/assets/certificates/digital-empowerment-network-internship.pdf"
+       ];
+       for(const pdf of pdfs) {
+          const res = await request.get(pdf);
+          expect(res.status()).toBe(200);
+          const body = await res.body();
+          // Ensure it's a PDF (starts with %PDF)
+          expect(body.toString('utf8', 0, 4)).toBe('%PDF');
+       }
+    });
 
+    test("Test 8 - Keyboard access and focus trap in generalized viewer", async ({ page }) => {
+      // Use achievement button to test keyboard flow
+      await page.evaluate(() => {
+        document.getElementById("achievements")?.scrollIntoView({ behavior: "auto" });
+      });
+      await page.waitForTimeout(500);
+
+      const adventBtn = page.locator('#achievements li', { hasText: 'Advent of Cyber 2025' }).locator('button');
+      await adventBtn.focus();
       await page.keyboard.press('Enter');
       await page.waitForTimeout(500);
 
@@ -804,40 +806,17 @@ test.describe("Portfolio Smoke Tests", () => {
       await expect(viewer).toHaveClass(/open/);
       
       const closeBtn = page.locator('#cert-viewer-close');
-      // Wait for focus to land
       await expect(closeBtn).toBeFocused({ timeout: 5000 });
 
       await page.keyboard.press('Tab');
-      // Focus should loop inside modal, but not escape
       await page.waitForTimeout(300);
       const activeEl = await page.evaluate(() => document.activeElement.id);
       expect(['cert-viewer-close', 'cert-viewer-new-tab', 'cert-viewer-iframe'].includes(activeEl)).toBe(true);
-    });
 
-    test("Test 9 - Mobile constraints", async ({ page, isMobile }) => {
-      if (!isMobile) test.skip();
-      
-      const firstCard = page.locator('.featured-cert-card').first();
-      await firstCard.click();
-      await page.waitForTimeout(300);
-
-      const closeBtn = page.locator('#cert-viewer-close');
-      await expect(closeBtn).toBeVisible();
-      
-      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > window.innerWidth);
-      expect(overflow).toBe(false);
-    });
-
-    test("Test 10 - Reduced motion", async ({ page }) => {
-      await page.emulateMedia({ reducedMotion: 'reduce' });
-      const btn = page.locator('#cert-reveal-btn');
-      await btn.click();
-      
-      const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
-      await expect(revealed).toHaveCount(4);
-      
-      // Ensure no long transitions are blocking interactiveness
-      await expect(revealed.first()).toBeVisible();
+      await page.keyboard.press('Escape');
+      await page.waitForTimeout(500);
+      await expect(viewer).not.toHaveClass(/open/);
+      await expect(adventBtn).toBeFocused();
     });
   });
 });

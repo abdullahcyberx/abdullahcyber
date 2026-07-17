@@ -165,6 +165,7 @@ try {
         <div class="timeline-company">${escapeHtml(exp.company)}</div>
         <p>${escapeHtml(exp.description)}</p>
         ${exp.responsibilities && exp.responsibilities.length ? `<ul>${exp.responsibilities.map((r) => `<li>${escapeHtml(r)}</li>`).join("")}</ul>` : ""}
+        ${exp.certificateFile ? `<div style="margin-top: 12px;"><button class="btn btn-outline" data-pdf-full="${escapeHtml(exp.certificateFile)}" data-cert-title="${escapeHtml(exp.role)}" data-cert-issuer="${escapeHtml(exp.company)}">${escapeHtml(exp.certificateLabel || 'View Internship Certificate')}</button></div>` : ""}
       </div>
     </article>
   `,
@@ -362,6 +363,7 @@ try {
         (a, i) => `<li>
       <strong>${escapeHtml(a.title)}</strong> — ${escapeHtml(a.organization)}
       <p>${escapeHtml(a.description)}</p>
+      ${a.certificateFile ? `<div style="margin-top: 8px;"><button class="btn btn-outline" data-pdf-full="${escapeHtml(a.certificateFile)}" data-cert-title="${escapeHtml(a.title)}" data-cert-issuer="${escapeHtml(a.organization)}">${escapeHtml(a.certificateLabel || 'View Achievement Certificate')}</button></div>` : ""}
     </li>`,
       )
       .join("")}

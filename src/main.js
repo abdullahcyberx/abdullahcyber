@@ -1104,8 +1104,8 @@
     if (!certViewer) return;
     certLastFocus = card;
     const pdfUrl = card.getAttribute('data-pdf-full');
-    const title = card.querySelector('.cert-title').textContent;
-    const issuer = card.querySelector('.cert-meta span:first-child').textContent;
+    const title = card.getAttribute('data-cert-title') || card.querySelector('.cert-title')?.textContent || '';
+    const issuer = card.getAttribute('data-cert-issuer') || card.querySelector('.cert-meta span:first-child')?.textContent || '';
     
     certViewerTitle.textContent = title;
     certViewerIssuer.textContent = issuer;
@@ -1144,12 +1144,17 @@
 
   // Need to use document.body to delegate in case cards are dynamically created
   // Though cards are rendered statically, it's safe.
-  document.querySelectorAll('.cert-card').forEach(card => {
-    card.addEventListener('click', () => openCertViewer(card));
-    card.addEventListener('keydown', (e) => {
+  document.querySelectorAll('[data-pdf-full]').forEach(trigger => {
+    trigger.addEventListener('click', (e) => {
+      if (trigger.tagName === 'BUTTON' || trigger.tagName === 'A') {
+        e.preventDefault();
+      }
+      openCertViewer(trigger);
+    });
+    trigger.addEventListener('keydown', (e) => {
       if (e.key === 'Enter' || e.key === ' ') {
         e.preventDefault();
-        openCertViewer(card);
+        openCertViewer(trigger);
       }
     });
   });

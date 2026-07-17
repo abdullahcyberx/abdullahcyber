@@ -6,7 +6,9 @@
     "properties": {
       "id": { "type": "string" },
       "title": { "type": "string" },
-      "isBadge": { "type": "boolean" }
+      "isBadge": { "type": "boolean" },
+      "certificateFile": { "type": "string" },
+      "certificateLabel": { "type": "string" }
     },
     "required": ["id", "title"]
   }

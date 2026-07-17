@@ -13,7 +13,9 @@
       "workType": { "type": "string" },
       "description": { "type": "string" },
       "responsibilities": { "type": "array", "items": { "type": "string" } },
-      "displayOrder": { "type": "number" }
+      "displayOrder": { "type": "number" },
+      "certificateFile": { "type": "string" },
+      "certificateLabel": { "type": "string" }
     },
     "required": ["id", "company", "role"]
   }

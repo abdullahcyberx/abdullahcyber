@@ -24,7 +24,9 @@
     "date": "2025",
     "description": "Achievement badge",
     "displayOrder": 3,
-    "isBadge": true
+    "isBadge": true,
+    "certificateFile": "/assets/certificates/tryhackme-advent-of-cyber-2025.pdf",
+    "certificateLabel": "View Achievement Certificate"
   },
   {
     "id": "ach-4",
@@ -34,5 +36,16 @@
     "description": "Organized events",
     "displayOrder": 4,
     "isBadge": true
+  },
+  {
+    "id": "ach-5",
+    "title": "NaSCon'25 Participation",
+    "organization": "NaSCon",
+    "date": "2025",
+    "description": "Participation certificate",
+    "displayOrder": 5,
+    "isBadge": false,
+    "certificateFile": "/assets/certificates/nascon-2025-participation.pdf",
+    "certificateLabel": "View Participation Certificate"
   }
 ]
