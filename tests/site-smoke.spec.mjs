@@ -94,6 +94,12 @@ test.describe("Portfolio Smoke Tests", () => {
         prevSelector: "#experience",
       },
       {
+        name: "Achievements",
+        hash: "#achievements",
+        selector: "#achievements",
+        prevSelector: "#credentials",
+      },
+      {
         name: "Contact",
         hash: "#contact",
         selector: "#contact",
@@ -636,9 +642,9 @@ test.describe("Portfolio Smoke Tests", () => {
       // Hidden cards = 16 - 3 = 13
       await expect(hidden).toHaveCount(13);
 
-      // The first Read More button is visible and indicates 4 certificates
+      // The first Explore More button is visible and indicates 4 certificates
       await expect(btn).toBeVisible();
-      await expect(btn).toHaveText("Read More");
+      await expect(btn).toHaveText("Explore More");
     });
 
     test("Test 2 - First batch", async ({ page }) => {
@@ -649,7 +655,7 @@ test.describe("Portfolio Smoke Tests", () => {
       const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
       await expect(revealed).toHaveCount(4);
       
-      await expect(btn).toHaveText("Read More");
+      await expect(btn).toHaveText("Explore More");
     });
 
     test("Test 3 - Second batch", async ({ page }) => {
@@ -662,7 +668,7 @@ test.describe("Portfolio Smoke Tests", () => {
       const revealed = page.locator('.supp-cert-card[data-revealed="true"]');
       await expect(revealed).toHaveCount(9); // 4 + 5
       
-      await expect(btn).toHaveText("Read More");
+      await expect(btn).toHaveText("Explore More");
     });
 
     test("Test 4 - Continue until complete", async ({ page }) => {
