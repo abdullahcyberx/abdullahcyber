@@ -1131,6 +1131,7 @@
     certViewer.setAttribute('aria-hidden', 'false');
     certViewer.removeAttribute('inert');
     document.body.style.overflow = 'hidden';
+    document.body.classList.add('cert-viewer-open');
     
     setTimeout(() => {
       certViewerClose.focus();
@@ -1143,6 +1144,7 @@
     certViewer.setAttribute('aria-hidden', 'true');
     certViewer.setAttribute('inert', '');
     document.body.style.overflow = '';
+    document.body.classList.remove('cert-viewer-open');
     
     // Clear iframe src
     certViewerIframe.src = '';

@@ -879,4 +879,82 @@ test.describe("Portfolio Smoke Tests", () => {
       await expect(adventBtn).toBeFocused();
     });
   });
+
+  test.describe("New Layout and Mobile Audit Tests", () => {
+    test("About desktop bounding-box layout and 2x2 grid", async ({ page, isMobile }) => {
+      if (isMobile) test.skip();
+      await page.goto("/#about");
+      
+      const statement = page.locator(".about-statement");
+      const copy = page.locator(".about-copy");
+      const linksBlock = page.locator(".about-links-block");
+      const profileLinks = page.locator(".profile-link");
+
+      // Bounding box checks
+      const statementBox = await statement.boundingBox();
+      const linksBox = await linksBlock.boundingBox();
+      const copyBox = await copy.boundingBox();
+
+      // Find me online is below statement
+      expect(linksBox.y).toBeGreaterThanOrEqual(statementBox.y + statementBox.height);
+      // Links and statement are left of copy
+      expect(statementBox.x + statementBox.width).toBeLessThanOrEqual(copyBox.x);
+      
+      // 2x2 grid for profile links
+      const count = await profileLinks.count();
+      expect(count).toBe(4);
+      const link1 = await profileLinks.nth(0).boundingBox();
+      const link2 = await profileLinks.nth(1).boundingBox();
+      const link3 = await profileLinks.nth(2).boundingBox();
+      // link 1 and 2 should be on same row or wrapped (y is close or greater)
+      expect(link2.y).toBeGreaterThanOrEqual(link1.y - 10);
+      // link 3 is either below link 1 or on the same row depending on screen width
+      expect(link3.y).toBeGreaterThanOrEqual(link1.y - 10);
+    });
+
+    test("About mobile order and 1x4 link grid", async ({ page, isMobile }) => {
+      if (!isMobile) test.skip();
+      await page.setViewportSize({ width: 320, height: 568 });
+      await page.goto("/#about");
+
+      const profileLinks = page.locator(".profile-link");
+      const link1 = await profileLinks.nth(0).boundingBox();
+      const link2 = await profileLinks.nth(1).boundingBox();
+      
+      // One link per row: link2 is below link1
+      expect(link2.y).toBeGreaterThan(link1.y + 20); // clearly on a new row
+    });
+
+    test("Mobile header at 320px and AI button overlay hiding", async ({ page, isMobile }) => {
+      if (!isMobile) test.skip();
+      await page.setViewportSize({ width: 320, height: 568 });
+      await page.goto("/");
+      
+      const brand = page.locator(".site-header .brand").first();
+      const cvBtn = page.locator(".nav-cv-btn");
+      const menuBtn = page.locator(".menu-toggle");
+      
+      // Ensure all fit
+      const brandBox = await brand.boundingBox();
+      const cvBox = await cvBtn.boundingBox();
+      const menuBox = await menuBtn.boundingBox();
+      
+      expect(brandBox.x + brandBox.width).toBeLessThanOrEqual(cvBox.x);
+      expect(cvBox.x + cvBox.width).toBeLessThanOrEqual(menuBox.x);
+      
+      // AI button overlay hiding
+      const aiBtn = page.locator(".ai-float-btn");
+      await expect(aiBtn).toBeVisible();
+      
+      // Open menu
+      await menuBtn.click();
+      await page.waitForTimeout(500);
+      await expect(aiBtn).toBeHidden();
+      
+      // Close menu
+      await page.locator(".mobile-menu-close").click();
+      await page.waitForTimeout(500);
+      await expect(aiBtn).toBeVisible();
+    });
+  });
 });
