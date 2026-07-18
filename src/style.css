@@ -26,9 +26,9 @@
   --ease-std: cubic-bezier(0.4, 0, 0.2, 1);
   --max-width: 1380px;
 
-  --space-section-desktop: clamp(100px, 10vw, 140px);
-  --space-section-mobile: 80px;
-  --space-heading-content: clamp(40px, 5vw, 72px);
+  --space-section-desktop: clamp(72px, 7vw, 104px);
+  --space-section-mobile: clamp(52px, 12vw, 72px);
+  --space-heading-content: clamp(28px, 4vw, 48px);
 
   /* Legacy compat aliases */
   --text-primary: #f4f3ee;
@@ -470,11 +470,11 @@ body.menu-open {
 
 /* ---- Hero Section ----------------------------------------- */
 .hero {
-  min-height: 100svh;
+  min-height: auto;
   display: flex;
   align-items: center;
-  padding-top: 120px;
-  padding-bottom: 80px;
+  padding-top: clamp(110px, 10vw, 150px);
+  padding-bottom: clamp(56px, 6vw, 88px);
 }
 
 .hero-grid {
@@ -772,7 +772,7 @@ body.menu-open {
   gap: 20px;
   width: 100%;
   min-width: 0;
-  padding: clamp(40px, 6vw, 72px) 0;
+  padding: clamp(32px, 4.5vw, 56px) 0;
   border-top: 1px solid var(--border);
   position: relative;
   transition: background 200ms var(--ease);
@@ -934,7 +934,7 @@ body.menu-open {
 
 @media (min-width: 768px) and (max-width: 1023px) {
   .project-row {
-    padding: 52px 0;
+    padding: 40px 0;
   }
 
   .project-visual-container {
@@ -1016,14 +1016,17 @@ body.menu-open {
   border-radius: 3px;
   overflow: hidden;
 }
+.pv1-report-footer {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  margin-top: 8px;
+}
 .pv1-report-bar div {
   height: 100%;
   background: var(--accent);
 }
 .pv1-label {
-  position: absolute;
-  bottom: 16px;
-  right: 16px;
   font-size: 0.6875rem;
   color: var(--accent-light);
   background: rgba(129, 103, 255, 0.15);
@@ -1655,7 +1658,6 @@ html.js-enabled .supp-cert-card[data-revealed="false"] {
   position: relative;
   overflow: hidden;
   padding-block: var(--space-section-desktop);
-  min-height: 100svh;
   background:
     radial-gradient(
       circle at 78% 44%,
@@ -2323,8 +2325,8 @@ body.ai-open {
   }
 
   .hero {
-    padding-top: 100px;
-    padding-bottom: 60px;
+    padding-top: clamp(90px, 12vw, 110px);
+    padding-bottom: clamp(44px, 8vw, 60px);
     min-height: auto;
   }
 

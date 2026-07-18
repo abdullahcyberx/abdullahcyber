@@ -246,8 +246,10 @@ try {
             <div class="pv1-report-header">Awareness Report Panel</div>
             <div class="pv1-report-bar"><div style="width: 45%;"></div></div>
             <div class="pv1-report-bar"><div style="width: 75%;"></div></div>
+            <div class="pv1-report-footer">
+              <div class="pv1-label">Ethical Academic Scope</div>
+            </div>
           </div>
-          <div class="pv1-label">Ethical Academic Scope</div>
         </div>
       `;
       } else if (p.image === "honeypot-art") {
