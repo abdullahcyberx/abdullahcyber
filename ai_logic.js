@@ -1,500 +1,4 @@
-(() => {
-  "use strict";
-
-  document.addEventListener("DOMContentLoaded", () => {
-    if ("scrollRestoration" in history) {
-      history.scrollRestoration = "manual";
-    }
-  });
-
-  const finePointer = window.matchMedia(
-    "(hover: hover) and (pointer: fine)",
-  ).matches;
-
   /* -------------------------
-     Section Observer
-     ------------------------- */
-  const observer = new IntersectionObserver(
-    (entries, obs) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add("entered");
-          obs.unobserve(entry.target);
-        }
-      });
-    },
-    { rootMargin: "0px 0px -50px 0px", threshold: 0.1 },
-  );
-
-  document.querySelectorAll(".reveal").forEach((el) => observer.observe(el));
-
-  const contactObserver = new IntersectionObserver(
-    (entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          document.body.classList.add("contact-visible");
-        } else {
-          document.body.classList.remove("contact-visible");
-        }
-      });
-    },
-    { threshold: 0.1 },
-  );
-
-  const contactSection = document.getElementById("contact");
-  if (contactSection) {
-    contactObserver.observe(contactSection);
-  }
-
-  /* -------------------------
-     Mobile Menu Accessibility
-     ------------------------- */
-  const mobileMenuToggle = document.getElementById("mobile-menu-trigger");
-  const mobileMenuClose = document.getElementById("mobile-menu-close");
-  const mobileMenu = document.getElementById("mobile-menu");
-  const focusableSelectors =
-    'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select';
-
-  if (mobileMenuToggle && mobileMenuClose && mobileMenu) {
-    let focusables = [];
-
-    const mainElement = document.querySelector("main");
-
-    const openMenu = () => {
-      mobileMenu.classList.add("open");
-      document.body.classList.add("menu-open");
-      mobileMenu.setAttribute("aria-hidden", "false");
-      mobileMenuToggle.setAttribute("aria-expanded", "true");
-      if (mainElement) {
-        if ("inert" in HTMLElement.prototype) {
-          mainElement.inert = true;
-        } else {
-          mainElement.setAttribute("aria-hidden", "true");
-        }
-      }
-
-      focusables = Array.from(mobileMenu.querySelectorAll(focusableSelectors));
-      if (focusables.length) focusables[0].focus();
-    };
-
-    const closeMenu = ({ restoreFocus = true } = {}) => {
-      mobileMenu.classList.remove("open");
-      document.body.classList.remove("menu-open");
-      mobileMenu.setAttribute("aria-hidden", "true");
-      mobileMenuToggle.setAttribute("aria-expanded", "false");
-
-      if (mainElement) {
-        if ("inert" in HTMLElement.prototype) {
-          mainElement.inert = false;
-        } else {
-          mainElement.removeAttribute("aria-hidden");
-        }
-      }
-
-      if (restoreFocus) {
-        mobileMenuToggle.focus();
-      }
-    };
-
-    window.closeMenuMobile = closeMenu;
-
-    mobileMenuToggle.addEventListener("click", openMenu);
-    mobileMenuClose.addEventListener("click", () => closeMenu());
-
-    document.addEventListener("keydown", (e) => {
-      if (mobileMenu.classList.contains("open") && e.key === "Escape") {
-        closeMenu();
-        return;
-      }
-    });
-
-    mobileMenu.addEventListener("keydown", (e) => {
-      if (e.key === "Tab") {
-        if (!focusables.length) return;
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-        if (e.shiftKey) {
-          if (document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          }
-        } else {
-          if (document.activeElement === last) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      }
-    });
-  }
-
-  /* -------------------------
-     Authoritative Navigation Controller
-     ------------------------- */
-  const header = document.querySelector(".site-header");
-
-  const desktopSectionLinks = Array.from(
-    document.querySelectorAll('.desktop-nav a[href^="#"]'),
-  );
-
-  const mobileSectionLinks = Array.from(
-    document.querySelectorAll('.mobile-nav a[href^="#"]'),
-  );
-
-  const sectionLinks = [...desktopSectionLinks, ...mobileSectionLinks];
-
-  const sectionTargets = [];
-  const seenSectionIds = new Set();
-
-  for (const link of sectionLinks) {
-    const id = decodeURIComponent(link.hash.slice(1));
-    const section = document.getElementById(id);
-
-    if (!section || seenSectionIds.has(id)) {
-      continue;
-    }
-
-    const anchor =
-      section.querySelector("[data-section-anchor]") ||
-      section.querySelector(":scope > h2") ||
-      section;
-
-    sectionTargets.push({
-      id,
-      section,
-      anchor,
-    });
-
-    seenSectionIds.add(id);
-  }
-
-  const getHeaderHeight = () =>
-    Math.ceil(header?.getBoundingClientRect().height || 72);
-
-  const getAnchorGap = () =>
-    window.matchMedia("(max-width: 767px)").matches ? 16 : 24;
-
-  const getTargetScrollTop = (target) => {
-    let absoluteTop =
-      window.scrollY + target.anchor.getBoundingClientRect().top;
-
-    const computedTransform = window.getComputedStyle(target.anchor).transform;
-    const hasTransform = computedTransform !== "none" && computedTransform !== "";
-
-    if (
-      hasTransform &&
-      target.anchor.classList.contains("fade-in-up") &&
-      !target.anchor.classList.contains("entered")
-    ) {
-      absoluteTop -= 18;
-    }
-
-    return Math.max(
-      0,
-      Math.round(absoluteTop - getHeaderHeight() - getAnchorGap()),
-    );
-  };
-
-  const setActiveSection = (id) => {
-    for (const link of desktopSectionLinks) {
-      const isActive = link.hash === `#${id}`;
-
-      link.classList.toggle("active", isActive);
-
-      if (isActive) {
-        link.setAttribute("aria-current", "location");
-      } else {
-        link.removeAttribute("aria-current");
-      }
-    }
-  };
-
-  const getTargetById = (id) =>
-    sectionTargets.find((target) => target.id === id);
-
-  let lockedSectionId = null;
-  let scrollSettleTimer = 0;
-
-  const clearNavigationLockSoon = () => {
-    window.clearTimeout(scrollSettleTimer);
-
-    scrollSettleTimer = window.setTimeout(() => {
-      lockedSectionId = null;
-      updateActiveSectionFromScroll();
-    }, 160);
-  };
-
-  const updateActiveSectionFromScroll = () => {
-    if (lockedSectionId) {
-      setActiveSection(lockedSectionId);
-      return;
-    }
-
-    const probeLine = getHeaderHeight() + getAnchorGap() + 4;
-
-    let activeId = "";
-
-    // If scrolled to the bottom of the page, activate the last section.
-    if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight - 10) {
-      if (sectionTargets.length > 0) {
-        activeId = sectionTargets[sectionTargets.length - 1].id;
-      }
-    } else {
-      for (const target of sectionTargets) {
-        const targetTop = target.anchor.getBoundingClientRect().top;
-
-        if (targetTop <= probeLine) {
-          activeId = target.id;
-        } else {
-          break;
-        }
-      }
-    }
-
-    if (activeId) {
-      setActiveSection(activeId);
-    } else {
-      for (const link of desktopSectionLinks) {
-        link.classList.remove("active");
-        link.removeAttribute("aria-current");
-      }
-    }
-  };
-
-  const scrollToSection = (
-    id,
-    { updateHistory = true, smooth = true } = {},
-  ) => {
-    const target = getTargetById(id);
-
-    if (!target) {
-      return;
-    }
-
-    lockedSectionId = id;
-    setActiveSection(id);
-
-    const prefersReducedMotion = window.matchMedia(
-      "(prefers-reduced-motion: reduce)",
-    ).matches;
-
-    window.scrollTo({
-      top: getTargetScrollTop(target),
-      behavior: smooth && !prefersReducedMotion ? "smooth" : "auto",
-    });
-
-    if (updateHistory) {
-      const nextHash = `#${id}`;
-
-      if (window.location.hash !== nextHash) {
-        window.history.pushState({ section: id }, "", nextHash);
-      } else {
-        window.history.replaceState({ section: id }, "", nextHash);
-      }
-    }
-
-    clearNavigationLockSoon();
-  };
-
-  for (const link of sectionLinks) {
-    link.addEventListener("click", (event) => {
-      const id = decodeURIComponent(link.hash.slice(1));
-
-      if (!getTargetById(id)) {
-        return;
-      }
-
-      event.preventDefault();
-
-      if (link.closest(".mobile-nav") && typeof window.closeMenuMobile === "function") {
-        window.closeMenuMobile({ restoreFocus: false });
-      }
-
-      window.requestAnimationFrame(() => {
-        scrollToSection(id);
-      });
-    });
-  }
-
-  let navigationFrame = 0;
-
-  const handleNavigationScroll = () => {
-    if (navigationFrame) {
-      return;
-    }
-
-    navigationFrame = window.requestAnimationFrame(() => {
-      header?.classList.toggle("scrolled", window.scrollY > 50);
-
-      updateActiveSectionFromScroll();
-
-      if (lockedSectionId) {
-        clearNavigationLockSoon();
-      }
-
-      navigationFrame = 0;
-    });
-  };
-
-  window.addEventListener("scroll", handleNavigationScroll, { passive: true });
-
-  window.addEventListener("resize", () => {
-    updateActiveSectionFromScroll();
-  });
-
-  window.addEventListener("popstate", () => {
-    const id = decodeURIComponent(window.location.hash.slice(1));
-
-    if (getTargetById(id)) {
-      scrollToSection(id, {
-        updateHistory: false,
-        smooth: false,
-      });
-    }
-  });
-
-  window.addEventListener("load", () => {
-    const id = decodeURIComponent(window.location.hash.slice(1));
-
-    if (getTargetById(id)) {
-      window.requestAnimationFrame(() => {
-        scrollToSection(id, {
-          updateHistory: false,
-          smooth: false,
-        });
-      });
-    } else {
-      updateActiveSectionFromScroll();
-    }
-  });
-
-  /* -------------------------
-     Dynamic Data Initialization
-     ------------------------- */
-  const aiDataElement = document.getElementById("ai-data");
-  const renderSafeMarkdown = (el, str) => {
-    if (!str) return;
-    const parts = str.split(/(\*\*.*?\*\*|`.*?`|\n\n)/g);
-    parts.forEach(p => {
-      if (p === "\n\n") {
-        el.appendChild(document.createElement("br"));
-        el.appendChild(document.createElement("br"));
-      } else if (p.startsWith("**") && p.endsWith("**")) {
-        const strong = document.createElement("strong");
-        strong.textContent = p.slice(2, -2);
-        el.appendChild(strong);
-      } else if (p.startsWith("`") && p.endsWith("`")) {
-        const code = document.createElement("code");
-        code.textContent = p.slice(1, -1);
-        el.appendChild(code);
-      } else if (p) {
-        el.appendChild(document.createTextNode(p));
-      }
-    });
-  };
-
-  let aiPayload = { config: {}, knowledge: {} };
-
-  if (aiDataElement) {
-    try {
-      const parsed = JSON.parse(aiDataElement.textContent || "{}");
-      aiPayload = {
-        config: parsed.config || {},
-        knowledge: parsed.knowledge || {},
-      };
-    } catch (error) {
-      console.error("Unable to parse portfolio AI data.", error);
-    }
-  }
-
-  const aiConfig = aiPayload.config;
-  const portfolioKnowledge = aiPayload.knowledge;
-
-  /* -------------------------
-     Case-study Modal
-     ------------------------- */
-  const projectsByKey = new Map();
-  for (const project of portfolioKnowledge.projects || []) {
-    if (project.slug) projectsByKey.set(project.slug, project);
-    if (project.id) projectsByKey.set(project.id, project);
-  }
-
-  const modalRoot = document.getElementById("modal-root");
-  if (modalRoot) {
-    modalRoot.insertAdjacentHTML("beforeend", `
-      <dialog id="case-modal" class="modal-dialog">
-        <div class="modal-content">
-          <button class="modal-close" aria-label="Close modal">Ã¢Å“â€¢</button>
-          <div id="modal-label" class="modal-label"></div>
-          <h2 id="modal-title"></h2>
-          <p id="modal-summary"></p>
-          <div id="modal-details"></div>
-        </div>
-      </dialog>
-    `);
-  }
-
-  const modal = document.getElementById("case-modal");
-  const modalFields = {
-    label: document.getElementById("modal-label"),
-    title: document.getElementById("modal-title"),
-    summary: document.getElementById("modal-summary"),
-    details: document.getElementById("modal-details"),
-  };
-
-  document.querySelectorAll("[data-modal]").forEach((button) => {
-    button.addEventListener("click", () => {
-      const project = projectsByKey.get(button.dataset.modal);
-      if (!project || !modal) return;
-
-      if (modalFields.label)
-        modalFields.label.textContent = project.category || "";
-      if (modalFields.title)
-        modalFields.title.textContent = project.title || "";
-      if (modalFields.summary)
-        modalFields.summary.textContent = project.summary || "";
-
-      if (modalFields.details) {
-        
-        if (modalFields.details) {
-          modalFields.details.innerHTML = "";
-          
-          const addSection = (title, text) => {
-            const h = document.createElement("h3");
-            h.textContent = title;
-            const p = document.createElement("p");
-            p.textContent = text;
-            modalFields.details.appendChild(h);
-            modalFields.details.appendChild(p);
-          };
-
-          if (project.fullDescription) addSection("Description", project.fullDescription);
-          if (project.caseStudyContent) addSection("Case Study", project.caseStudyContent);
-          if (project.tools && project.tools.length) addSection("Tools", project.tools.join(", "));
-          if (project.date) addSection("Date", project.date);
-          if (project.ethicalDisclaimer) addSection("Ethics", project.ethicalDisclaimer);
-        }
-
-      }
-
-      modal.showModal();
-    });
-  });
-
-  document
-    .querySelector(".modal-close")
-    ?.addEventListener("click", () => modal?.close());
-  modal?.addEventListener("click", (event) => {
-    const rect = modal.getBoundingClientRect();
-    const outside =
-      event.clientX < rect.left ||
-      event.clientX > rect.right ||
-      event.clientY < rect.top ||
-      event.clientY > rect.bottom;
-    if (outside) modal.close();
-  });
-
-    /* -------------------------
      Shehzada's AI
      ------------------------- */
   const aiPanel = document.getElementById("ai-assistant");
@@ -579,7 +83,7 @@
     if (!state.sound || !window.speechSynthesis) return;
     window.speechSynthesis.cancel();
     const temp = document.createElement("div");
-    temp.textContent = text;
+    temp.innerHTML = text;
     const utterance = new SpeechSynthesisUtterance(temp.textContent || temp.innerText || "");
     window.speechSynthesis.speak(utterance);
   };
@@ -663,7 +167,7 @@
     bubble.innerHTML = "";
     const prefersReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     if (prefersReducedMotion || htmlMode) {
-      if (htmlMode) renderSafeMarkdown(bubble, text);
+      if (htmlMode) bubble.innerHTML = text;
       else bubble.textContent = text;
       scrollMessages();
       return;
@@ -844,7 +348,7 @@
 
   const startChallenge = () => {
     if (challengeQuestions.length === 0) {
-      createMessageBubble("ai").textContent = challengeConfig.unavailableMessage || "Challenge currently unavailable.";
+      createMessageBubble("ai").innerHTML = challengeConfig.unavailableMessage || "Challenge currently unavailable.";
       defaultActions();
       return;
     }
@@ -853,10 +357,10 @@
     state.challengeAttempts = 0;
     state.challengeHintShown = false;
 
-    renderSafeMarkdown(createMessageBubble("ai"), `**${challengeConfig.title || "CTF Challenge"}**\n\n${challengeConfig.intro || ""}`);
+    createMessageBubble("ai").innerHTML = `<p><strong>${escapeHTML(challengeConfig.title || "CTF Challenge")}</strong></p><p>${escapeHTML(challengeConfig.intro || "")}</p>`;
 
     setTimeout(() => {
-      renderSafeMarkdown(createMessageBubble("ai"), challengeQuestions[0].prompt);
+      createMessageBubble("ai").innerHTML = `<p>${escapeHTML(challengeQuestions[0].prompt)}</p>`;
       renderQuickActions([
         { label: "Hint", special: "hint" },
         { label: "Quit", special: "quit-challenge" }
@@ -877,7 +381,7 @@
     }
     if (q === "hint" || q === "give me a hint" || q === "/help") {
       const qData = challengeQuestions[state.challengeIndex];
-      renderSafeMarkdown(createMessageBubble("ai"), `*Hint:* ${qData.hint}`);
+      createMessageBubble("ai").innerHTML = `<p><em>Hint:</em> ${escapeHTML(qData.hint)}</p>`;
       return true;
     }
     const qData = challengeQuestions[state.challengeIndex];
@@ -890,14 +394,14 @@
       state.challengeHintShown = false;
       if (state.challengeIndex >= challengeQuestions.length) {
         state.challengeActive = false;
-        renderSafeMarkdown(createMessageBubble("ai"), `**${challengeConfig.successMessage || "Challenge Complete!"}**\n\n\`${challengeConfig.flag}\``);
+        createMessageBubble("ai").innerHTML = `<p><strong>${escapeHTML(challengeConfig.successMessage || "Challenge Complete!")}</strong></p><p style="font-family: monospace; padding: 8px; background: var(--surface); border-radius: 4px;">${escapeHTML(challengeConfig.flag)}</p>`;
         defaultActions();
       } else {
-        renderSafeMarkdown(createMessageBubble("ai"), `Correct. Next: ${challengeQuestions[state.challengeIndex].prompt}`);
+        createMessageBubble("ai").innerHTML = `<p>Correct. Next: ${escapeHTML(challengeQuestions[state.challengeIndex].prompt)}</p>`;
       }
     } else {
       state.challengeAttempts++;
-      renderSafeMarkdown(createMessageBubble("ai"), challengeConfig.incorrectMessage || "Incorrect. Try again.");
+      createMessageBubble("ai").innerHTML = `<p>${escapeHTML(challengeConfig.incorrectMessage || "Incorrect. Try again.")}</p>`;
     }
     return true;
   };
@@ -910,7 +414,7 @@
       if (aiMessages) aiMessages.innerHTML = "";
       state.greeted = false;
       setContext({});
-      renderSafeMarkdown(createMessageBubble("ai"), aiConfig.greeting || "Hi - I'm Shehzada's AI. I can guide you through Muhammad's projects, skills, internships, certifications and practical cybersecurity work. What would you like to explore?");
+      createMessageBubble("ai").innerHTML = aiConfig.greeting || "Hi — I'm Shehzada's AI. I can guide you through Muhammad's projects, skills, internships, certifications and practical cybersecurity work. What would you like to explore?";
       defaultActions();
       return;
     }
@@ -919,7 +423,7 @@
     setBusy(true);
     
     const statusBubble = createMessageBubble("ai");
-    statusBubble.textContent = "Searching portfolio knowledge...";
+    statusBubble.innerHTML = `<span style="opacity: 0.7; font-style: italic;">Searching portfolio knowledge...</span>`;
 
     const abortCtrl = new AbortController();
     activeResponseController = abortCtrl;
@@ -959,50 +463,22 @@
     if (state.busy) return;
     setBusy(true);
     const msg = createMessageBubble("ai");
-    renderSafeMarkdown(msg, aiConfig.scanLabels?.summary || "Scanning...");
+    msg.innerHTML = `<p>${escapeHTML(aiConfig.scanLabels?.summary || "Scanning...")}</p>`;
     setTimeout(() => {
-      renderSafeMarkdown(msg, `**${aiConfig.scanLabels?.title || "Evidence Scan Complete"}**\n\nFound ${portfolioKnowledge.projects?.length || 0} projects and ${portfolioKnowledge.certificates?.length || 0} certificates.`);
+      msg.innerHTML = `<p><strong>${escapeHTML(aiConfig.scanLabels?.title || "Evidence Scan Complete")}</strong></p><p>Found ${portfolioKnowledge.projects?.length || 0} projects and ${portfolioKnowledge.certificates?.length || 0} certificates.</p>`;
       setBusy(false);
       defaultActions();
     }, 800);
   };
 
   const displayRecruiterBriefing = () => {
-    const msg = createMessageBubble("ai");
-    
-    const titleP = document.createElement("p");
-    const titleStrong = document.createElement("strong");
-    titleStrong.textContent = aiConfig.recruiterBriefingLabels?.title || "Recruiter Briefing";
-    titleP.appendChild(titleStrong);
-    msg.appendChild(titleP);
-    
-    const textDiv = document.createElement("div");
-    textDiv.style.whiteSpace = "pre-wrap";
-    textDiv.style.fontSize = "0.9em";
-    textDiv.textContent = recruiterBriefingText;
-    msg.appendChild(textDiv);
-    
-    const actionsDiv = document.createElement("div");
-    actionsDiv.style.marginTop = "8px";
-    
-    const copyBtn = document.createElement("button");
-    copyBtn.type = "button";
-    copyBtn.className = "ai-chip";
-    copyBtn.setAttribute("data-ai-special", "copy-brief");
-    copyBtn.textContent = "Copy summary";
-    actionsDiv.appendChild(copyBtn);
-    
-    const copyStatus = document.createElement("span");
-    copyStatus.id = "copy-status";
-    copyStatus.style.fontSize = "0.8em";
-    copyStatus.style.color = "var(--text-muted)";
-    copyStatus.style.marginLeft = "8px";
-    copyStatus.style.display = "none";
-    copyStatus.textContent = "Copied!";
-    actionsDiv.appendChild(copyStatus);
-    
-    msg.appendChild(actionsDiv);
-    
+    const briefHtml = `<p><strong>${escapeHTML(aiConfig.recruiterBriefingLabels?.title || "Recruiter Briefing")}</strong></p>
+      <div style="white-space: pre-wrap; font-size: 0.9em;">${escapeHTML(recruiterBriefingText)}</div>
+      <div style="margin-top: 8px;">
+        <button type="button" class="ai-chip" data-ai-special="copy-brief">Copy summary</button>
+        <span id="copy-status" style="font-size: 0.8em; color: var(--text-muted); margin-left: 8px; display: none;">Copied!</span>
+      </div>`;
+    createMessageBubble("ai").innerHTML = briefHtml;
     defaultActions();
   };
 
@@ -1152,9 +628,9 @@
     if (!state.greeted) {
       state.greeted = true;
       if (aiConfig.privacyMessage) {
-        renderSafeMarkdown(createMessageBubble("ai"), aiConfig.privacyMessage);
+        createMessageBubble("ai").innerHTML = aiConfig.privacyMessage;
       }
-      renderSafeMarkdown(createMessageBubble("ai"), aiConfig.greeting || "Hi - I'm Shehzada's AI. I can guide you through Muhammad's projects, skills, internships, certifications and practical cybersecurity work. What would you like to explore?");
+      createMessageBubble("ai").innerHTML = aiConfig.greeting || "Hi — I'm Shehzada's AI. I can guide you through Muhammad's projects, skills, internships, certifications and practical cybersecurity work. What would you like to explore?";
       defaultActions();
     }
   };
@@ -1205,221 +681,5 @@
       createMessageBubble("user").textContent = val;
       aiInput.value = "";
       setTimeout(() => processQuery(val), 10);
-    });
-  }
-
-  /* -------------------------
-     Certificates - Lazy Load & Progressive Reveal
-     ------------------------- */
-  const suppCerts = Array.from(document.querySelectorAll('.supp-cert-card'));
-  const revealBtn = document.getElementById('cert-reveal-btn');
-  const revealContainer = document.getElementById('cert-reveal-container');
-
-  let currentBatchSize = 4;
-
-  const previewObserver = new IntersectionObserver((entries, obs) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const img = entry.target.querySelector('.cert-preview-image');
-        if (img && img.dataset.previewSrc) {
-          img.src = img.dataset.previewSrc;
-          delete img.dataset.previewSrc;
-        }
-        obs.unobserve(entry.target);
-      }
-    });
-  }, { rootMargin: "0px 0px 200px 0px" });
-
-  // Initialize observer for already revealed cards (featured)
-  document.querySelectorAll('.cert-card[data-revealed="true"]').forEach(card => {
-    previewObserver.observe(card);
-  });
-
-  // Attach load and error listeners to all preview images
-  document.querySelectorAll('.cert-preview-image').forEach(img => {
-    if (img.complete && img.naturalWidth > 0) {
-      img.classList.add("is-loaded");
-    } else {
-      img.addEventListener("load", () => img.classList.add("is-loaded"));
-      img.addEventListener("error", () => {
-        img.hidden = true;
-        const viewport = img.closest(".cert-preview-viewport");
-        if (viewport) viewport.classList.add("has-preview-error");
-      });
-    }
-  });
-
-  const updateRevealButton = () => {
-    if (!revealBtn) return;
-    const hiddenCerts = suppCerts.filter(c => c.getAttribute('data-revealed') === 'false');
-    
-    if (hiddenCerts.length === 0) {
-      revealContainer.style.display = 'none';
-      return;
-    }
-    
-    const nextRevealCount = Math.min(currentBatchSize, hiddenCerts.length);
-    revealBtn.textContent = 'Explore More';
-    revealBtn.setAttribute('aria-label', `Reveal ${nextRevealCount} more certificates`);
-  };
-
-  if (revealBtn) {
-    updateRevealButton();
-    
-    revealBtn.addEventListener('click', () => {
-      const hiddenCerts = suppCerts.filter(c => c.getAttribute('data-revealed') === 'false');
-      const toReveal = hiddenCerts.slice(0, currentBatchSize);
-      
-      toReveal.forEach(card => {
-        card.setAttribute('data-revealed', 'true');
-        card.classList.add('fade-in-up', 'reveal');
-        // trigger reflow
-        void card.offsetWidth;
-        card.classList.add('entered');
-        previewObserver.observe(card);
-      });
-      
-      currentBatchSize++;
-      updateRevealButton();
-    });
-  }
-
-  /* -------------------------
-     Certificates - Fullscreen Viewer
-     ------------------------- */
-  const certViewer = document.getElementById('cert-viewer');
-  const certViewerIframe = document.getElementById('cert-viewer-iframe');
-  const certViewerTitle = document.getElementById('cert-viewer-title');
-  const certViewerIssuer = document.getElementById('cert-viewer-issuer');
-  const certViewerNewTab = document.getElementById('cert-viewer-new-tab');
-  const certViewerClose = document.getElementById('cert-viewer-close');
-  const certViewerBackdrop = document.getElementById('cert-viewer-backdrop');
-  
-  let certLastFocus = null;
-
-  const openCertViewer = (card) => {
-    if (!certViewer) return;
-    certLastFocus = card;
-    const pdfUrl = card.getAttribute('data-pdf-full');
-    const title = card.getAttribute('data-cert-title') || card.querySelector('.cert-title')?.textContent || '';
-    const issuer = card.getAttribute('data-cert-issuer') || card.querySelector('.cert-meta span:first-child')?.textContent || '';
-    
-    certViewerTitle.textContent = title;
-    certViewerIssuer.textContent = issuer;
-    certViewerNewTab.href = pdfUrl;
-    certViewerIframe.src = pdfUrl;
-    
-    certViewer.classList.add('open');
-    certViewer.setAttribute('aria-hidden', 'false');
-    certViewer.removeAttribute('inert');
-    document.body.style.overflow = 'hidden';
-    document.body.classList.add('cert-viewer-open');
-    
-    setTimeout(() => {
-      certViewerClose.focus();
-    }, 350);
-  };
-
-  const closeCertViewer = () => {
-    if (!certViewer) return;
-    certViewer.classList.remove('open');
-    certViewer.setAttribute('aria-hidden', 'true');
-    certViewer.setAttribute('inert', '');
-    document.body.style.overflow = '';
-    document.body.classList.remove('cert-viewer-open');
-    
-    // Clear iframe src
-    certViewerIframe.src = '';
-    
-    if (certLastFocus) {
-      certLastFocus.focus();
-    }
-  };
-
-  if (certViewerClose && certViewerBackdrop) {
-    certViewerClose.addEventListener('click', closeCertViewer);
-    certViewerBackdrop.addEventListener('click', closeCertViewer);
-  }
-
-  // Need to use document.body to delegate in case cards are dynamically created
-  // Though cards are rendered statically, it's safe.
-  document.querySelectorAll('[data-pdf-full]').forEach(trigger => {
-    trigger.addEventListener('click', (e) => {
-      if (trigger.tagName === 'BUTTON' || trigger.tagName === 'A') {
-        e.preventDefault();
-      }
-      openCertViewer(trigger);
-    });
-    trigger.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter' || e.key === ' ') {
-        e.preventDefault();
-        openCertViewer(trigger);
-      }
-    });
-  });
-
-  if (certViewer) {
-    certViewer.addEventListener('keydown', (e) => {
-      if (e.key === 'Escape') {
-        e.preventDefault();
-        closeCertViewer();
-      }
-      
-      if (e.key === 'Tab') {
-        const focusables = Array.from(certViewer.querySelectorAll('a[href], button')).filter(el => !el.hidden && !el.disabled && el.offsetParent !== null);
-        if (!focusables.length) return;
-        const first = focusables[0];
-        const last = focusables[focusables.length - 1];
-        if (e.shiftKey) {
-          if (document.activeElement === first) {
-            e.preventDefault();
-            last.focus();
-          }
-        } else {
-          if (document.activeElement === last || document.activeElement === certViewerIframe) {
-            e.preventDefault();
-            first.focus();
-          }
-        }
-      }
-    });
-  }
-
-})();
-
-  /* -------------------------
-     Back to Top
-     ------------------------- */
-  const backToTopBtn = document.getElementById('back-to-top');
-  if (backToTopBtn) {
-    backToTopBtn.addEventListener('click', (e) => {
-      e.preventDefault();
-
-      const mobileMenu = document.getElementById('mobile-menu');
-      if (mobileMenu && mobileMenu.classList.contains('open') && typeof window.closeMenuMobile === 'function') {
-        window.closeMenuMobile({ restoreFocus: false });
-      }
-
-      const aiPanel = document.getElementById('ai-assistant');
-      if (aiPanel && aiPanel.classList.contains('open')) {
-        const closeBtn = document.querySelector('[data-ai-close]');
-        if (closeBtn) closeBtn.click();
-      }
-
-      const certViewer = document.getElementById('cert-viewer');
-      if (certViewer && certViewer.classList.contains('open')) {
-        const certClose = document.getElementById('cert-viewer-close');
-        if (certClose) certClose.click();
-      }
-
-      const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-      window.scrollTo({
-        top: 0,
-        behavior: prefersReducedMotion ? 'auto' : 'smooth'
-      });
-
-      if (window.history && window.history.replaceState) {
-        window.history.replaceState(null, '', window.location.pathname + window.location.search);
-      }
     });
   }
