@@ -234,13 +234,20 @@
 
     let activeId = "";
 
-    for (const target of sectionTargets) {
-      const targetTop = target.anchor.getBoundingClientRect().top;
+    // If scrolled to the bottom of the page, activate the last section.
+    if ((window.innerHeight + Math.round(window.scrollY)) >= document.body.offsetHeight - 10) {
+      if (sectionTargets.length > 0) {
+        activeId = sectionTargets[sectionTargets.length - 1].id;
+      }
+    } else {
+      for (const target of sectionTargets) {
+        const targetTop = target.anchor.getBoundingClientRect().top;
 
-      if (targetTop <= probeLine) {
-        activeId = target.id;
-      } else {
-        break;
+        if (targetTop <= probeLine) {
+          activeId = target.id;
+        } else {
+          break;
+        }
       }
     }
 
@@ -1135,7 +1142,7 @@
     
     setTimeout(() => {
       certViewerClose.focus();
-    }, 150);
+    }, 350);
   };
 
   const closeCertViewer = () => {

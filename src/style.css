@@ -474,7 +474,7 @@ body.menu-open {
   display: flex;
   align-items: center;
   padding-top: clamp(110px, 10vw, 150px);
-  padding-bottom: clamp(56px, 6vw, 88px);
+  padding-bottom: 0;
 }
 
 .hero-grid {
@@ -2326,7 +2326,7 @@ body.ai-open {
 
   .hero {
     padding-top: clamp(90px, 12vw, 110px);
-    padding-bottom: clamp(44px, 8vw, 60px);
+    padding-bottom: 0;
     min-height: auto;
   }
 
