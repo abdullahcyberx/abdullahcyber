@@ -1103,4 +1103,54 @@ test.describe("Portfolio Smoke Tests", () => {
   });
 
 
+  test.describe("Back to top and Shehzada AI", () => {
+    test("Back to top button scrolls and cleans up URL", async ({ page }) => {
+      await page.goto("/");
+      await page.evaluate(() => window.scrollTo(0, 1000));
+      await page.click('#back-to-top');
+      await page.waitForFunction(() => window.scrollY === 0, { timeout: 2000 });
+      const hash = await page.evaluate(() => window.location.hash);
+      expect(hash).toBe("");
+    });
+
+    test("Shehzada AI opens, answers basic query, and clears", async ({ page }) => {
+      await page.goto("/");
+      
+      // Open AI
+      await page.click('[data-ai-open]');
+      await expect(page.locator('#ai-assistant')).toHaveClass(/open/);
+      
+      // Check greeting
+      await expect(page.locator('.ai-ai').last()).toBeVisible();
+
+      // Ask question
+      await page.fill('#ai-input', 'Who is Muhammad?');
+      await page.click('#ai-form button[type="submit"]');
+
+      // Wait for the processing state to disappear and answer to be ready
+      await expect(page.locator('.ai-ai').last()).toContainText('Muhammad Abdullah', { timeout: 5000 });
+      
+      // Clear
+      await page.fill('#ai-input', '/clear');
+      await page.click('#ai-form button[type="submit"]');
+      
+      // Check it was cleared
+      await expect(page.locator('.ai-message')).toHaveCount(1, { timeout: 2000 });
+    });
+
+    test("Shehzada AI Context memory survives", async ({ page }) => {
+      await page.goto("/");
+      await page.click('[data-ai-open]');
+
+      // Question 1
+      await page.fill('#ai-input', 'Show his strongest projects');
+      await page.click('#ai-form button[type="submit"]');
+      await expect(page.locator('.ai-ai').last()).toContainText('Modular Recon Tool', { timeout: 5000 });
+
+      // Follow up
+      await page.fill('#ai-input', 'What tools were used?');
+      await page.click('#ai-form button[type="submit"]');
+      await expect(page.locator('.ai-ai').last()).toContainText('Modular Recon Tool', { timeout: 5000 });
+    });
+  });
 });

@@ -475,6 +475,7 @@ body.menu-open {
   align-items: center;
   padding-top: clamp(110px, 10vw, 150px);
   padding-bottom: 0;
+  margin-bottom: clamp(40px, 4vw, 80px);
 }
 
 .hero-grid {
@@ -2111,6 +2112,7 @@ footer a:hover {
   font-size: 0.875rem;
   line-height: 1.6;
   max-width: 88%;
+  word-break: break-word;
 }
 
 .ai-message p {
@@ -2145,9 +2147,9 @@ footer a:hover {
   display: flex;
   gap: 6px;
   padding-bottom: 10px;
-  overflow-x: auto;
   flex-wrap: wrap;
-  max-height: 72px;
+  max-height: none;
+  overflow-y: auto;
 }
 
 .ai-suggestions::-webkit-scrollbar {
@@ -2327,6 +2329,7 @@ body.ai-open {
   .hero {
     padding-top: clamp(90px, 12vw, 110px);
     padding-bottom: 0;
+    margin-bottom: 30px;
     min-height: auto;
   }
 
@@ -2527,6 +2530,7 @@ body.ai-open {
     left: 16px;
     width: auto;
     max-width: none;
+    max-height: calc(100dvh - 120px - env(safe-area-inset-top));
   }
 
   .ai-float-btn {
