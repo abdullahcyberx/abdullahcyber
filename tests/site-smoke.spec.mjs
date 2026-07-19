@@ -491,117 +491,6 @@ test.describe("Portfolio Smoke Tests", () => {
     }
   });
 
-  test("Shehzadas AI advanced features", async ({ page, context }) => {
-    // Grant clipboard permissions for copy testing
-    await context.grantPermissions(["clipboard-read", "clipboard-write"]);
-
-    await page.goto("/");
-
-    const aiToggle = page.locator(".ai-float-btn");
-    await aiToggle.click();
-    const aiAssistant = page.locator("#ai-assistant");
-    await expect(aiAssistant).toHaveClass(/open/);
-
-    const messages = page.locator(".ai-messages");
-
-    // Recruiter briefing & copy
-    const briefChip = page.locator('[data-ai-special="brief"]').first();
-    await briefChip.click();
-    await page.waitForTimeout(500);
-    await expect(messages).toContainText("Recruiter Briefing");
-
-    const copyBtn = page.locator('[data-ai-special="copy-brief"]').first();
-    await copyBtn.click();
-    await page.waitForTimeout(300);
-
-    // Evidence scan
-    const scanChip = page.locator('[data-ai-special="scan"]').first();
-    await scanChip.click();
-    await page.waitForTimeout(1200);
-    await expect(messages).toContainText("Evidence Scan");
-    await expect(messages).toContainText("Found");
-
-    // CTF challenge
-    const ctfChip = page.locator('[data-ai-special="challenge"]').first();
-    await ctfChip.click();
-    await page.waitForTimeout(1000); // Wait for title and first question to appear
-
-    const input = page.locator("#ai-input");
-
-    // Incorrect answer
-    await input.fill("wrong answer");
-    await input.press("Enter");
-    await page.waitForTimeout(500);
-    await expect(messages).toContainText("Not quite. Try again");
-
-    // Hint
-    const hintChip = page.locator('[data-ai-special="hint"]').first();
-    await hintChip.click();
-    await page.waitForTimeout(500);
-    await expect(messages).toContainText("Think about input being inserted");
-
-    // First correct answer
-    await input.fill("sql injection");
-    await input.press("Enter");
-    await page.waitForTimeout(500);
-    await expect(messages).toContainText(
-      "I execute untrusted script inside another visitor",
-    );
-
-    // Second correct answer
-    await input.fill("xss");
-    await input.press("Enter");
-    await page.waitForTimeout(500);
-    await expect(messages).toContainText(
-      "Challenge complete. You identified both",
-    );
-    await expect(messages).toContainText("FLAG{think_beyond_tools}");
-  });
-
-  test("Shehzadas AI accessibility", async ({ page }) => {
-    await page.goto("/");
-
-    const aiAssistant = page.locator("#ai-assistant");
-    const aiToggle = page.locator(".ai-float-btn");
-    const input = page.locator("#ai-input");
-const sendBtn = page.locator("button[aria-label='Send message']");
-
-    // Before opening: Verify panel is inert and not focusable
-    await expect(aiAssistant).toHaveAttribute("aria-hidden", "true");
-    await expect(aiAssistant).toHaveAttribute("inert", "");
-
-    // Verify inputs cannot receive focus
-    await input.focus({ force: true }).catch(() => {});
-    await expect(input).not.toBeFocused();
-await sendBtn.focus({ force: true }).catch(() => {});
-    await expect(sendBtn).not.toBeFocused();
-
-    // Open AI panel
-    await aiToggle.focus();
-    await aiToggle.press("Enter");
-
-    // After opening: Verify inert is removed
-    await expect(aiAssistant).toHaveClass(/open/);
-    await expect(aiAssistant).not.toHaveAttribute("inert");
-    await expect(aiAssistant).toHaveAttribute("aria-hidden", "false");
-    await expect(page.locator("body")).toHaveClass(/ai-open/);
-    await expect(input).toBeFocused();
-
-    // Tab trap
-    await page.keyboard.press("Tab");
-    await page.keyboard.press("Shift+Tab");
-    await expect(input).toBeFocused();
-// Escape closes panel and restores focus
-    await page.keyboard.press("Escape");
-    await expect(aiAssistant).not.toHaveClass(/open/);
-    await expect(aiAssistant).toHaveAttribute("aria-hidden", "true");
-    await expect(aiAssistant).toHaveAttribute("inert", "");
-    await expect(page.locator("body")).not.toHaveClass(/ai-open/);
-
-    // Focus should be restored
-    await expect(aiToggle).toBeFocused();
-  });
-
   test.describe("Certifications & Generalized Viewer Tests", () => {
     test.beforeEach(async ({ page }) => {
       await page.goto("/");
@@ -893,7 +782,6 @@ await sendBtn.focus({ force: true }).catch(() => {});
       const statementBox = await statement.boundingBox();
       const linksBox = await linksBlock.boundingBox();
       const copyBox = await copy.boundingBox();
-
       // Links block is to the left of copy
       expect(linksBox.x + linksBox.width).toBeLessThanOrEqual(copyBox.x + 4);
 
@@ -931,13 +819,20 @@ await sendBtn.focus({ force: true }).catch(() => {});
       if (!isMobile) test.skip();
       await page.setViewportSize({ width: 320, height: 568 });
       await page.goto("/#about");
+      await page.waitForTimeout(800);
 
       const profileLinks = page.locator(".profile-link");
-      const link1 = await profileLinks.nth(0).boundingBox();
-      const link2 = await profileLinks.nth(1).boundingBox();
-      
-      // One link per row: link2 is below link1
-      expect(link2.y).toBeGreaterThan(link1.y + 20); // clearly on a new row
+      const count = await profileLinks.count();
+      expect(count).toBe(4);
+      const boxes = [];
+      for (let index = 0; index < count; index += 1) {
+        boxes.push(await profileLinks.nth(index).boundingBox());
+      }
+      const rows = boxes.map((box) => Math.round(box.y)).sort((a, b) => a - b);
+      expect(new Set(rows).size).toBe(4);
+      for (let index = 1; index < rows.length; index += 1) {
+        expect(rows[index] - rows[index - 1]).toBeGreaterThan(20);
+      }
     });
 
     test("Mobile header at 320px and AI button overlay hiding", async ({ page, isMobile }) => {
@@ -958,7 +853,7 @@ await sendBtn.focus({ force: true }).catch(() => {});
       expect(cvBox.x + cvBox.width).toBeLessThanOrEqual(menuBox.x);
       
       // AI button overlay hiding
-      const aiBtn = page.locator(".ai-float-btn");
+      const aiBtn = page.locator("[data-ai-open]");
       await expect(aiBtn).toBeVisible();
       
       // Open menu
@@ -1096,6 +991,24 @@ await sendBtn.focus({ force: true }).catch(() => {});
 
 
   test.describe("Back to top and Shehzada AI", () => {
+    const sendAiMessage = async (page, question) => {
+      const answers = page.locator(".ai-message.ai-assistant-message .ai-bubble");
+      const previousCount = await answers.count();
+      await page.locator("#ai-input").fill(question);
+      await page.locator("#ai-form").evaluate((form) => form.requestSubmit());
+      await expect(answers).toHaveCount(previousCount + 1, { timeout: 5000 });
+      return answers.last();
+    };
+
+    const expectBoxesClose = (actual, expected, tolerance = 3) => {
+      for (const key of ["x", "y", "width", "height"]) {
+        expect(
+          Math.abs(actual[key] - expected[key]),
+          `${key}: expected ${expected[key]}, received ${actual[key]}`,
+        ).toBeLessThanOrEqual(tolerance);
+      }
+    };
+
     test("Back to top button scrolls and cleans up URL", async ({ page }) => {
       await page.goto("/");
       await page.evaluate(() => window.scrollTo(0, 1000));
@@ -1105,44 +1018,210 @@ await sendBtn.focus({ force: true }).catch(() => {});
       expect(hash).toBe("");
     });
 
-    test("Shehzada AI opens, answers basic query, and clears", async ({ page }) => {
+    test("AI assistant desktop compact, maximize, restore, close and reopen", async ({ page, isMobile }) => {
+      if (isMobile) test.skip();
+      await page.setViewportSize({ width: 1440, height: 900 });
       await page.goto("/");
-      
-      // Open AI
-      await page.click('[data-ai-open]');
-      await expect(page.locator('#ai-assistant')).toHaveClass(/open/);
-      
-      // Check greeting
-      await expect(page.locator('.ai-ai').last()).toBeVisible();
+      await page.locator("[data-ai-open]").click();
+      await page.waitForTimeout(500);
 
-      // Ask question
-      await page.fill('#ai-input', 'Who is Muhammad?');
-      await page.click('#ai-form button[type="submit"]');
+      const aiDialog = page.locator("#ai-assistant");
+      const aiPanel = page.locator(".ai-panel");
+      await expect(aiPanel).toBeVisible();
 
-      // Wait for the processing state to disappear and answer to be ready
-      await expect(page.locator('.ai-ai').last()).toContainText('Muhammad Abdullah', { timeout: 5000 });
-      
-      // Clear
-      await page.fill('#ai-input', '/clear');
-      await page.click('#ai-form button[type="submit"]');
-      
-      // Check it was cleared
-      await expect(page.locator('.ai-message')).toHaveCount(1, { timeout: 2000 });
+      const compactBox = await aiPanel.boundingBox();
+      expectBoxesClose(compactBox, { x: 984, y: 164, width: 440, height: 720 });
+
+      await sendAiMessage(page, "Who is Muhammad?");
+      await page.locator("#ai-input").fill("Unsent draft");
+      const messageCount = await page.locator(".ai-message").count();
+
+      await page.locator("#ai-maximize-btn").click();
+      await page.waitForTimeout(500);
+      await expect(aiDialog).toHaveClass(/is-maximized/);
+      await expect(page.locator("#ai-maximize-btn")).toHaveAttribute("aria-label", "Restore AI assistant");
+      const maximizedBox = await aiPanel.boundingBox();
+      expectBoxesClose(maximizedBox, { x: 16, y: 16, width: 1408, height: 868 });
+      await expect(page.locator("#ai-input")).toHaveValue("Unsent draft");
+      await expect(page.locator(".ai-message")).toHaveCount(messageCount);
+
+      await page.locator("#ai-maximize-btn").click();
+      await page.waitForTimeout(500);
+      await expect(aiDialog).not.toHaveClass(/is-maximized/);
+      const restoredBox = await aiPanel.boundingBox();
+      expectBoxesClose(restoredBox, compactBox);
+      await expect(page.locator("#ai-input")).toHaveValue("Unsent draft");
+      await expect(page.locator(".ai-message")).toHaveCount(messageCount);
+
+      await page.locator("#ai-maximize-btn").click();
+      await page.waitForTimeout(500);
+      await page.locator(".ai-close-button").click();
+      await expect(aiDialog).not.toHaveClass(/open/);
+      await expect(aiDialog).not.toHaveClass(/is-maximized/);
+      await page.locator("[data-ai-open]").click();
+      await page.waitForTimeout(500);
+      await expectBoxesClose(await aiPanel.boundingBox(), compactBox);
+      await expect(page.locator("#ai-input")).toHaveValue("Unsent draft");
+      await expect(page.locator(".ai-message")).toHaveCount(messageCount);
+
+      await page.locator("#ai-maximize-btn").click();
+      await page.reload();
+      await page.locator("[data-ai-open]").click();
+      await page.waitForTimeout(500);
+      await expect(aiDialog).not.toHaveClass(/is-maximized/);
+      expectBoxesClose(await aiPanel.boundingBox(), compactBox);
+      await expect(page.locator(".ai-message")).toHaveCount(messageCount);
+      await expect(page.locator(".ai-message.ai-assistant-message .ai-bubble")).toContainText("Muhammad Abdullah");
+
+      for (const selector of ["#ai-jump-to-latest", "#ai-stop-btn", "#ai-voice-input", "#ai-voice-output"]) {
+        await expect(page.locator(selector)).toHaveCount(0);
+      }
     });
 
-    test("Shehzada AI Context memory survives", async ({ page }) => {
+    for (const viewport of [
+      { width: 320, height: 568 },
+      { width: 390, height: 844 },
+      { width: 430, height: 932 },
+    ]) {
+      test(`AI assistant mobile fullscreen ${viewport.width}x${viewport.height}`, async ({ page, isMobile }) => {
+        if (!isMobile) test.skip();
+        await page.setViewportSize(viewport);
+        await page.goto("/");
+        await page.locator("[data-ai-open]").click();
+        await page.waitForTimeout(400);
+
+        const panel = page.locator(".ai-panel");
+        expectBoxesClose(await panel.boundingBox(), { x: 0, y: 0, ...viewport }, 1);
+        await expect(page.locator("#ai-maximize-btn")).toBeHidden();
+        await expect(page.locator(".ai-close-button")).toBeVisible();
+        await expect(page.locator("#ai-form")).toBeVisible();
+
+        const layout = await page.evaluate(() => {
+          const header = document.querySelector(".ai-header").getBoundingClientRect();
+          const actions = document.querySelector(".ai-header-actions").getBoundingClientRect();
+          const identity = document.querySelector(".ai-identity").getBoundingClientRect();
+          const composer = document.querySelector(".ai-composer-shell").getBoundingClientRect();
+          const conversation = document.querySelector("#ai-conversation").getBoundingClientRect();
+          const panel = document.querySelector(".ai-panel");
+          return {
+            header: { left: header.left, right: header.right },
+            identityRight: identity.right,
+            actionsLeft: actions.left,
+            composerTop: composer.top,
+            composerBottom: composer.bottom,
+            conversationTop: conversation.top,
+            conversationBottom: conversation.bottom,
+            panelClientWidth: panel.clientWidth,
+            panelScrollWidth: panel.scrollWidth,
+          };
+        });
+        expect(layout.identityRight).toBeLessThanOrEqual(layout.actionsLeft + 1);
+        expect(layout.composerBottom).toBeLessThanOrEqual(viewport.height + 1);
+        expect(layout.conversationBottom).toBeLessThanOrEqual(layout.composerTop + 1);
+        expect(layout.panelScrollWidth).toBe(layout.panelClientWidth);
+      });
+    }
+
+    test("Shehzada AI chat rendering, composer and safe text", async ({ page }) => {
       await page.goto("/");
-      await page.click('[data-ai-open]');
+      await page.locator("[data-ai-open]").click();
+      await expect(page.locator("#ai-welcome")).toBeVisible();
+      await expect(page.locator("[data-ai-question]")).toHaveCount(4);
+      await expect(page.locator("[data-ai-question]").allTextContents()).resolves.toEqual([
+        expect.stringContaining("Why hire Muhammad?"),
+        expect.stringContaining("Strongest projects"),
+        expect.stringContaining("Internship experience"),
+        expect.stringContaining("Technical skills"),
+      ]);
 
-      // Question 1
-      await page.fill('#ai-input', 'Show his strongest projects');
-      await page.click('#ai-form button[type="submit"]');
-      await expect(page.locator('.ai-ai').last()).toContainText('Modular Recon Tool', { timeout: 5000 });
+      await page.locator("#ai-input").fill("Line one");
+      await page.keyboard.press("Shift+Enter");
+      await page.keyboard.type("Line two");
+      await expect(page.locator("#ai-input")).toHaveValue("Line one\nLine two");
 
-      // Follow up
-      await page.fill('#ai-input', 'What tools were used?');
-      await page.click('#ai-form button[type="submit"]');
-      await expect(page.locator('.ai-ai').last()).toContainText('Modular Recon Tool', { timeout: 5000 });
+      await page.locator("#ai-input").fill("<img src=x onerror=window.aiInjected=true>");
+      await page.evaluate(() => {
+        window.aiThinkingTiming = {};
+        const observer = new MutationObserver(() => {
+          const thinking = document.querySelector(".ai-thinking");
+          if (thinking && window.aiThinkingTiming.started === undefined) {
+            window.aiThinkingTiming.started = performance.now();
+          }
+          if (!thinking && window.aiThinkingTiming.started !== undefined && window.aiThinkingTiming.ended === undefined) {
+            window.aiThinkingTiming.ended = performance.now();
+            observer.disconnect();
+          }
+        });
+        observer.observe(document.querySelector("#ai-messages"), { childList: true, subtree: true });
+      });
+      await page.locator("#ai-form").evaluate((form) => form.requestSubmit());
+      await expect(page.locator(".ai-message.ai-assistant-message .ai-bubble").last()).toContainText("focused on Muhammad's portfolio");
+      const thinkingDuration = await page.evaluate(() => window.aiThinkingTiming.ended - window.aiThinkingTiming.started);
+      expect(thinkingDuration).toBeGreaterThanOrEqual(100);
+      expect(thinkingDuration).toBeLessThanOrEqual(300);
+      await expect(page.locator(".ai-user .ai-bubble").last()).toHaveText("<img src=x onerror=window.aiInjected=true>");
+      await expect(page.locator(".ai-user img")).toHaveCount(0);
+      expect(await page.evaluate(() => window.aiInjected)).toBeUndefined();
+
+      const positions = await page.evaluate(() => {
+        const assistant = document.querySelector(".ai-message.ai-assistant-message .ai-bubble").getBoundingClientRect();
+        const user = document.querySelector(".ai-message.ai-user .ai-bubble").getBoundingClientRect();
+        return { assistantLeft: assistant.left, userLeft: user.left };
+      });
+      expect(positions.userLeft).toBeGreaterThan(positions.assistantLeft);
+
+      await page.locator("#ai-input").fill("x".repeat(439));
+      await expect(page.locator("#ai-char-count")).not.toHaveClass(/is-near-limit/);
+      await page.locator("#ai-input").fill("x".repeat(440));
+      await expect(page.locator("#ai-char-count")).toHaveClass(/is-near-limit/);
+      await expect(page.locator("#ai-char-count")).toHaveText("440 / 500");
+    });
+
+    test("Shehzada AI local engine regressions and follow-up context", async ({ page }) => {
+      await page.goto("/");
+      await page.locator("[data-ai-open]").click();
+
+      await expect(await sendAiMessage(page, "Who is Muhammad?")).toContainText("Muhammad Abdullah");
+      await expect(await sendAiMessage(page, "Explain the Modular Recon Tool.")).toContainText("Modular Recon Tool");
+      await expect(await sendAiMessage(page, "What tools did he use?")).toContainText("Modular Recon Tool");
+      await expect(await sendAiMessage(page, "Why should someone hire him?")).toContainText(/practical|project/i);
+      await expect(await sendAiMessage(page, "What is the weather today?")).toContainText("focused on Muhammad's portfolio");
+    });
+
+    test("Shehzada AI clear, recruiter briefing, evidence scan and CTF challenge", async ({ page }) => {
+      await page.goto("/");
+      await page.locator("[data-ai-open]").click();
+
+      await expect(await sendAiMessage(page, "Recruiter briefing")).toContainText("Muhammad Abdullah");
+      await expect(await sendAiMessage(page, "Evidence scan")).toContainText("Evidence Scan");
+      await expect(await sendAiMessage(page, "CTF challenge")).toContainText(/CTF|challenge/i);
+      await expect(await sendAiMessage(page, "wrong answer")).toContainText(/try again/i);
+      await expect(await sendAiMessage(page, "hint")).toContainText(/hint/i);
+      await expect(await sendAiMessage(page, "sql injection")).toContainText(/Correct|Next/i);
+      await expect(await sendAiMessage(page, "xss")).toContainText(/FLAG\{|Challenge/i);
+
+      await page.locator("#ai-input").fill("/clear");
+      await page.locator("#ai-input").press("Enter");
+      await expect(page.locator(".ai-message")).toHaveCount(0);
+      await expect(page.locator("#ai-welcome")).toBeVisible();
+    });
+
+    test("Shehzada AI focus trap, Escape close and opener restoration", async ({ page, isMobile }) => {
+      if (isMobile) test.skip();
+      await page.goto("/");
+      const opener = page.locator("[data-ai-open]");
+      await opener.focus();
+      await opener.press("Enter");
+      await expect(page.locator("#ai-assistant")).toHaveClass(/open/);
+      await expect(page.locator("#ai-input")).toBeFocused();
+
+      await page.locator("#ai-send-btn").focus();
+      await page.keyboard.press("Tab");
+      await expect(page.locator("#ai-clear-btn")).toBeFocused();
+
+      await page.keyboard.press("Escape");
+      await expect(page.locator("#ai-assistant")).not.toHaveClass(/open/);
+      await expect(opener).toBeFocused();
     });
   });
 });
