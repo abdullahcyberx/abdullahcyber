@@ -933,46 +933,51 @@
       <div class="ai-backdrop" data-ai-close></div>
       <div class="ai-panel">
         <div class="ai-header">
-          <div class="ai-brand" id="ai-assistant-title">Shehzada's AI</div>
-          <button class="ai-close" data-ai-close aria-label="Close AI">
-            ✕
+          <div class="ai-header-left">
+            <div class="ai-brand" id="ai-assistant-title">Shehzada's AI</div>
+            <div class="ai-subtitle">
+              Local portfolio assistant
+              <span class="ai-status-indicator" aria-hidden="true"></span>
+              <span class="visually-hidden">Ready</span>
+            </div>
+          </div>
+          <div class="ai-header-right">
+            <button class="ai-header-btn" id="ai-clear-btn" type="button" aria-label="Clear conversation">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+            </button>
+            <button class="ai-header-btn" id="ai-maximize-btn" type="button" aria-label="Maximize AI assistant">
+              <svg class="icon-maximize" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3"></path><path d="M21 8V5a2 2 0 0 0-2-2h-3"></path><path d="M3 16v3a2 2 0 0 0 2 2h3"></path><path d="M16 21h3a2 2 0 0 0 2-2v-3"></path></svg>
+              <svg class="icon-restore" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="display:none;"><path d="M4 14h6v6"></path><path d="M20 10h-6V4"></path><path d="M14 10l7-7"></path><path d="M3 21l7-7"></path></svg>
+            </button>
+            <button class="ai-header-btn ai-close" data-ai-close aria-label="Close AI">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+            </button>
+          </div>
+        </div>
+        <div class="ai-scroll-container">
+          <div class="ai-messages" id="ai-messages" role="log" aria-live="polite"></div>
+          <button type="button" class="ai-jump-to-latest" id="ai-jump-to-latest" aria-label="Jump to latest message" hidden>
+            ↓ Jump to latest
           </button>
         </div>
-        <div
-          class="ai-messages"
-          id="ai-messages"
-          role="log"
-          aria-live="polite"
-        ></div>
         <div class="ai-input-area">
           <div class="ai-suggestions" id="ai-suggestions"></div>
           <form id="ai-form">
-            <button
-              type="button"
-              id="ai-voice-input"
-              class="ai-action-btn"
-              aria-label="Start voice input"
-              aria-pressed="false"
-              hidden
-            >
-              🎤
+            <div class="ai-input-wrapper">
+              <textarea
+                id="ai-input"
+                rows="1"
+                placeholder="Ask about projects, skills, experience or certifications..."
+                aria-label="Message Shehzada's AI"
+                maxlength="500"
+              ></textarea>
+              <div class="ai-char-count" id="ai-char-count" aria-live="polite">0/500</div>
+            </div>
+            <button type="button" id="ai-stop-btn" class="ai-action-btn" aria-label="Stop generating" hidden>
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect></svg>
             </button>
-            <input
-              type="text"
-              id="ai-input"
-              placeholder="Ask about Muhammad's skills..."
-              autocomplete="off"
-            />
-            <button type="submit" aria-label="Send message">➔</button>
-            <button
-              type="button"
-              id="ai-voice-output"
-              class="ai-action-btn"
-              aria-label="Enable speech output"
-              aria-pressed="false"
-              hidden
-            >
-              🔊
+            <button type="submit" id="ai-send-btn" class="ai-action-btn" aria-label="Send message">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"></line><polygon points="22 2 15 22 11 13 2 9 22 2"></polygon></svg>
             </button>
           </form>
           <div

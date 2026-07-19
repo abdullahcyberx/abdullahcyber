@@ -514,9 +514,12 @@
   const aiForm = document.getElementById("ai-form");
   const aiMessages = document.getElementById("ai-messages");
   const aiSuggestions = document.getElementById("ai-suggestions");
-  const aiVoiceInputBtn = document.getElementById("ai-voice-input");
-  const aiVoiceOutputBtn = document.getElementById("ai-voice-output");
   const aiLiveRegion = document.getElementById("ai-live-region");
+  const aiClearBtn = document.getElementById("ai-clear-btn");
+  const aiMaximizeBtn = document.getElementById("ai-maximize-btn");
+  const aiStopBtn = document.getElementById("ai-stop-btn");
+  const aiCharCount = document.getElementById("ai-char-count");
+  const aiJumpBtn = document.getElementById("ai-jump-to-latest");
   const aiFocusableSelectors =
     'a[href], button, textarea, input[type="text"], input[type="radio"], input[type="checkbox"], select';
 
@@ -526,7 +529,6 @@
   const state = {
     greeted: false,
     busy: false,
-    sound: false,
     challengeActive: false,
     challengeIndex: 0,
     challengeAttempts: 0,
@@ -619,25 +621,20 @@
 
   const scrollMessages = () =>
     requestAnimationFrame(() => {
-      if (aiMessages) aiMessages.scrollTop = aiMessages.scrollHeight;
+      if (!aiMessages) return;
+      if (isAutoScrolling) {
+        aiMessages.scrollTop = aiMessages.scrollHeight;
+      }
     });
 
-  const speakText = (text) => {
-    if (!state.sound || !window.speechSynthesis) return;
-    window.speechSynthesis.cancel();
-    const temp = document.createElement("div");
-    temp.textContent = text;
-    const utterance = new SpeechSynthesisUtterance(
-      temp.textContent || temp.innerText || "",
-    );
-    window.speechSynthesis.speak(utterance);
-  };
 
   const setBusy = (isBusy) => {
     state.busy = isBusy;
     if (aiInput) aiInput.disabled = isBusy;
-    const btn = aiForm?.querySelector('button[type="submit"]');
-    if (btn) btn.disabled = isBusy;
+    const sendBtn = aiForm?.querySelector('button[type="submit"]');
+    if (sendBtn) sendBtn.hidden = isBusy;
+    if (aiStopBtn) aiStopBtn.hidden = !isBusy;
+    
     if (!isBusy && aiInput && aiPanel?.classList.contains("open")) {
       setTimeout(() => {
         if (aiPanel?.classList.contains("open")) aiInput.focus();
@@ -1154,7 +1151,7 @@
       renderSafeMarkdown(
         createMessageBubble("ai"),
         aiConfig.greeting ||
-          "Hi - I'm Shehzada's AI. I can guide you through Muhammad's projects, skills, internships, certifications and practical cybersecurity work. What would you like to explore?",
+          "**Ask about Muhammad’s work**\n\nExplore his cybersecurity projects, internships, technical skills, certifications and practical experience.",
       );
       defaultActions();
       return;
@@ -1317,71 +1314,92 @@
     if (special === "nav-contact") window.location.hash = "#contact";
   };
 
-  // Voice Features
-  let recognition = null;
-  const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
-
-  if (SpeechRec && aiVoiceInputBtn) {
-    aiVoiceInputBtn.hidden = false;
-    recognition = new SpeechRec();
-    recognition.continuous = false;
-    recognition.interimResults = false;
-
-    recognition.onresult = (event) => {
-      const transcript = event.results[0][0].transcript;
-      if (aiInput) {
-        aiInput.value = transcript;
-        aiInput.focus();
-      }
-      aiVoiceInputBtn.setAttribute("aria-pressed", "false");
-      aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
-    };
-
-    recognition.onerror = () => {
-      aiVoiceInputBtn.setAttribute("aria-pressed", "false");
-      aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
-    };
-
-    recognition.onend = () => {
-      aiVoiceInputBtn.setAttribute("aria-pressed", "false");
-      aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
-    };
-
-    aiVoiceInputBtn.addEventListener("click", () => {
-      if (aiVoiceInputBtn.getAttribute("aria-pressed") === "true") {
-        recognition.stop();
-        aiVoiceInputBtn.setAttribute("aria-pressed", "false");
-        aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
-      } else {
-        try {
-          recognition.start();
-          aiVoiceInputBtn.setAttribute("aria-pressed", "true");
-          aiVoiceInputBtn.setAttribute("aria-label", "Stop voice input");
-        } catch (e) {
-          aiVoiceInputBtn.setAttribute("aria-pressed", "false");
-          aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
-        }
-      }
-    });
-  }
-
-  if (window.speechSynthesis && aiVoiceOutputBtn) {
-    aiVoiceOutputBtn.hidden = false;
-    aiVoiceOutputBtn.addEventListener("click", () => {
-      state.sound = !state.sound;
-      aiVoiceOutputBtn.setAttribute(
-        "aria-pressed",
-        state.sound ? "true" : "false",
-      );
-      aiVoiceOutputBtn.setAttribute(
-        "aria-label",
-        state.sound ? "Disable speech output" : "Enable speech output",
-      );
-      if (!state.sound) window.speechSynthesis.cancel();
-    });
-  }
-
   // Accessibility Focus Trap
+
+  // Maximize Logic
+  const toggleMaximize = () => {
+    const isMax = aiPanel.classList.toggle("is-maximized");
+    try {
+      sessionStorage.setItem("ai-maximized", isMax ? "true" : "false");
+    } catch {}
+    
+    const iconMax = aiMaximizeBtn.querySelector(".icon-maximize");
+    const iconRes = aiMaximizeBtn.querySelector(".icon-restore");
+    if (isMax) {
+      aiMaximizeBtn.setAttribute("aria-label", "Restore AI assistant");
+      if (iconMax) iconMax.style.display = "none";
+      if (iconRes) iconRes.style.display = "block";
+    } else {
+      aiMaximizeBtn.setAttribute("aria-label", "Maximize AI assistant");
+      if (iconMax) iconMax.style.display = "block";
+      if (iconRes) iconRes.style.display = "none";
+    }
+    scrollMessages();
+  };
+
+  if (aiMaximizeBtn) aiMaximizeBtn.addEventListener("click", toggleMaximize);
+
+  // Clear Logic
+  if (aiClearBtn) {
+    aiClearBtn.addEventListener("click", () => {
+      processQuery("/clear");
+    });
+  }
+
+  // Auto-resize Textarea and Char Count
+  const updateTextarea = () => {
+    aiInput.style.height = "auto";
+    const newHeight = Math.min(aiInput.scrollHeight, 120);
+    aiInput.style.height = newHeight + "px";
+    
+    if (aiCharCount) {
+      const len = aiInput.value.length;
+      aiCharCount.textContent = `${len}/500`;
+      if (len >= 480) {
+        aiCharCount.style.color = "var(--danger)";
+      } else {
+        aiCharCount.style.color = "var(--text-muted)";
+      }
+    }
+  };
+
+  if (aiInput) {
+    aiInput.addEventListener("input", updateTextarea);
+  }
+
+  // Stop Logic
+  if (aiStopBtn) {
+    aiStopBtn.addEventListener("click", () => {
+      if (activeResponseController) {
+        activeResponseController.abort();
+        setBusy(false);
+        defaultActions();
+        aiStopBtn.hidden = true;
+        if (aiForm) aiForm.querySelector('button[type="submit"]').hidden = false;
+        createMessageBubble("ai").textContent = "Response stopped.";
+      }
+    });
+  }
+
+  // Jump to latest logic
+  let isAutoScrolling = true;
+  if (aiMessages) {
+    aiMessages.addEventListener("scroll", () => {
+      const atBottom = aiMessages.scrollHeight - aiMessages.scrollTop - aiMessages.clientHeight < 30;
+      isAutoScrolling = atBottom;
+      if (aiJumpBtn) {
+        aiJumpBtn.hidden = atBottom;
+      }
+    });
+  }
+
+  if (aiJumpBtn) {
+    aiJumpBtn.addEventListener("click", () => {
+      isAutoScrolling = true;
+      scrollMessages();
+    });
+  }
+
   const trapFocus = (e) => {
     if (e.key === "Tab" && aiPanel.classList.contains("open")) {
       const focusables = Array.from(
@@ -1425,6 +1443,16 @@
     aiPanel.classList.add("open");
     document.body.classList.add("ai-open");
 
+    try {
+      const isMax = sessionStorage.getItem("ai-maximized") === "true";
+      if (isMax && !aiPanel.classList.contains("is-maximized")) {
+        toggleMaximize();
+      }
+    } catch {}
+
+    isAutoScrolling = true;
+    scrollMessages();
+
     if (aiInput) setTimeout(() => aiInput.focus(), 50);
     document.addEventListener("keydown", trapFocus);
 
@@ -1435,8 +1463,7 @@
       }
       renderSafeMarkdown(
         createMessageBubble("ai"),
-        aiConfig.greeting ||
-          "Hi - I'm Shehzada's AI. I can guide you through Muhammad's projects, skills, internships, certifications and practical cybersecurity work. What would you like to explore?",
+        `**Ask about Muhammad’s work**\n\nExplore his cybersecurity projects, internships, technical skills, certifications and practical experience.`
       );
       defaultActions();
     }
@@ -1456,17 +1483,6 @@
       setBusy(false);
       defaultActions();
     }
-
-    if (
-      recognition &&
-      aiVoiceInputBtn &&
-      aiVoiceInputBtn.getAttribute("aria-pressed") === "true"
-    ) {
-      recognition.stop();
-      aiVoiceInputBtn.setAttribute("aria-pressed", "false");
-      aiVoiceInputBtn.setAttribute("aria-label", "Start voice input");
-    }
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
 
     if (lastOpenedBy && typeof lastOpenedBy.focus === "function")
       lastOpenedBy.focus();
@@ -1496,6 +1512,9 @@
       }
       createMessageBubble("user").textContent = val;
       aiInput.value = "";
+      updateTextarea();
+      isAutoScrolling = true;
+      scrollMessages();
       setTimeout(() => processQuery(val), 10);
     });
   }
