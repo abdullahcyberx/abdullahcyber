@@ -946,7 +946,7 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.goto("/");
       await page.waitForTimeout(800);
 
-      const sections = ["#about", "#experience", "#credentials", "#achievements", "#contact"];
+      const sections = ["#about", "#skill-map", "#experience", "#credentials", "#achievements", "#journey", "#contact"];
       for (let i = 0; i < sections.length - 1; i++) {
         const s1 = page.locator(sections[i]);
         const s2 = page.locator(sections[i+1]);
@@ -986,6 +986,78 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.goto("/#projects");
       await page.waitForTimeout(800);
       // Already partially covered by Test 1,2,3
+    });
+  });
+
+  test.describe("Connected skill map and unified journey", () => {
+    test("Skill domains expose generated project, experience and credential evidence", async ({ page }) => {
+      await page.goto("/");
+
+      const nodes = page.locator("[data-skill-domain]");
+      await expect(nodes).toHaveCount(6);
+      await expect(page.locator('[data-skill-domain="web"]')).toHaveAttribute("aria-pressed", "true");
+      await expect(page.locator(".skill-domain-panel:not([hidden])")).toHaveCount(1);
+      await expect(page.locator(".skill-map-connectors line.is-active")).toHaveCount(1);
+
+      const reconNode = page.locator('[data-skill-domain="recon"]');
+      await reconNode.click();
+      await expect(reconNode).toHaveAttribute("aria-pressed", "true");
+      await expect(page.locator("#skill-domain-recon")).toBeVisible();
+      await expect(page.locator("#skill-domain-recon")).toContainText("Modular Recon Tool");
+      await expect(page.locator("#skill-domain-recon")).toContainText("Experience");
+      await expect(page.locator('[data-domain-line="recon"]')).toHaveClass(/is-active/);
+
+      await reconNode.focus();
+      await reconNode.press("ArrowRight");
+      await expect(page.locator('[data-skill-domain="linux"]')).toBeFocused();
+      await expect(page.locator("#skill-domain-linux")).toBeVisible();
+      await expect(page.locator("#skill-domain-linux")).toContainText("SSH Honeypot Deployment");
+    });
+
+    test("Journey is generated, ordered, filtered and progressively expanded", async ({ page }) => {
+      await page.goto("/");
+
+      const allItems = page.locator(".journey-item");
+      await expect(allItems).toHaveCount(27);
+      await expect(page.locator(".journey-item:not([hidden])")).toHaveCount(10);
+      await expect(page.locator(".journey-item:not([hidden])").first()).toContainText("2026");
+
+      const projectFilter = page.locator('[data-journey-filter="project"]');
+      await projectFilter.click();
+      await expect(projectFilter).toHaveAttribute("aria-pressed", "true");
+      await expect(page.locator(".journey-item:not([hidden])")).toHaveCount(4);
+      await expect(page.locator('.journey-item:not([hidden])[data-journey-tags~="project"]')).toHaveCount(4);
+      await expect(page.locator("#journey-more")).toBeHidden();
+
+      const ctfFilter = page.locator('[data-journey-filter="ctf"]');
+      await ctfFilter.click();
+      await expect(page.locator(".journey-item:not([hidden])")).toHaveCount(5);
+      await expect(page.locator(".journey-item:not([hidden]) .journey-ctf-mark")).toHaveCount(5);
+
+      await page.locator('[data-journey-filter="all"]').click();
+      await page.locator("#journey-more").click();
+      await expect(page.locator(".journey-item:not([hidden])")).toHaveCount(27);
+      await expect(page.locator("#journey-more")).toHaveAttribute("aria-expanded", "true");
+    });
+
+    test("Mobile and reduced-motion presentations remain static and overflow-free", async ({ page, isMobile }) => {
+      if (!isMobile) test.skip();
+      await page.emulateMedia({ reducedMotion: "reduce" });
+      await page.goto("/#skill-map");
+
+      await expect(page.locator(".skill-map-connectors")).toBeHidden();
+      const presentation = await page.evaluate(() => {
+        const tiltSurface = document.querySelector("[data-tilt-surface]");
+        return {
+          overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
+          tiltTransform: getComputedStyle(tiltSurface).transform,
+          mapColumns: getComputedStyle(document.querySelector(".skill-map-orbit")).gridTemplateColumns,
+        };
+      });
+
+      expect(presentation.overflow).toBe(false);
+      expect(presentation.tiltTransform).toBe("none");
+      expect(presentation.mapColumns.split(" ").length).toBeGreaterThanOrEqual(2);
     });
   });
 

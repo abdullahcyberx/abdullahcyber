@@ -1450,6 +1450,186 @@
       }
     });
   }
+
+  /* -------------------------
+     Connected Skill Map
+     ------------------------- */
+  const skillDomainButtons = Array.from(
+    document.querySelectorAll("[data-skill-domain]"),
+  );
+  const skillDomainPanels = Array.from(
+    document.querySelectorAll(".skill-domain-panel"),
+  );
+  const skillDomainLines = Array.from(
+    document.querySelectorAll("[data-domain-line]"),
+  );
+
+  const activateSkillDomain = (domain) => {
+    skillDomainButtons.forEach((button) => {
+      const active = button.dataset.skillDomain === domain;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+
+    skillDomainPanels.forEach((panel) => {
+      panel.hidden = panel.id !== `skill-domain-${domain}`;
+    });
+
+    skillDomainLines.forEach((line) => {
+      line.classList.toggle("is-active", line.dataset.domainLine === domain);
+    });
+  };
+
+  skillDomainButtons.forEach((button, index) => {
+    button.addEventListener("click", () => {
+      activateSkillDomain(button.dataset.skillDomain);
+    });
+
+    button.addEventListener("keydown", (event) => {
+      if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
+        return;
+      }
+
+      event.preventDefault();
+      const direction = event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;
+      const nextIndex = (index + direction + skillDomainButtons.length) % skillDomainButtons.length;
+      const nextButton = skillDomainButtons[nextIndex];
+      activateSkillDomain(nextButton.dataset.skillDomain);
+      nextButton.focus();
+    });
+  });
+
+  if (skillDomainButtons.length) {
+    activateSkillDomain(skillDomainButtons[0].dataset.skillDomain);
+  }
+
+  /* -------------------------
+     Unified Journey Filters
+     ------------------------- */
+  const journeyFilters = Array.from(
+    document.querySelectorAll("[data-journey-filter]"),
+  );
+  const journeyItems = Array.from(document.querySelectorAll(".journey-item"));
+  const journeyMoreButton = document.getElementById("journey-more");
+  const journeyStatus = document.getElementById("journey-status");
+  const journeyInitialLimit = 10;
+  let activeJourneyFilter = "all";
+  let journeyExpanded = false;
+
+  const updateJourney = () => {
+    let matchingIndex = 0;
+    let visibleCount = 0;
+
+    journeyItems.forEach((item) => {
+      const tags = (item.dataset.journeyTags || "").split(" ");
+      const matches =
+        activeJourneyFilter === "all" || tags.includes(activeJourneyFilter);
+      const withinLimit =
+        activeJourneyFilter !== "all" ||
+        journeyExpanded ||
+        matchingIndex < journeyInitialLimit;
+
+      item.hidden = !matches || !withinLimit;
+
+      if (matches) matchingIndex += 1;
+      if (matches && withinLimit) visibleCount += 1;
+    });
+
+    journeyFilters.forEach((button) => {
+      const active = button.dataset.journeyFilter === activeJourneyFilter;
+      button.classList.toggle("is-active", active);
+      button.setAttribute("aria-pressed", String(active));
+    });
+
+    if (journeyMoreButton) {
+      const canExpand =
+        activeJourneyFilter === "all" && journeyItems.length > journeyInitialLimit;
+      journeyMoreButton.hidden = !canExpand;
+      journeyMoreButton.setAttribute("aria-expanded", String(journeyExpanded));
+      journeyMoreButton.textContent = journeyExpanded
+        ? "Show recent journey"
+        : "Show complete journey";
+    }
+
+    if (journeyStatus) {
+      journeyStatus.textContent = `${visibleCount} journey ${visibleCount === 1 ? "item" : "items"} shown.`;
+    }
+  };
+
+  journeyFilters.forEach((button) => {
+    button.addEventListener("click", () => {
+      activeJourneyFilter = button.dataset.journeyFilter;
+      journeyExpanded = false;
+      updateJourney();
+    });
+  });
+
+  journeyMoreButton?.addEventListener("click", () => {
+    journeyExpanded = !journeyExpanded;
+    updateJourney();
+  });
+
+  if (journeyItems.length) {
+    updateJourney();
+  }
+
+  /* -------------------------
+     Premium Pointer Microinteractions
+     ------------------------- */
+  const motionAllowed = !window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  if (finePointer && motionAllowed) {
+    document.querySelectorAll("[data-spotlight-surface]").forEach((surface) => {
+      let spotlightFrame = 0;
+
+      surface.addEventListener("pointerenter", () => {
+        surface.classList.add("has-spotlight");
+      });
+
+      surface.addEventListener("pointermove", (event) => {
+        if (spotlightFrame) return;
+        spotlightFrame = window.requestAnimationFrame(() => {
+          const rect = surface.getBoundingClientRect();
+          surface.style.setProperty("--spotlight-x", `${event.clientX - rect.left}px`);
+          surface.style.setProperty("--spotlight-y", `${event.clientY - rect.top}px`);
+          spotlightFrame = 0;
+        });
+      });
+
+      surface.addEventListener("pointerleave", () => {
+        surface.classList.remove("has-spotlight");
+        surface.style.removeProperty("--spotlight-x");
+        surface.style.removeProperty("--spotlight-y");
+      });
+    });
+
+    document.querySelectorAll("[data-tilt-surface]").forEach((surface) => {
+      let tiltFrame = 0;
+
+      surface.addEventListener("pointermove", (event) => {
+        if (tiltFrame) return;
+        tiltFrame = window.requestAnimationFrame(() => {
+          const rect = surface.getBoundingClientRect();
+          const horizontal = (event.clientX - rect.left) / rect.width - 0.5;
+          const vertical = (event.clientY - rect.top) / rect.height - 0.5;
+          const maxTilt = 2.5;
+
+          surface.style.setProperty("--tilt-x", `${vertical * -maxTilt * 2}deg`);
+          surface.style.setProperty("--tilt-y", `${horizontal * maxTilt * 2}deg`);
+          surface.classList.add("is-tilting");
+          tiltFrame = 0;
+        });
+      });
+
+      surface.addEventListener("pointerleave", () => {
+        surface.classList.remove("is-tilting");
+        surface.style.setProperty("--tilt-x", "0deg");
+        surface.style.setProperty("--tilt-y", "0deg");
+      });
+    });
+  }
 })();
 
 /* -------------------------

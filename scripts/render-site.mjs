@@ -26,6 +26,33 @@ function escapeJson(unsafe) {
     .replace(/\u2029/g, "\\u2029");
 }
 
+function searchableText(...values) {
+  return values
+    .flat(Infinity)
+    .filter((value) => typeof value === "string")
+    .join(" ")
+    .toLowerCase();
+}
+
+function hasSearchMatch(text, keywords) {
+  return keywords.some((keyword) => text.includes(keyword));
+}
+
+function parsePortfolioDate(value) {
+  if (!value || typeof value !== "string") return null;
+
+  const parsed = Date.parse(value);
+  if (Number.isFinite(parsed)) return parsed;
+
+  const year = value.match(/\b(20\d{2})\b/);
+  return year ? Date.UTC(Number(year[1]), 0, 1) : null;
+}
+
+function compactText(value, limit = 170) {
+  if (!value || value.length <= limit) return value || "";
+  return `${value.slice(0, limit - 1).trimEnd()}…`;
+}
+
 const loadJson = (file) =>
   JSON.parse(fs.readFileSync(path.join(contentDir, file), "utf8"));
 
@@ -203,6 +230,158 @@ try {
   `;
   html = html.replaceAll("<!-- TEMPLATE: SKILLS -->", fullKeyboard);
 
+  // INTERACTIVE SKILL MAP
+  // Domain relationships are derived from the existing portfolio records so
+  // projects, internships and credentials remain the single source of truth.
+  const skillDomains = [
+    {
+      id: "web",
+      mark: "WEB",
+      label: "Web Security",
+      description: "Application testing, trust boundaries and vulnerability validation.",
+      skillKeys: ["burp", "web", "vulnerability", "sqli", "xss"],
+      keywords: ["web", "burp", "vulnerability", "penetration", "sqli", "sql injection", "xss", "phishing"],
+    },
+    {
+      id: "recon",
+      mark: "RE",
+      label: "Recon",
+      description: "Structured discovery across public data, hosts, services and technologies.",
+      skillKeys: ["nmap", "gobuster", "osint"],
+      keywords: ["recon", "whois", "dns", "osint", "nmap", "enumeration", "subdomain", "scanning", "penetration"],
+    },
+    {
+      id: "linux",
+      mark: "LX",
+      label: "Linux",
+      description: "Practical system operation, administration and security lab deployment.",
+      skillKeys: ["linux", "honeypot"],
+      keywords: ["linux", "ssh", "honeypot", "sshesame", "virtualbox", "malware"],
+    },
+    {
+      id: "networking",
+      mark: "NET",
+      label: "Networking",
+      description: "Protocols, traffic analysis, exposure discovery and defensive controls.",
+      skillKeys: ["nmap", "wireshark", "networking", "firewall", "ids"],
+      keywords: ["network", "wireshark", "firewall", "ids", "tcp", "socket", "port", "dns", "ssh", "iot"],
+    },
+    {
+      id: "docker",
+      mark: "DK",
+      label: "Docker",
+      description: "Portable, isolated environments for repeatable security tooling and labs.",
+      skillKeys: ["docker"],
+      keywords: ["docker", "container", "containerization"],
+    },
+    {
+      id: "ctf",
+      mark: "CTF",
+      label: "CTFs",
+      description: "Challenge solving, event organization and practical security problem-solving.",
+      skillKeys: ["ctf", "mindset", "osint"],
+      keywords: ["ctf", "capture the flag", "challenge", "tryhackme", "advent of cyber"],
+    },
+  ];
+
+  const skillEvidenceSources = [
+    ...projects.map((project) => ({
+      id: project.id,
+      type: "Project",
+      title: project.title,
+      meta: project.category || "Practical project",
+      href: "#projects",
+      priority: 0,
+      text: searchableText(project.title, project.category, project.summary, project.fullDescription, project.tools),
+    })),
+    ...experience.map((item) => ({
+      id: item.id,
+      type: "Experience",
+      title: `${item.role} · ${item.company}`,
+      meta: `${item.startDate} — ${item.endDate}`,
+      href: "#experience",
+      priority: 1,
+      text: searchableText(item.role, item.company, item.description, item.responsibilities),
+    })),
+    ...certificates.map((certificate) => ({
+      id: certificate.id,
+      type: "Certificate",
+      title: certificate.title,
+      meta: certificate.issuer,
+      href: "#credentials",
+      priority: 2,
+      text: searchableText(certificate.title, certificate.issuer, certificate.description, certificate.skills),
+    })),
+  ];
+
+  const skillMapNodes = skillDomains
+    .map((domain, index) => {
+      const evidenceCount = skillEvidenceSources.filter((item) =>
+        hasSearchMatch(item.text, domain.keywords),
+      ).length;
+      const active = index === 0;
+
+      return `<button class="skill-map-node${active ? " is-active" : ""}" id="skill-map-node-${domain.id}" type="button" data-skill-domain="${domain.id}" aria-pressed="${active}" aria-controls="skill-domain-${domain.id}">
+        <span class="skill-map-node-mark" aria-hidden="true">${escapeHtml(domain.mark)}</span>
+        <strong>${escapeHtml(domain.label)}</strong>
+        <small>${evidenceCount} evidence ${evidenceCount === 1 ? "link" : "links"}</small>
+      </button>`;
+    })
+    .join("");
+
+  const skillMapPanels = skillDomains
+    .map((domain, index) => {
+      const relatedSkills = skills.filter((skill) =>
+        domain.skillKeys.includes(skill.skillKey),
+      );
+      const relatedEvidence = skillEvidenceSources
+        .filter((item) => hasSearchMatch(item.text, domain.keywords))
+        .sort((a, b) => a.priority - b.priority)
+        .slice(0, 5);
+
+      return `<section class="skill-domain-panel" id="skill-domain-${domain.id}" aria-labelledby="skill-map-node-${domain.id}"${index === 0 ? "" : " hidden"}>
+        <p class="skill-domain-label">Selected domain</p>
+        <h3>${escapeHtml(domain.label)}</h3>
+        <p class="skill-domain-description">${escapeHtml(domain.description)}</p>
+        <div class="skill-domain-tags" aria-label="Related skills">
+          ${relatedSkills.map((skill) => `<span>${escapeHtml(skill.name)}</span>`).join("")}
+        </div>
+        <ul class="skill-evidence-list">
+          ${relatedEvidence.map((item) => `<li>
+            <a href="${item.href}" data-skill-evidence="${escapeHtml(item.id)}">
+              <span class="skill-evidence-type">${escapeHtml(item.type)}</span>
+              <strong>${escapeHtml(item.title)}</strong>
+              <small>${escapeHtml(item.meta)}</small>
+              <span class="skill-evidence-arrow" aria-hidden="true">↗</span>
+            </a>
+          </li>`).join("")}
+        </ul>
+      </section>`;
+    })
+    .join("");
+
+  const skillMapHtml = `<div class="skill-map-shell premium-surface fade-in-up reveal" data-spotlight-surface>
+    <div class="skill-map-orbit" aria-label="Interactive cybersecurity skill map">
+      <svg class="skill-map-connectors" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
+        <line data-domain-line="web" x1="50" y1="50" x2="15" y2="20"></line>
+        <line data-domain-line="recon" x1="50" y1="50" x2="50" y2="8"></line>
+        <line data-domain-line="linux" x1="50" y1="50" x2="85" y2="20"></line>
+        <line data-domain-line="networking" x1="50" y1="50" x2="15" y2="80"></line>
+        <line data-domain-line="docker" x1="50" y1="50" x2="50" y2="92"></line>
+        <line data-domain-line="ctf" x1="50" y1="50" x2="85" y2="80"></line>
+      </svg>
+      <div class="skill-map-core" aria-hidden="true">
+        <span>MA.</span>
+        <small>Practical security</small>
+      </div>
+      ${skillMapNodes}
+    </div>
+    <div class="skill-map-details" aria-live="polite">
+      ${skillMapPanels}
+    </div>
+  </div>`;
+  html = html.replaceAll("<!-- TEMPLATE: SKILL_MAP -->", skillMapHtml);
+
   // PROJECTS
   const projHtml = projects
     .map((p, idx) => {
@@ -287,9 +466,9 @@ try {
       }
 
       return `
-      <li class="project-row ${layoutClass} fade-in-up reveal" data-image="${escapeHtml(p.image)}">
+      <li class="project-row ${layoutClass} fade-in-up reveal" data-image="${escapeHtml(p.image)}" data-spotlight-surface>
         <div class="project-number">0${idx + 1}</div>
-        <div class="project-visual-container">
+        <div class="project-visual-container" data-tilt-surface>
           ${visualHtml}
         </div>
         <div class="project-content">
@@ -326,8 +505,8 @@ try {
     const classNames = isFeatured ? 'cert-card featured-cert-card fade-in-up reveal' : 'cert-card supp-cert-card';
 
     return `
-    <div class="${classNames}" ${revealAttr} data-pdf-full="${escapeHtml(c.certificateFile)}" tabindex="0" role="button" aria-label="Open ${escapeHtml(c.title)} certificate viewer">
-      <div class="cert-preview-viewport">
+    <div class="${classNames}" ${revealAttr} data-pdf-full="${escapeHtml(c.certificateFile)}" data-spotlight-surface tabindex="0" role="button" aria-label="Open ${escapeHtml(c.title)} certificate viewer">
+      <div class="cert-preview-viewport" data-tilt-surface>
         ${imageHtml}
         <div class="cert-preview-fallback" aria-hidden="true">
           <span class="cert-fallback-title">${escapeHtml(c.title)}</span>
@@ -374,6 +553,107 @@ try {
       .join("")}
   </ul>`;
   html = html.replaceAll("<!-- TEMPLATE: ACHIEVEMENTS -->", achHtml);
+
+  // UNIFIED JOURNEY
+  const isCtfEntry = (...values) =>
+    hasSearchMatch(searchableText(...values), [
+      "ctf",
+      "capture the flag",
+      "tryhackme",
+      "advent of cyber",
+      "challenge",
+    ]);
+
+  const journeyEntries = [
+    ...experience.map((item) => ({
+      id: item.id,
+      kind: "experience",
+      typeLabel: "Experience",
+      title: `${item.role} · ${item.company}`,
+      dateLabel: `${item.startDate} — ${item.endDate}`,
+      sortDate: parsePortfolioDate(item.endDate) || parsePortfolioDate(item.startDate),
+      meta: item.workType,
+      description: item.description,
+      href: "#experience",
+      isCtf: isCtfEntry(item.role, item.description, item.responsibilities),
+    })),
+    ...projects.map((item) => ({
+      id: item.id,
+      kind: "project",
+      typeLabel: "Project",
+      title: item.title,
+      dateLabel: item.date || "Date not listed",
+      sortDate: parsePortfolioDate(item.date),
+      meta: item.category,
+      description: item.summary,
+      href: "#projects",
+      isCtf: isCtfEntry(item.title, item.category, item.summary, item.tools),
+    })),
+    ...certificates.map((item) => ({
+      id: item.id,
+      kind: "certificate",
+      typeLabel: "Certificate",
+      title: item.title,
+      dateLabel: item.issueDate,
+      sortDate: parsePortfolioDate(item.issueDate),
+      meta: item.issuer,
+      description: item.description || `Credential issued by ${item.issuer}.`,
+      href: "#credentials",
+      isCtf: isCtfEntry(item.title, item.issuer, item.description, item.skills),
+    })),
+    ...achievements.map((item) => ({
+      id: item.id,
+      kind: "achievement",
+      typeLabel: "Achievement",
+      title: item.title,
+      dateLabel: item.date || "Date not listed",
+      sortDate: parsePortfolioDate(item.date),
+      meta: item.organization,
+      description: item.description,
+      href: "#achievements",
+      isCtf: isCtfEntry(item.title, item.organization, item.description),
+    })),
+  ].sort((a, b) => {
+    if (a.sortDate === null && b.sortDate === null) return a.title.localeCompare(b.title);
+    if (a.sortDate === null) return 1;
+    if (b.sortDate === null) return -1;
+    return b.sortDate - a.sortDate;
+  });
+
+  const journeyFilters = [
+    { id: "all", label: "All", count: journeyEntries.length },
+    { id: "experience", label: "Experience", count: journeyEntries.filter((entry) => entry.kind === "experience").length },
+    { id: "project", label: "Projects", count: journeyEntries.filter((entry) => entry.kind === "project").length },
+    { id: "certificate", label: "Certificates", count: journeyEntries.filter((entry) => entry.kind === "certificate").length },
+    { id: "ctf", label: "CTFs", count: journeyEntries.filter((entry) => entry.isCtf).length },
+  ];
+
+  const journeyHtml = `<div class="journey-controls fade-in-up reveal" role="group" aria-label="Filter Muhammad's journey">
+      ${journeyFilters.map((filter, index) => `<button type="button" class="journey-filter${index === 0 ? " is-active" : ""}" data-journey-filter="${filter.id}" aria-pressed="${index === 0}">${filter.label}<span>${filter.count}</span></button>`).join("")}
+    </div>
+    <p class="visually-hidden" id="journey-status" aria-live="polite"></p>
+    <ol class="journey-list" id="journey-list">
+      ${journeyEntries.map((entry, index) => {
+        const tags = [entry.kind, entry.isCtf ? "ctf" : ""].filter(Boolean).join(" ");
+        const datetime = entry.sortDate === null ? "" : new Date(entry.sortDate).toISOString().slice(0, 10);
+        return `<li class="journey-item premium-surface fade-in-up reveal" data-journey-tags="${tags}" data-journey-index="${index}" data-spotlight-surface>
+          <div class="journey-date">${datetime ? `<time datetime="${datetime}">${escapeHtml(entry.dateLabel)}</time>` : `<span>${escapeHtml(entry.dateLabel)}</span>`}</div>
+          <article>
+            <div class="journey-item-topline">
+              <span class="journey-kind journey-kind-${entry.kind}">${escapeHtml(entry.typeLabel)}</span>${entry.isCtf ? '<span class="journey-ctf-mark">CTF</span>' : ""}
+            </div>
+            <h3>${escapeHtml(entry.title)}</h3>
+            <p class="journey-meta">${escapeHtml(entry.meta || "Portfolio milestone")}</p>
+            <p>${escapeHtml(compactText(entry.description))}</p>
+            <a href="${entry.href}">View source section <span aria-hidden="true">↗</span></a>
+          </article>
+        </li>`;
+      }).join("")}
+    </ol>
+    <div class="journey-more-wrap">
+      <button class="btn btn-outline journey-more" id="journey-more" type="button" aria-controls="journey-list" aria-expanded="false">Show complete journey</button>
+    </div>`;
+  html = html.replaceAll("<!-- TEMPLATE: JOURNEY -->", journeyHtml);
 
   // EDUCATION
   const edu = education[0];
