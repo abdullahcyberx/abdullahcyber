@@ -1,13 +1,13 @@
 {
   "fullName": "Muhammad Abdullah",
-  "professionalTitle": "Penetration Tester",
+  "professionalTitle": "Junior Cybersecurity Analyst",
   "heroHeading": "Muhammad",
   "heroAccent": "Abdullah",
-  "heroIntroduction": "I’m Muhammad Abdullah, also known online as Abdullah Cyber—a Cyber Security student at Riphah International University in Pakistan, focused on web penetration testing, practical labs and CTF challenges.",
+  "heroIntroduction": "Cybersecurity student at Riphah International University with practical experience in penetration testing, security monitoring, network analysis and vulnerability assessment through internships, projects, labs and CTFs.",
   "aboutText": [
-    "I focus on web penetration testing—understanding how applications behave, questioning their trust boundaries and finding weaknesses before attackers do.",
-    "As a Bachelor of Cyber Security student at Riphah International University, I am building practical experience in Pakistan through authorized assessments, security labs, internships and CTF events.",
-    "My learning is practical: I combine Linux, networking and Docker fundamentals with vulnerability testing, security controls and CTF problem-solving. I am continuously improving through labs, projects and collaborative security events."
+    "I focus on finding weaknesses, understanding risks and recommending effective security controls across web applications, networks and security environments.",
+    "My practical experience includes vulnerability assessment, penetration testing in simulated environments, security monitoring, network analysis, Linux, Windows, Docker, access control, firewall and IDS configuration, malware analysis, SQL injection and XSS labs.",
+    "I continue developing through cybersecurity internships, independent security projects and CTFs, including Python security tooling, an SSH honeypot deployment and an authorized phishing-awareness campaign."
   ],
   "location": "Pakistan",
   "availabilityStatus": "Open to cybersecurity opportunities",

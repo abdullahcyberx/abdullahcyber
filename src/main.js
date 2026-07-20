@@ -533,7 +533,7 @@
   };
 
   const buildRecruiterBriefing = (knowledge) => {
-    let text = `Muhammad Abdullah is a Cyber Security student focused on web penetration testing, application security and practical security testing.`;
+    let text = `Muhammad Abdullah is a Cyber Security student focused on vulnerability assessment, web security, security monitoring and network analysis.`;
     if (knowledge.experience && knowledge.experience.length > 0) {
       text += `\n\nHis experience includes:\n`;
       const expSlice = knowledge.experience.slice(0, 3);
@@ -705,20 +705,20 @@
 
     if (intent === "identity") {
       text = getVariation([
-        "Muhammad Abdullah is a Cyber Security student focusing on web application security, penetration testing, and practical security projects.",
-        "Muhammad Abdullah is an early-career cybersecurity candidate with hands-on experience through internships and technical projects.",
-        "Muhammad Abdullah specializes in offensive security and practical cyber defense, evidenced by his portfolio projects and certifications.",
+        "Muhammad Abdullah is a BS Cyber Security student and early-career Junior Cybersecurity Analyst with practical experience in vulnerability assessment, web security, security monitoring, network analysis and penetration testing.",
+        "Muhammad Abdullah is a BS Cyber Security student and early-career Junior Cybersecurity Analyst with practical experience in vulnerability assessment, web security, security monitoring, network analysis and penetration testing.",
+        "Muhammad Abdullah is a BS Cyber Security student and early-career Junior Cybersecurity Analyst with practical experience in vulnerability assessment, web security, security monitoring, network analysis and penetration testing.",
       ]);
     } else if (intent === "contact") {
       text = "You can contact Muhammad through the contact form at the bottom of the page, or via his verified LinkedIn and GitHub profiles. His email is also listed in his CV.";
     } else if (intent === "specialization") {
-      text = "He specializes in web application security and penetration testing. This is demonstrated by his practical projects, such as the Modular Recon Tool, and his internship experience.";
+      text = "His profile is broader than a single penetration-testing role. His strongest documented areas include vulnerability assessment and web security, supported by security monitoring, network analysis, Linux, Windows, Docker and Python scripting.";
     } else if (intent === "skills") {
       if (qStr.includes("python")) {
         text = "Yes, Python appears prominently in his portfolio. He used it to build the Modular Recon Tool, demonstrating network programming and security automation skills.";
         newContext.lastEntity = "Modular Recon Tool";
       } else {
-        text = "Muhammad's technical skills include Python, Linux, networking, Docker, and various security tools. You can view the full interactive skill keyboard below for details.";
+        text = "His documented skills include vulnerability assessment, web security, network traffic analysis, security monitoring, Linux, Windows, Docker, VirtualBox, Python scripting, Git and GitHub, along with Burp Suite, Nmap, Gobuster and Wireshark.";
       }
     } else if (intent === "strongest_project") {
       text = "His strongest documented work is likely the Modular Recon Tool, as it demonstrates independent Python development, networking knowledge, and practical tool-building for security assessments.";
@@ -740,14 +740,14 @@
         newContext.lastEntity = exp.role;
         newContext.lastIntent = "internships";
       } else {
-        text = "He has internship experience in cybersecurity, involving practical tasks like penetration testing and vulnerability assessments.";
+        text = "His internship experience includes hands-on work with Linux, networking, Docker, access control, firewall and IDS configuration, malware analysis, SQL injection and XSS labs, vulnerability assessments, penetration testing, reporting and remediation.";
       }
     } else if (intent === "certifications") {
       text = "Muhammad holds several certifications that validate his knowledge. Key credentials include his practical training and achievements in offensive security and networking.";
     } else if (intent === "recruiter" || intent === "soc_suitability" || intent === "pentest_suitability" || intent === "web_suitability") {
-      text = "His portfolio presents him as an early-career candidate with practical exposure rather than a senior specialist. For a cybersecurity role, the strongest evidence is his practical project work combined with his internships and offensive-security certifications.";
+      text = "His portfolio presents him as an early-career Junior Cybersecurity Analyst candidate with practical exposure rather than a senior specialist. His evidence includes cybersecurity internships, vulnerability assessments, web-security labs, security monitoring and network-analysis skills, Python security tooling, certifications and CTF work.";
     } else if (intent === "education") {
-      text = "He is currently pursuing a degree in Cyber Security. His academic foundation is complemented by hands-on labs and certifications.";
+      text = "He is completing a BS Cyber Security degree at Riphah International University with a 3.3 CGPA and an expected graduation year of 2028.";
     } else if (intent === "achievements") {
       text = "His achievements include participating in CTFs and earning security badges, which shows a continuous commitment to practical learning.";
     } else if (intent === "project_compare") {
