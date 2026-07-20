@@ -272,7 +272,7 @@ section {
 
 .desktop-nav {
   display: flex;
-  gap: 36px;
+  gap: clamp(18px, 2.2vw, 36px);
   align-items: center;
 }
 
@@ -354,6 +354,17 @@ section {
 .menu-toggle:hover {
   background: var(--surface);
   border-color: var(--border-strong);
+}
+
+@media (max-width: 1050px) {
+  .desktop-nav {
+    display: none;
+  }
+
+  .menu-toggle {
+    display: flex;
+    align-items: center;
+  }
 }
 
 /* ---- Mobile Menu ------------------------------------------ */

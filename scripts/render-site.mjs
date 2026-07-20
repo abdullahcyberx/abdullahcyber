@@ -469,7 +469,7 @@ try {
       <li class="project-row ${layoutClass} fade-in-up reveal" data-image="${escapeHtml(p.image)}" data-spotlight-surface>
         <div class="project-number">0${idx + 1}</div>
         <div class="project-visual-container" data-tilt-surface>
-          ${visualHtml}
+          ${visualHtml.trim()}
         </div>
         <div class="project-content">
           <div class="project-category">${escapeHtml(p.category)}</div>
@@ -479,9 +479,9 @@ try {
           ${p.repositoryUrl ? `<a class="project-link" href="${escapeHtml(p.repositoryUrl)}" target="_blank" rel="noopener noreferrer">Visit Repository <span>↗</span></a>` : `<button class="project-link" type="button" data-modal="${escapeHtml(p.slug)}">View case study <span>↗</span></button>`}
         </div>
       </li>
-    `;
+    `.trim();
     })
-    .join("");
+    .join("\n");
   html = html.replaceAll("<!-- TEMPLATE: PROJECTS -->", projHtml);
 
   // CERTIFICATES

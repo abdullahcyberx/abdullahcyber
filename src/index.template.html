@@ -60,11 +60,12 @@
         >
 
         <nav id="main-nav" class="desktop-nav" aria-label="Main navigation">
-          <a href="#projects">Project</a>
-          <a href="#about">About</a>
+          <a href="#skill-map">Skills</a>
+          <a href="#projects">Projects</a>
           <a href="#experience">Experience</a>
           <a href="#credentials">Certificates</a>
-          <a href="#achievements">Achievements</a>
+          <a href="#journey">Journey</a>
+          <a href="#about">About</a>
           <a href="#contact">Contact</a>
         </nav>
 
@@ -110,12 +111,13 @@
         </button>
       </div>
       <nav class="mobile-nav">
-        <a href="#projects"><span>01</span> Project</a>
-        <a href="#about"><span>02</span> About</a>
+        <a href="#skill-map"><span>01</span> Skills</a>
+        <a href="#projects"><span>02</span> Projects</a>
         <a href="#experience"><span>03</span> Experience</a>
         <a href="#credentials"><span>04</span> Certificates</a>
-        <a href="#achievements"><span>05</span> Achievements</a>
-        <a href="#contact"><span>06</span> Contact</a>
+        <a href="#journey"><span>05</span> Journey</a>
+        <a href="#about"><span>06</span> About</a>
+        <a href="#contact"><span>07</span> Contact</a>
       </nav>
       <div class="mobile-menu-footer">
         <a
@@ -225,6 +227,24 @@
         </div>
       </section>
 
+      <section
+        id="skill-map"
+        class="skill-map-section container"
+        aria-labelledby="skill-map-title"
+      >
+        <div class="feature-section-heading fade-in-up reveal" data-section-anchor>
+          <p class="eyebrow">CONNECTED EXPERTISE</p>
+          <h2 class="section-header" id="skill-map-title">
+            CYBERSECURITY SKILL MAP
+          </h2>
+          <p class="feature-section-intro">
+            Select a domain to trace Muhammad’s practical skills to the projects,
+            internships and credentials that demonstrate them.
+          </p>
+        </div>
+        <!-- TEMPLATE: SKILL_MAP -->
+      </section>
+
       <section id="projects" class="projects container">
         <h2 class="section-header fade-in-up reveal" data-section-anchor>
           PROJECTS
@@ -232,6 +252,58 @@
         <ul class="project-list">
           <!-- TEMPLATE: PROJECTS -->
         </ul>
+      </section>
+
+      <section id="experience" class="experience container">
+        <h2 class="section-header fade-in-up reveal" data-section-anchor>
+          EXPERIENCE
+        </h2>
+        <div class="timeline">
+          <!-- TEMPLATE: EXPERIENCE -->
+        </div>
+      </section>
+
+      <section id="credentials" class="credentials container">
+        <h2 class="section-header fade-in-up reveal" data-section-anchor>
+          CERTIFICATIONS
+        </h2>
+        <div class="featured-cert-grid">
+          <!-- TEMPLATE: FEATURED_CERTIFICATES -->
+        </div>
+        <div class="additional-certs fade-in-up reveal" id="additional-certs-container">
+          <div class="supp-cert-grid">
+            <!-- TEMPLATE: SUPPORTING_CERTIFICATES -->
+          </div>
+          <div class="cert-reveal-action" id="cert-reveal-container">
+            <button class="btn btn-outline" id="cert-reveal-btn" type="button" aria-label="Reveal 4 more certificates">Explore More</button>
+          </div>
+        </div>
+      </section>
+
+      <section id="achievements" class="achievements container">
+        <h2 class="section-header fade-in-up reveal" data-section-anchor>ACHIEVEMENTS</h2>
+        <div class="achievements-content fade-in-up reveal">
+          <!-- TEMPLATE: ACHIEVEMENTS -->
+        </div>
+      </section>
+
+      <section
+        id="journey"
+        class="journey-section container"
+        aria-labelledby="journey-title"
+      >
+        <div class="feature-section-heading fade-in-up reveal" data-section-anchor>
+          <p class="eyebrow">LEARNING IN MOTION</p>
+          <h2 class="section-header" id="journey-title">
+            UNIFIED JOURNEY
+          </h2>
+          <p class="feature-section-intro">
+            A chronological view of Muhammad’s experience, projects,
+            certifications and CTF milestones, generated from the same portfolio
+            records used across this site.
+          </p>
+        </div>
+        <!-- TEMPLATE: JOURNEY -->
       </section>
 
       <section id="about" class="about container">
@@ -244,7 +316,7 @@
             testing.
           </p>
           <div class="about-copy">{{ profile.aboutText }}</div>
-          
+
           <div class="about-links-block">
             <div class="about-links-intro">
               <p class="eyebrow">Find me online</p>
@@ -313,72 +385,6 @@
             </div>
           </div>
         </div>
-      </section>
-
-      <section
-        id="skill-map"
-        class="skill-map-section container"
-        aria-labelledby="skill-map-title"
-      >
-        <div class="feature-section-heading fade-in-up reveal">
-          <p class="eyebrow">CONNECTED EXPERTISE</p>
-          <h2 class="section-header" id="skill-map-title">CYBERSECURITY SKILL MAP</h2>
-          <p class="feature-section-intro">
-            Select a domain to trace Muhammad’s practical skills to the projects,
-            internships and credentials that demonstrate them.
-          </p>
-        </div>
-        <!-- TEMPLATE: SKILL_MAP -->
-      </section>
-
-      <section id="experience" class="experience container">
-        <h2 class="section-header fade-in-up reveal" data-section-anchor>
-          EXPERIENCE
-        </h2>
-        <div class="timeline">
-          <!-- TEMPLATE: EXPERIENCE -->
-        </div>
-      </section>
-
-      <section id="credentials" class="credentials container">
-        <h2 class="section-header fade-in-up reveal" data-section-anchor>
-          CERTIFICATIONS
-        </h2>
-        <div class="featured-cert-grid">
-          <!-- TEMPLATE: FEATURED_CERTIFICATES -->
-        </div>
-        <div class="additional-certs fade-in-up reveal" id="additional-certs-container">
-          <div class="supp-cert-grid">
-            <!-- TEMPLATE: SUPPORTING_CERTIFICATES -->
-          </div>
-          <div class="cert-reveal-action" id="cert-reveal-container">
-            <button class="btn btn-outline" id="cert-reveal-btn" type="button" aria-label="Reveal 4 more certificates">Explore More</button>
-          </div>
-        </div>
-      </section>
-
-      <section id="achievements" class="achievements container">
-        <h2 class="section-header fade-in-up reveal" data-section-anchor>ACHIEVEMENTS</h2>
-        <div class="achievements-content fade-in-up reveal">
-          <!-- TEMPLATE: ACHIEVEMENTS -->
-        </div>
-      </section>
-
-      <section
-        id="journey"
-        class="journey-section container"
-        aria-labelledby="journey-title"
-      >
-        <div class="feature-section-heading fade-in-up reveal">
-          <p class="eyebrow">LEARNING IN MOTION</p>
-          <h2 class="section-header" id="journey-title">UNIFIED JOURNEY</h2>
-          <p class="feature-section-intro">
-            A chronological view of Muhammad’s experience, projects,
-            certifications and CTF milestones, generated from the same portfolio
-            records used across this site.
-          </p>
-        </div>
-        <!-- TEMPLATE: JOURNEY -->
       </section>
 
       <section id="contact" class="contact-section container">

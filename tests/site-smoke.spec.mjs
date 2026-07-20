@@ -70,22 +70,22 @@ test.describe("Portfolio Smoke Tests", () => {
   test.describe("Section Navigation", () => {
     const navTests = [
       {
-        name: "Project",
-        hash: "#projects",
-        selector: "#projects",
+        name: "Skills",
+        hash: "#skill-map",
+        selector: "#skill-map",
         prevSelector: null,
       },
       {
-        name: "About",
-        hash: "#about",
-        selector: "#about",
-        prevSelector: "#projects",
+        name: "Projects",
+        hash: "#projects",
+        selector: "#projects",
+        prevSelector: "#skill-map",
       },
       {
         name: "Experience",
         hash: "#experience",
         selector: "#experience",
-        prevSelector: "#about",
+        prevSelector: "#projects",
       },
       {
         name: "Certificates",
@@ -94,16 +94,22 @@ test.describe("Portfolio Smoke Tests", () => {
         prevSelector: "#experience",
       },
       {
-        name: "Achievements",
-        hash: "#achievements",
-        selector: "#achievements",
-        prevSelector: "#credentials",
+        name: "Journey",
+        hash: "#journey",
+        selector: "#journey",
+        prevSelector: "#achievements",
+      },
+      {
+        name: "About",
+        hash: "#about",
+        selector: "#about",
+        prevSelector: "#journey",
       },
       {
         name: "Contact",
         hash: "#contact",
         selector: "#contact",
-        prevSelector: "#achievements",
+        prevSelector: "#about",
       },
     ];
 
@@ -770,18 +776,34 @@ test.describe("Portfolio Smoke Tests", () => {
       if (isMobile) test.skip();
       await page.goto("/#about");
       
-      const statement = page.locator(".about-statement");
-      const copy = page.locator(".about-copy");
-      const linksBlock = page.locator(".about-links-block");
-      const profileLinks = page.locator(".profile-link");
-
       // Wait for reveal animations to settle
       await page.waitForTimeout(800);
 
-      // Bounding box checks
-      const statementBox = await statement.boundingBox();
-      const linksBox = await linksBlock.boundingBox();
-      const copyBox = await copy.boundingBox();
+      // Read every box in one browser pass so late page-height changes cannot
+      // shift viewport-relative coordinates between individual assertions.
+      const { statementBox, linksBox, copyBox, profileBoxes } =
+        await page.evaluate(() => {
+          const toBox = (element) => {
+            const box = element.getBoundingClientRect();
+            return {
+              x: box.x,
+              y: box.y,
+              width: box.width,
+              height: box.height,
+            };
+          };
+
+          return {
+            statementBox: toBox(document.querySelector(".about-statement")),
+            linksBox: toBox(document.querySelector(".about-links-block")),
+            copyBox: toBox(document.querySelector(".about-copy")),
+            profileBoxes: Array.from(
+              document.querySelectorAll(".profile-link"),
+              toBox,
+            ),
+          };
+        });
+
       // Links block is to the left of copy
       expect(linksBox.x + linksBox.width).toBeLessThanOrEqual(copyBox.x + 4);
 
@@ -789,12 +811,8 @@ test.describe("Portfolio Smoke Tests", () => {
       expect(statementBox.x + statementBox.width).toBeLessThanOrEqual(copyBox.x + 4);
       
       // 2x2 grid for profile links
-      const count = await profileLinks.count();
-      expect(count).toBe(4);
-      const link1 = await profileLinks.nth(0).boundingBox();
-      const link2 = await profileLinks.nth(1).boundingBox();
-      const link3 = await profileLinks.nth(2).boundingBox();
-      const link4 = await profileLinks.nth(3).boundingBox();
+      expect(profileBoxes).toHaveLength(4);
+      const [link1, link2, link3, link4] = profileBoxes;
 
       // first and second cards have approximately equal top values
       expect(Math.abs(link1.y - link2.y)).toBeLessThanOrEqual(4);
@@ -821,13 +839,13 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.goto("/#about");
       await page.waitForTimeout(800);
 
-      const profileLinks = page.locator(".profile-link");
-      const count = await profileLinks.count();
-      expect(count).toBe(4);
-      const boxes = [];
-      for (let index = 0; index < count; index += 1) {
-        boxes.push(await profileLinks.nth(index).boundingBox());
-      }
+      const boxes = await page.locator(".about-links-list").evaluate((list) =>
+        Array.from(list.querySelectorAll(".profile-link"), (element) => {
+          const box = element.getBoundingClientRect();
+          return { y: box.y };
+        }),
+      );
+      expect(boxes).toHaveLength(4);
       const rows = boxes.map((box) => Math.round(box.y)).sort((a, b) => a - b);
       expect(new Set(rows).size).toBe(4);
       for (let index = 1; index < rows.length; index += 1) {
@@ -921,17 +939,17 @@ test.describe("Portfolio Smoke Tests", () => {
       }
     });
 
-    test("TEST 4 & 5 — Hero to Projects gap", async ({ page, isMobile }) => {
+    test("TEST 4 & 5 — Hero to Skill Map gap", async ({ page, isMobile }) => {
       await page.goto("/");
       await page.waitForTimeout(800);
 
       const heroSection = page.locator(".hero");
-      const projectsSection = page.locator("#projects");
+      const skillMapSection = page.locator("#skill-map");
       
       const hBox = await heroSection.boundingBox();
-      const pBox = await projectsSection.boundingBox();
+      const skillMapBox = await skillMapSection.boundingBox();
 
-      const gap = pBox.y - (hBox.y + hBox.height);
+      const gap = skillMapBox.y - (hBox.y + hBox.height);
       
       if (!isMobile) {
         expect(gap).toBeGreaterThanOrEqual(40);
@@ -946,7 +964,7 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.goto("/");
       await page.waitForTimeout(800);
 
-      const sections = ["#about", "#skill-map", "#experience", "#credentials", "#achievements", "#journey", "#contact"];
+      const sections = ["#skill-map", "#projects", "#experience", "#credentials", "#achievements", "#journey", "#about", "#contact"];
       for (let i = 0; i < sections.length - 1; i++) {
         const s1 = page.locator(sections[i]);
         const s2 = page.locator(sections[i+1]);
