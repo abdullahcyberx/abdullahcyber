@@ -914,7 +914,7 @@ projects.forEach(p => {
     "@context": "https://schema.org",
     "@graph": [
       {
-        "@type": p.repositoryUrl ? "SoftwareSourceCode" : "CreativeWork",
+        "@type": (p.repositoryUrl && p.slug !== 'ctf-practice') ? "SoftwareSourceCode" : "CreativeWork",
         "@id": `https://abdullahcyber.dev/projects/${p.slug}/#project`,
         "url": `https://abdullahcyber.dev/projects/${p.slug}/`,
         "name": p.title,
