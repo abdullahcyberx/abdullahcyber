@@ -1,7 +1,7 @@
 {
-  "name": "Muhammad Abdullah \u2014 Abdullah Cyber",
+  "name": "Hafiz Muhammad Abdullah \u2014 Abdullah Cyber",
   "short_name": "Abdullah Cyber",
-  "description": "Cyber Security and penetration-testing portfolio of Muhammad Abdullah.",
+  "description": "Cyber Security and penetration-testing portfolio of Hafiz Muhammad Abdullah.",
   "start_url": "/",
   "scope": "/",
   "display": "standalone",
@@ -15,10 +15,14 @@
       "type": "image/png"
     },
     {
-      "src": "/assets/favicon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any"
+      "src": "/assets/branding/favicon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/assets/branding/favicon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
     }
   ]
 }

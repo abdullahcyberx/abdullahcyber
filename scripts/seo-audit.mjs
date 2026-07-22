@@ -120,8 +120,8 @@ for (const file of htmlFiles) {
         if (persons.length === 1) {
           const person = persons[0];
           check(person["@id"] === "https://abdullahcyber.dev/#person", `Person uses stable @id in ${relativePath}`);
-          check(person.name === "Muhammad Abdullah", `Person.name equals Muhammad Abdullah in ${relativePath}`);
-          check(person.alternateName && person.alternateName.includes("Hafiz Muhammad Abdullah"), `Person.alternateName contains Hafiz Muhammad Abdullah in ${relativePath}`);
+          check(person.name === "Hafiz Muhammad Abdullah", `Person.name equals Hafiz Muhammad Abdullah in ${relativePath}`);
+          check(person.alternateName && person.alternateName.includes("Muhammad Abdullah"), `Person.alternateName contains Muhammad Abdullah in ${relativePath}`);
           check(person.alternateName && person.alternateName.includes("Abdullah Cyber"), `Person.alternateName contains Abdullah Cyber in ${relativePath}`);
           check(person.alternateName && person.alternateName.includes("abdullahcyberx"), `Person.alternateName contains abdullahcyberx in ${relativePath}`);
           if (person.sameAs) {

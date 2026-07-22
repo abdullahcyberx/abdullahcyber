@@ -424,8 +424,7 @@ let homeMainContentProcessed = homeMainContent;
         <line data-domain-line="ctf" x1="50" y1="50" x2="85" y2="80"></line>
       </svg>
       <div class="skill-map-core" aria-hidden="true">
-        <span>MA.</span>
-        <small>Practical security</small>
+        <img src="assets/branding/abdullah-cyber-symbol-transparent.png" alt="Abdullah Cyber Logo" width="40" height="40" style="width: auto; height: 100%; max-height: 40px;" />
       </div>
       ${skillMapNodes}
     </div>
@@ -744,9 +743,9 @@ const homeSchemaObj = {
     {
       "@type": "Person",
       "@id": "https://abdullahcyber.dev/#person",
-      "name": "Muhammad Abdullah",
+      "name": "Hafiz Muhammad Abdullah",
       "alternateName": [
-        "Hafiz Muhammad Abdullah",
+        "Muhammad Abdullah",
         "Abdullah Cyber",
         "abdullahcyberx"
       ],
@@ -754,9 +753,9 @@ const homeSchemaObj = {
       "url": "https://abdullahcyber.dev/",
       "jobTitle": "Junior Cybersecurity Analyst",
       "sameAs": [
-        "https://github.com/abdullahcyberx",
         "https://www.linkedin.com/in/abdullahcyberx/",
-        "https://www.youtube.com/@abdullahcyberx"
+        "https://www.youtube.com/@abdullahcyberx",
+        "https://github.com/abdullahcyberx"
       ],
       "email": `mailto:${profile.email}`,
       "description": seo.description
@@ -780,9 +779,9 @@ const aboutSchemaObj = {
     {
       "@type": "Person",
       "@id": "https://abdullahcyber.dev/#person",
-      "name": "Muhammad Abdullah",
+      "name": "Hafiz Muhammad Abdullah",
       "alternateName": [
-        "Hafiz Muhammad Abdullah",
+        "Muhammad Abdullah",
         "Abdullah Cyber",
         "abdullahcyberx"
       ],
@@ -790,9 +789,9 @@ const aboutSchemaObj = {
       "url": "https://abdullahcyber.dev/",
       "jobTitle": "Junior Cybersecurity Analyst",
       "sameAs": [
-        "https://github.com/abdullahcyberx",
         "https://www.linkedin.com/in/abdullahcyberx/",
-        "https://www.youtube.com/@abdullahcyberx"
+        "https://www.youtube.com/@abdullahcyberx",
+        "https://github.com/abdullahcyberx"
       ]
     },
     {
