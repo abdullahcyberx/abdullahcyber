@@ -3760,3 +3760,61 @@ body.cert-viewer-open .ai-launcher {
     transition: none !important;
   }
 }
+
+/* ==========================================================================
+   Logo Symbol Styles
+   ========================================================================== */
+.site-logo-symbol {
+  display: block;
+  width: 32px;
+  height: 32px;
+  object-fit: contain;
+  flex: 0 0 32px;
+  opacity: 1;
+}
+
+.mobile-logo-symbol {
+  display: block;
+  width: 28px;
+  height: 28px;
+  object-fit: contain;
+  flex: 0 0 28px;
+  opacity: 1;
+}
+
+.skill-map-logo-symbol {
+  display: block;
+  width: 90px;
+  height: 90px;
+  max-width: none;
+  object-fit: contain;
+  opacity: 1;
+  margin: auto;
+}
+
+.ai-logo-symbol {
+  display: block;
+  width: 24px;
+  height: 24px;
+  object-fit: contain;
+  opacity: 1;
+}
+
+.ai-header .ai-logo-symbol {
+  width: 28px;
+  height: 28px;
+}
+
+@media (max-width: 1024px) {
+  .skill-map-logo-symbol {
+    width: 80px;
+    height: 80px;
+  }
+}
+
+@media (max-width: 768px) {
+  .skill-map-logo-symbol {
+    width: 64px;
+    height: 64px;
+  }
+}

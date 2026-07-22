@@ -1314,4 +1314,62 @@ test.describe("Portfolio Smoke Tests", () => {
       await expect(opener).toBeFocused();
     });
   });
+
+  test.describe("Logo and Network Verifications", () => {
+    test("Logos and favicons return 200 and render correctly", async ({ page }) => {
+      // Collect all network responses for images
+      const imageResponses = [];
+      page.on('response', response => {
+        if (response.request().resourceType() === 'image') {
+          imageResponses.push(response);
+        }
+      });
+
+      await page.goto("/");
+      
+      // Check network status
+      for (const res of imageResponses) {
+        const url = res.url();
+        if (url.includes('abdullah-cyber-symbol') || url.includes('favicon')) {
+          expect(res.status()).toBe(200);
+          expect(res.headers()['content-type']).toContain('image/');
+          const length = parseInt(res.headers()['content-length'] || "0", 10);
+          expect(length).toBeGreaterThan(0);
+        }
+      }
+
+      // Check header logo
+      const headerLogo = page.locator('.site-logo-symbol');
+      await expect(headerLogo).toBeVisible();
+      const headerImgComplete = await headerLogo.evaluate(img => img.complete);
+      expect(headerImgComplete).toBe(true);
+      const headerImgWidth = await headerLogo.evaluate(img => img.naturalWidth);
+      expect(headerImgWidth).toBeGreaterThan(0);
+
+      // Check skill map logo
+      const skillMapLogo = page.locator('.skill-map-logo-symbol');
+      await expect(skillMapLogo).toBeVisible();
+      const skillImgComplete = await skillMapLogo.evaluate(img => img.complete);
+      expect(skillImgComplete).toBe(true);
+      const skillImgWidth = await skillMapLogo.evaluate(img => img.naturalWidth);
+      expect(skillImgWidth).toBeGreaterThan(0);
+
+      // Check AI launcher logo
+      const aiLauncherLogo = page.locator('.ai-launcher-symbol .ai-logo-symbol');
+      await expect(aiLauncherLogo).toBeVisible();
+      const aiLauncherImgComplete = await aiLauncherLogo.evaluate(img => img.complete);
+      expect(aiLauncherImgComplete).toBe(true);
+      const aiLauncherImgWidth = await aiLauncherLogo.evaluate(img => img.naturalWidth);
+      expect(aiLauncherImgWidth).toBeGreaterThan(0);
+
+      // Check AI dialog header logo
+      await page.locator('.ai-launcher').click();
+      const aiHeaderLogo = page.locator('.ai-header .ai-logo-symbol');
+      await expect(aiHeaderLogo).toBeVisible();
+      const aiHeaderImgComplete = await aiHeaderLogo.evaluate(img => img.complete);
+      expect(aiHeaderImgComplete).toBe(true);
+      const aiHeaderImgWidth = await aiHeaderLogo.evaluate(img => img.naturalWidth);
+      expect(aiHeaderImgWidth).toBeGreaterThan(0);
+    });
+  });
 });

@@ -424,7 +424,7 @@ let homeMainContentProcessed = homeMainContent;
         <line data-domain-line="ctf" x1="50" y1="50" x2="85" y2="80"></line>
       </svg>
       <div class="skill-map-core" aria-hidden="true">
-        <img src="assets/branding/abdullah-cyber-symbol-transparent.png" alt="" width="40" height="40" style="width: auto; height: 100%; max-height: 40px;" />
+        <img class="skill-map-logo-symbol" src="/assets/branding/abdullah-cyber-symbol-skill-map-v2.png" alt="" width="90" height="90" aria-hidden="true" />
       </div>
       ${skillMapNodes}
     </div>
