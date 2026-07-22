@@ -629,7 +629,7 @@
 
   const detectIntent = (expanded, q) => {
     const qStr = normalizeQuery(q);
-    if (expanded.includes("who") || expanded.includes("identity") || qStr.includes("tell me about abdullah") || qStr.includes("who is"))
+    if (expanded.includes("who") || expanded.includes("identity") || qStr.includes("tell me about abdullah") || qStr.includes("who is") || qStr.includes("hafiz muhammad abdullah") || qStr.includes("abdullah cyber") || qStr.includes("abdullahcyberx"))
       return "identity";
     if (expanded.includes("specialization") || expanded.includes("specialize"))
       return "specialization";
@@ -705,12 +705,12 @@
 
     if (intent === "identity") {
       text = getVariation([
-        "Muhammad Abdullah is a BS Cyber Security student and early-career Junior Cybersecurity Analyst with practical experience in vulnerability assessment, web security, security monitoring, network analysis and penetration testing.",
-        "Muhammad Abdullah is a BS Cyber Security student and early-career Junior Cybersecurity Analyst with practical experience in vulnerability assessment, web security, security monitoring, network analysis and penetration testing.",
-        "Muhammad Abdullah is a BS Cyber Security student and early-career Junior Cybersecurity Analyst with practical experience in vulnerability assessment, web security, security monitoring, network analysis and penetration testing.",
+        "Muhammad Abdullah, also known as Hafiz Muhammad Abdullah and Abdullah Cyber, is a Junior Cybersecurity Analyst and BS Cyber Security student at Riphah International University in Pakistan.",
+        "Muhammad Abdullah, also known as Hafiz Muhammad Abdullah and Abdullah Cyber, is a Junior Cybersecurity Analyst and BS Cyber Security student at Riphah International University in Pakistan.",
+        "Muhammad Abdullah, also known as Hafiz Muhammad Abdullah and Abdullah Cyber, is a Junior Cybersecurity Analyst and BS Cyber Security student at Riphah International University in Pakistan.",
       ]);
     } else if (intent === "contact") {
-      text = "You can contact Muhammad through the contact form at the bottom of the page, or via his verified LinkedIn and GitHub profiles. His email is also listed in his CV.";
+      text = "You can contact Muhammad through the contact form at the bottom of the page, or via his verified LinkedIn (https://www.linkedin.com/in/abdullahcyberx/), GitHub (https://github.com/abdullahcyberx), and YouTube (https://www.youtube.com/@abdullahcyberx). His email is also listed in his CV.";
     } else if (intent === "specialization") {
       text = "His profile is broader than a single penetration-testing role. His strongest documented areas include vulnerability assessment and web security, supported by security monitoring, network analysis, Linux, Windows, Docker and Python scripting.";
     } else if (intent === "skills") {

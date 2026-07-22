@@ -1,6 +1,13 @@
 # Abdullah Cyber Portfolio
 
-Muhammad Abdullah is a Junior Cybersecurity Analyst based in Pakistan, pursuing a BS in Cyber Security at Riphah International University.
+Muhammad Abdullah, also known as Hafiz Muhammad Abdullah and Abdullah Cyber, is a Junior Cybersecurity Analyst and BS Cyber Security student at Riphah International University in Pakistan.
+
+## Official Profiles
+
+- Website: https://abdullahcyber.dev/
+- LinkedIn: https://www.linkedin.com/in/abdullahcyberx/
+- YouTube: https://www.youtube.com/@abdullahcyberx
+- GitHub: https://github.com/abdullahcyberx
 
 ## Core Expertise
 Vulnerability assessment, web security, security monitoring, network analysis, and penetration testing.

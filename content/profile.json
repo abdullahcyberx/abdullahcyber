@@ -3,7 +3,7 @@
   "professionalTitle": "Junior Cybersecurity Analyst",
   "heroHeading": "Muhammad",
   "heroAccent": "Abdullah",
-  "heroIntroduction": "Cybersecurity student at Riphah International University with practical experience in penetration testing, security monitoring, network analysis and vulnerability assessment through internships, projects, labs and CTFs.",
+  "heroIntroduction": "I’m Muhammad Abdullah, also known as Hafiz Muhammad Abdullah and Abdullah Cyber—a BS Cyber Security student and Junior Cybersecurity Analyst based in Pakistan.",
   "aboutText": [
     "I focus on finding weaknesses, understanding risks and recommending effective security controls across web applications, networks and security environments.",
     "My practical experience includes vulnerability assessment, penetration testing in simulated environments, security monitoring, network analysis, Linux, Windows, Docker, access control, firewall and IDS configuration, malware analysis, SQL injection and XSS labs.",
@@ -14,6 +14,7 @@
   "email": "abdullahcyberx@gmail.com",
   "githubUrl": "https://github.com/abdullahcyberx",
   "linkedinUrl": "https://www.linkedin.com/in/abdullahcyberx/",
+  "youtubeUrl": "https://www.youtube.com/@abdullahcyberx",
   "cvPath": "assets/Muhammad-Abdullah-CV.pdf",
   "mainCtaLabels": {
     "explore": "Explore my work",

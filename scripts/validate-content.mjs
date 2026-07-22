@@ -39,8 +39,8 @@ try {
     errors.push("Profile: invalid linkedin URL");
   if (!isValidUrl(profile.tryhackmeUrl))
     errors.push("Profile: invalid tryhackme URL");
-  if (!isValidUrl(profile.personalProfileUrl))
-    errors.push("Profile: invalid personal profile URL");
+  if (!isValidUrl(profile.youtubeUrl))
+    errors.push("Profile: invalid youtube URL");
   if (profile.cvPath && !hasSafeExtension(profile.cvPath))
     errors.push("Profile: unsafe CV path extension");
 

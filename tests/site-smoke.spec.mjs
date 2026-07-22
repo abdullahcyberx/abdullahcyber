@@ -370,7 +370,7 @@ test.describe("Portfolio Smoke Tests", () => {
     await expect(links.nth(0).locator("strong")).toHaveText("GitHub");
     await expect(links.nth(1).locator("strong")).toHaveText("TryHackMe");
     await expect(links.nth(2).locator("strong")).toHaveText("LinkedIn");
-    await expect(links.nth(3).locator("strong")).toHaveText("Personal profile");
+    await expect(links.nth(3).locator("strong")).toHaveText("YouTube");
 
     for (let i = 0; i < 4; i++) {
       await expect(links.nth(i)).toHaveAttribute("target", "_blank");
@@ -391,7 +391,7 @@ test.describe("Portfolio Smoke Tests", () => {
     );
     await expect(links.nth(3)).toHaveAttribute(
       "href",
-      "https://guns.lol/abdullahcyberx",
+      "https://www.youtube.com/@abdullahcyberx",
     );
   });
 

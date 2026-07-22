@@ -100,7 +100,7 @@ function prepareLayout(layoutStr, pageTitle, pageDescription, canonicalUrl, ogTy
   html = html.replaceAll("{{ profile.githubUrl }}", escapeHtml(profile.githubUrl));
   html = html.replaceAll("{{ profile.linkedinUrl }}", escapeHtml(profile.linkedinUrl));
   html = html.replaceAll("{{ profile.tryhackmeUrl }}", escapeHtml(profile.tryhackmeUrl));
-  html = html.replaceAll("{{ profile.personalProfileUrl }}", escapeHtml(profile.personalProfileUrl));
+  html = html.replaceAll("{{ profile.youtubeUrl }}", escapeHtml(profile.youtubeUrl));
   html = html.replaceAll(/\{\{ profile.cvPath \}\}/g, escapeHtml(profile.cvPath));
 
   const safeSchema = escapeJson(JSON.stringify(schemaObj));
@@ -179,8 +179,8 @@ let homeMainContentProcessed = homeMainContent;
     escapeHtml(profile.tryhackmeUrl),
   );
   homeMainContentProcessed = homeMainContentProcessed.replaceAll(
-    "{{ profile.personalProfileUrl }}",
-    escapeHtml(profile.personalProfileUrl),
+    "{{ profile.youtubeUrl }}",
+    escapeHtml(profile.youtubeUrl),
   );
   homeMainContentProcessed = homeMainContentProcessed.replaceAll(
     /\{\{ profile.cvPath \}\}/g,
@@ -744,13 +744,22 @@ const homeSchemaObj = {
     {
       "@type": "Person",
       "@id": "https://abdullahcyber.dev/#person",
-      "name": profile.fullName,
-      "alternateName": profile.displayName,
+      "name": "Muhammad Abdullah",
+      "alternateName": [
+        "Hafiz Muhammad Abdullah",
+        "Abdullah Cyber",
+        "abdullahcyberx"
+      ],
+      "identifier": "abdullahcyberx",
       "url": "https://abdullahcyber.dev/",
+      "jobTitle": "Junior Cybersecurity Analyst",
+      "sameAs": [
+        "https://github.com/abdullahcyberx",
+        "https://www.linkedin.com/in/abdullahcyberx/",
+        "https://www.youtube.com/@abdullahcyberx"
+      ],
       "email": `mailto:${profile.email}`,
-      "jobTitle": profile.professionalTitle,
-      "description": seo.description,
-      "sameAs": [profile.githubUrl, profile.linkedinUrl]
+      "description": seo.description
     }
   ]
 };
@@ -771,10 +780,20 @@ const aboutSchemaObj = {
     {
       "@type": "Person",
       "@id": "https://abdullahcyber.dev/#person",
-      "name": profile.fullName,
-      "alternateName": profile.displayName,
+      "name": "Muhammad Abdullah",
+      "alternateName": [
+        "Hafiz Muhammad Abdullah",
+        "Abdullah Cyber",
+        "abdullahcyberx"
+      ],
+      "identifier": "abdullahcyberx",
       "url": "https://abdullahcyber.dev/",
-      "jobTitle": profile.professionalTitle
+      "jobTitle": "Junior Cybersecurity Analyst",
+      "sameAs": [
+        "https://github.com/abdullahcyberx",
+        "https://www.linkedin.com/in/abdullahcyberx/",
+        "https://www.youtube.com/@abdullahcyberx"
+      ]
     },
     {
       "@type": "BreadcrumbList",
@@ -787,19 +806,17 @@ const aboutSchemaObj = {
 };
 const aboutContent = `
 <section class="container" style="padding-top: 120px; padding-bottom: 80px;">
-  <h1 class="section-header">About Muhammad Abdullah</h1>
+  <h1 class="section-header">About Hafiz Muhammad Abdullah</h1>
   <div class="about-grid" style="margin-top: 40px;">
     <div class="about-info" style="line-height:1.6">
-      <p><strong>Name:</strong> ${escapeHtml(profile.fullName)}</p>
-      <p><strong>Public portfolio identity:</strong> ${escapeHtml(profile.displayName)}</p>
-      <p><strong>Primary role:</strong> ${escapeHtml(profile.professionalTitle)}</p>
+      <p><strong>Full name:</strong> Hafiz Muhammad Abdullah</p>
+      <p><strong>Professional name:</strong> ${escapeHtml(profile.fullName)}</p>
+      <p><strong>Known online as:</strong> ${escapeHtml(profile.displayName)}</p>
+      <p><strong>Handle:</strong> abdullahcyberx</p>
+      <p><strong>Role:</strong> ${escapeHtml(profile.professionalTitle)}</p>
+      <p><strong>Education:</strong> ${escapeHtml(education[0].degree)} at ${escapeHtml(education[0].institution)}</p>
       <p><strong>Location:</strong> ${escapeHtml(profile.location)}</p>
-      <p><strong>Education:</strong> ${escapeHtml(education[0].degree)}</p>
-      <p><strong>University:</strong> ${escapeHtml(education[0].institution)}</p>
-      <p><strong>CGPA:</strong> ${escapeHtml(education[0].cgpa)}</p>
-      <p><strong>Expected graduation:</strong> ${escapeHtml(education[0].expectedCompletion)}</p>
-      <p><strong>Focus areas:</strong> Vulnerability assessment, web security, security monitoring, network analysis and penetration testing</p>
-      <p><strong>Primary technical areas:</strong> Python scripting, Linux, Windows, Docker, VirtualBox, Burp Suite, Nmap, Gobuster and Wireshark</p>
+      <p><strong>Website:</strong> abdullahcyber.dev</p>
     </div>
     <div class="about-copy" style="line-height:1.6">
       ${Array.isArray(profile.aboutText) ? profile.aboutText.map(p => `<p>${escapeHtml(p)}</p>`).join('') : `<p>${escapeHtml(profile.aboutText)}</p>`}
@@ -808,7 +825,7 @@ const aboutContent = `
   <div style="margin-top: 40px;"><a href="/" class="btn btn-primary">Return to Homepage</a></div>
 </section>
 `;
-writePage('/about/', 'About Muhammad Abdullah | Abdullah Cyber', 'Detailed profile of Muhammad Abdullah, a Junior Cybersecurity Analyst based in Pakistan specializing in vulnerability assessment and web security.', 'https://abdullahcyber.dev/about/', 'profile', aboutSchemaObj, aboutContent);
+writePage('/about/', 'Hafiz Muhammad Abdullah | Abdullah Cyber', 'Hafiz Muhammad Abdullah, professionally known as Muhammad Abdullah and Abdullah Cyber, is a Junior Cybersecurity Analyst and BS Cyber Security student at Riphah International University in Pakistan.', 'https://abdullahcyber.dev/about/', 'profile', aboutSchemaObj, aboutContent);
 
 // Education
 const eduSchemaObj = {
@@ -1149,7 +1166,14 @@ fs.writeFileSync(path.join(rootDir, 'public', 'robots.txt'), robotsContent);
 // LLMs
 const llmsContent = `# Abdullah Cyber Portfolio
 
-Muhammad Abdullah is a Junior Cybersecurity Analyst based in Pakistan, pursuing a BS in Cyber Security at Riphah International University.
+Muhammad Abdullah, also known as Hafiz Muhammad Abdullah and Abdullah Cyber, is a Junior Cybersecurity Analyst and BS Cyber Security student at Riphah International University in Pakistan.
+
+## Official Profiles
+
+- Website: https://abdullahcyber.dev/
+- LinkedIn: https://www.linkedin.com/in/abdullahcyberx/
+- YouTube: https://www.youtube.com/@abdullahcyberx
+- GitHub: https://github.com/abdullahcyberx
 
 ## Core Expertise
 Vulnerability assessment, web security, security monitoring, network analysis, and penetration testing.

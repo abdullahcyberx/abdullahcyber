@@ -16,7 +16,7 @@ const profile = {
   "availabilityStatus": "Open to cybersecurity opportunities",
   "email": "abdullahcyberx@gmail.com",
   "githubUrl": "https://github.com/abdullahcyberx",
-  "linkedinUrl": "https://www.linkedin.com/in/hafizabdullahx",
+  "linkedinUrl": "https://www.linkedin.com/in/abdullahcyberx",
   "cvPath": "assets/Muhammad-Abdullah-CV.pdf",
   "mainCtaLabels": {
     "explore": "Explore my work",

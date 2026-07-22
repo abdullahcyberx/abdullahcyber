@@ -113,10 +113,34 @@ for (const file of htmlFiles) {
   check(!!jsonLdMatch, `JSON-LD exists for ${relativePath}`);
   if (jsonLdMatch) {
     try {
-      JSON.parse(jsonLdMatch[1]);
+      const ld = JSON.parse(jsonLdMatch[1]);
+      if (ld["@graph"]) {
+        const persons = ld["@graph"].filter(g => g["@type"] === "Person");
+        check(persons.length <= 1, `No duplicate Person entity exists in ${relativePath}`);
+        if (persons.length === 1) {
+          const person = persons[0];
+          check(person["@id"] === "https://abdullahcyber.dev/#person", `Person uses stable @id in ${relativePath}`);
+          check(person.name === "Muhammad Abdullah", `Person.name equals Muhammad Abdullah in ${relativePath}`);
+          check(person.alternateName && person.alternateName.includes("Hafiz Muhammad Abdullah"), `Person.alternateName contains Hafiz Muhammad Abdullah in ${relativePath}`);
+          check(person.alternateName && person.alternateName.includes("Abdullah Cyber"), `Person.alternateName contains Abdullah Cyber in ${relativePath}`);
+          check(person.alternateName && person.alternateName.includes("abdullahcyberx"), `Person.alternateName contains abdullahcyberx in ${relativePath}`);
+          if (person.sameAs) {
+            check(person.sameAs.includes("https://github.com/abdullahcyberx"), `Person.sameAs contains GitHub URL in ${relativePath}`);
+            check(person.sameAs.includes("https://www.linkedin.com/in/abdullahcyberx/"), `Person.sameAs contains LinkedIn URL in ${relativePath}`);
+            check(person.sameAs.includes("https://www.youtube.com/@abdullahcyberx"), `Person.sameAs contains YouTube URL in ${relativePath}`);
+          }
+        }
+      }
     } catch (e) {
       check(false, `JSON-LD parses successfully for ${relativePath} - Error: ${e.message}`);
     }
+  }
+
+  check(!content.includes("linkedin.com/in/hafizabdullahx"), `old LinkedIn URL is absent in ${relativePath}`);
+  check(content.includes('href="https://www.youtube.com/@abdullahcyberx"'), `YouTube link exists as a crawlable anchor in ${relativePath}`);
+  if (relativePath === "about/index.html") {
+    check(content.includes("Hafiz Muhammad Abdullah"), `About page visibly contains Hafiz Muhammad Abdullah`);
+    check(content.includes("Abdullah Cyber"), `About page visibly connects Muhammad Abdullah with Abdullah Cyber`);
   }
 
   // Duplicate IDs
