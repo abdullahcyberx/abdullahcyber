@@ -39,26 +39,24 @@ test.describe("Portfolio Smoke Tests", () => {
     // Wait for the hero animation to complete
     await page.waitForTimeout(1200);
 
-    const title = page.locator(".hero-title");
+    const title = page.locator(".hero-name");
     await expect(title).toBeVisible();
 
-    const opacity = await title.evaluate(
-      (element) => getComputedStyle(element).opacity,
-    );
-    expect(Number(opacity)).toBeGreaterThan(0.95);
+    const textContent = await title.textContent();
+    expect(textContent).toContain("Hafiz Muhammad");
+    expect(textContent).toContain("Abdullah");
 
-    const namePrimary = page.locator(".hero-name-primary");
+    const lines = await page.locator(".hero-name-line").count();
+    expect(lines).toBe(2);
+
+    const namePrimary = page.locator(".hero-name-line-primary");
     const primaryColor = await namePrimary.evaluate(
       (el) => getComputedStyle(el).color,
     );
-    // rgba(244, 244, 244) or rgb(244, 244, 244)
     expect(primaryColor).toContain("rgb(244, 243, 238)");
 
-    const nameAccent = page.locator(".hero-name-accent");
-    const accentColor = await nameAccent.evaluate(
-      (el) => getComputedStyle(el).color,
-    );
-    expect(accentColor).toContain("rgba(244, 243, 238, 0.58)");
+    const nameAccent = page.locator(".hero-name-line-accent");
+    await expect(nameAccent).toBeVisible();
 
     const statement = page.locator(".hero-statement");
     await expect(statement).toBeVisible();
@@ -1370,6 +1368,50 @@ test.describe("Portfolio Smoke Tests", () => {
       expect(aiHeaderImgComplete).toBe(true);
       const aiHeaderImgWidth = await aiHeaderLogo.evaluate(img => img.naturalWidth);
       expect(aiHeaderImgWidth).toBeGreaterThan(0);
+    });
+  });
+
+  test.describe("Hero and Monogram Interactive Tests", () => {
+    test("Hero name hover stretch and mobile behavior", async ({ page, isMobile }) => {
+      await page.goto("/");
+      await page.waitForTimeout(1200);
+
+      const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
+      const viewportWidth = await page.evaluate(() => window.innerWidth);
+      expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
+
+      const namePrimaryOuter = page.locator(".hero-name-line-primary");
+      
+      const initialTransform = await namePrimaryOuter.evaluate(el => getComputedStyle(el).transform);
+      
+      if (!isMobile) {
+        await page.locator(".hero-name").hover();
+        await page.waitForTimeout(700);
+        
+        const hoverTransform = await namePrimaryOuter.evaluate(el => getComputedStyle(el).transform);
+        expect(hoverTransform).not.toBe(initialTransform);
+        
+        await page.mouse.move(0, 0);
+        await page.waitForTimeout(700);
+        
+        const endTransform = await namePrimaryOuter.evaluate(el => getComputedStyle(el).transform);
+        expect(endTransform).toBe(initialTransform);
+      } else {
+        await page.locator(".hero-name").hover();
+        await page.waitForTimeout(700);
+        
+        const hoverTransform = await namePrimaryOuter.evaluate(el => getComputedStyle(el).transform);
+        expect(hoverTransform).toBe(initialTransform);
+      }
+    });
+
+    test("Statistics card identity mark HMA", async ({ page }) => {
+      await page.goto("/");
+      const initials = page.locator(".identity-initials");
+      await expect(initials).toBeVisible();
+      const text = await initials.textContent();
+      expect(text).toContain("HMA");
+      expect(text).not.toContain("MA.");
     });
   });
 });

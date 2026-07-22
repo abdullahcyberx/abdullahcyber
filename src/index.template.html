@@ -158,13 +158,20 @@
         <div class="hero-grid">
           <!-- Left: Name + details -->
           <div class="hero-left">
-            <p class="hero-context">
-              {{ profile.professionalTitle }} · Known online as Abdullah Cyber · @abdullahcyberx
+            <p class="hero-role">
+              {{ profile.professionalTitle }} · {{ profile.location }}
             </p>
-            <h1 id="hero-title" class="hero-title">
-              <span class="hero-name-primary">Hafiz Muhammad</span>
-              <span class="hero-name-accent">Abdullah</span>
+            <h1 id="hero-title" class="hero-name">
+              <span class="hero-name-line hero-name-line-primary">
+                <span class="hero-name-inner">Hafiz Muhammad</span>
+              </span>
+              <span class="hero-name-line hero-name-line-accent">
+                <span class="hero-name-inner">Abdullah</span>
+              </span>
             </h1>
+            <p class="hero-identity">
+              Known online as Abdullah Cyber · @abdullahcyberx
+            </p>
             <div class="hero-details">
               <div>
                 <p class="hero-statement">
@@ -211,7 +218,14 @@
 
           <!-- Right: Evidence panel -->
           <div class="hero-evidence-panel profile-evidence" aria-hidden="true">
-            <div class="hero-monogram">M<span>A</span>.</div>
+            <div class="hero-monogram">
+              <span class="identity-initials">
+                <span class="identity-initials-inner">
+                  <span>H</span><span class="identity-initials-accent">M</span><span>A</span>
+                </span>
+              </span>
+              <div class="identity-initials-label">HAFIZ MUHAMMAD ABDULLAH</div>
+            </div>
             <div class="evidence-stats">
               <div class="evidence-stat">
                 <div class="evidence-stat-value">{{ projectsCount }}</div>
@@ -740,6 +754,46 @@
       </div>
     </div>
 
+    <script>
+      (function() {
+        const heroName = document.querySelector('.hero-name');
+        if (!heroName || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+        
+        let targetX = 0, targetY = 0, currentX = 0, currentY = 0, rafId = null;
+        
+        function update() {
+          currentX += (targetX - currentX) * 0.1;
+          currentY += (targetY - currentY) * 0.1;
+          
+          if (Math.abs(targetX - currentX) < 0.01 && Math.abs(targetY - currentY) < 0.01 && targetX === 0 && targetY === 0) {
+            heroName.style.transform = '';
+            rafId = null;
+            return;
+          }
+          
+          heroName.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
+          rafId = requestAnimationFrame(update);
+        }
+        
+        heroName.addEventListener('mousemove', (e) => {
+          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+          const rect = heroName.getBoundingClientRect();
+          const x = (e.clientX - rect.left) / rect.width - 0.5;
+          const y = (e.clientY - rect.top) / rect.height - 0.5;
+          
+          targetX = x * 8; // Max ~4px horizontal
+          targetY = y * 3; // Max ~1.5px vertical
+          
+          if (!rafId) rafId = requestAnimationFrame(update);
+        });
+        
+        heroName.addEventListener('mouseleave', () => {
+          targetX = 0;
+          targetY = 0;
+          if (!rafId) rafId = requestAnimationFrame(update);
+        });
+      })();
+    </script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>
