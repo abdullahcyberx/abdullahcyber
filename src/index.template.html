@@ -161,12 +161,26 @@
             <p class="hero-role">
               {{ profile.professionalTitle }} · {{ profile.location }}
             </p>
-            <h1 id="hero-title" class="hero-name">
-              <span class="hero-name-line hero-name-line-primary">
-                <span class="hero-name-inner">Hafiz Muhammad</span>
+            <h1
+              id="hero-title"
+              class="hero-name"
+              aria-label="Hafiz Muhammad Abdullah"
+            >
+              <span class="hero-name-clip">
+                <span
+                  class="hero-name-line hero-name-line-primary"
+                  aria-hidden="true"
+                >
+                  Hafiz Muhammad
+                </span>
               </span>
-              <span class="hero-name-line hero-name-line-accent">
-                <span class="hero-name-inner">Abdullah</span>
+              <span class="hero-name-clip">
+                <span
+                  class="hero-name-line hero-name-line-accent"
+                  aria-hidden="true"
+                >
+                  Abdullah
+                </span>
               </span>
             </h1>
             <p class="hero-identity">
@@ -754,46 +768,6 @@
       </div>
     </div>
 
-    <script>
-      (function() {
-        const heroName = document.querySelector('.hero-name');
-        if (!heroName || !window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
-        
-        let targetX = 0, targetY = 0, currentX = 0, currentY = 0, rafId = null;
-        
-        function update() {
-          currentX += (targetX - currentX) * 0.1;
-          currentY += (targetY - currentY) * 0.1;
-          
-          if (Math.abs(targetX - currentX) < 0.01 && Math.abs(targetY - currentY) < 0.01 && targetX === 0 && targetY === 0) {
-            heroName.style.transform = '';
-            rafId = null;
-            return;
-          }
-          
-          heroName.style.transform = `translate3d(${currentX}px, ${currentY}px, 0)`;
-          rafId = requestAnimationFrame(update);
-        }
-        
-        heroName.addEventListener('mousemove', (e) => {
-          if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-          const rect = heroName.getBoundingClientRect();
-          const x = (e.clientX - rect.left) / rect.width - 0.5;
-          const y = (e.clientY - rect.top) / rect.height - 0.5;
-          
-          targetX = x * 8; // Max ~4px horizontal
-          targetY = y * 3; // Max ~1.5px vertical
-          
-          if (!rafId) rafId = requestAnimationFrame(update);
-        });
-        
-        heroName.addEventListener('mouseleave', () => {
-          targetX = 0;
-          targetY = 0;
-          if (!rafId) rafId = requestAnimationFrame(update);
-        });
-      })();
-    </script>
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

@@ -1372,9 +1372,17 @@ test.describe("Portfolio Smoke Tests", () => {
   });
 
   test.describe("Hero and Monogram Interactive Tests", () => {
-    test("Hero name hover stretch and mobile behavior", async ({ page, isMobile }) => {
+    test("Hero typography, variable font hover stretch and mobile behavior", async ({ page, isMobile }) => {
       await page.goto("/");
       await page.waitForTimeout(1200);
+
+      const h1 = page.locator("h1.hero-name");
+      await expect(h1).toHaveAttribute("aria-label", "Hafiz Muhammad Abdullah");
+
+      const lines = h1.locator(".hero-name-line");
+      await expect(lines).toHaveCount(2);
+      await expect(lines.nth(0)).toHaveText("Hafiz Muhammad");
+      await expect(lines.nth(1)).toHaveText("Abdullah");
 
       const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
       const viewportWidth = await page.evaluate(() => window.innerWidth);
@@ -1382,26 +1390,31 @@ test.describe("Portfolio Smoke Tests", () => {
 
       const namePrimaryOuter = page.locator(".hero-name-line-primary");
       
-      const initialTransform = await namePrimaryOuter.evaluate(el => getComputedStyle(el).transform);
+      const initialFontSettings = await namePrimaryOuter.evaluate(el => getComputedStyle(el).fontVariationSettings);
+      const initialWidth = await h1.evaluate(el => el.getBoundingClientRect().width);
       
       if (!isMobile) {
-        await page.locator(".hero-name").hover();
+        await h1.hover();
         await page.waitForTimeout(700);
         
-        const hoverTransform = await namePrimaryOuter.evaluate(el => getComputedStyle(el).transform);
-        expect(hoverTransform).not.toBe(initialTransform);
+        const hoverFontSettings = await namePrimaryOuter.evaluate(el => getComputedStyle(el).fontVariationSettings);
+        expect(hoverFontSettings).not.toBe(initialFontSettings);
+        expect(hoverFontSettings).toContain('"wdth" 101'); // Specific value check
+        
+        const hoverWidth = await h1.evaluate(el => el.getBoundingClientRect().width);
+        expect(hoverWidth).toBe(initialWidth); // Outer layout remains stable
         
         await page.mouse.move(0, 0);
         await page.waitForTimeout(700);
         
-        const endTransform = await namePrimaryOuter.evaluate(el => getComputedStyle(el).transform);
-        expect(endTransform).toBe(initialTransform);
+        const endFontSettings = await namePrimaryOuter.evaluate(el => getComputedStyle(el).fontVariationSettings);
+        expect(endFontSettings).toBe(initialFontSettings);
       } else {
-        await page.locator(".hero-name").hover();
+        await h1.hover();
         await page.waitForTimeout(700);
         
-        const hoverTransform = await namePrimaryOuter.evaluate(el => getComputedStyle(el).transform);
-        expect(hoverTransform).toBe(initialTransform);
+        const hoverFontSettings = await namePrimaryOuter.evaluate(el => getComputedStyle(el).fontVariationSettings);
+        expect(hoverFontSettings).toBe(initialFontSettings);
       }
     });
 

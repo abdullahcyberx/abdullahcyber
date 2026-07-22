@@ -503,6 +503,15 @@ section {
   flex-shrink: 0;
 }
 
+@font-face {
+  font-family: "Hero Flex";
+  src: url("/assets/fonts/roboto-flex-variable.woff2") format("woff2-variations");
+  font-style: normal;
+  font-weight: 100 1000;
+  font-stretch: 25% 151%;
+  font-display: swap;
+}
+
 .hero-identity {
   font-size: 0.9rem;
   color: var(--text-secondary);
@@ -517,55 +526,61 @@ section {
   display: flex;
   flex-direction: column;
   margin-bottom: 24px;
-  max-width: 1150px;
+  max-width: 1040px;
+  width: 100%;
 }
 
-.hero-name-line {
+.hero-name-clip {
   display: block;
-  white-space: nowrap;
-  font-weight: 800;
-  letter-spacing: -0.05em;
   overflow: hidden;
   padding-bottom: 0.1em;
   margin-bottom: -0.1em;
 }
 
+.hero-name-line {
+  display: inline-block;
+  white-space: nowrap;
+  font-family: "Hero Flex", var(--font), sans-serif;
+  font-weight: 820;
+  font-optical-sizing: auto;
+  letter-spacing: -0.045em;
+  text-rendering: geometricPrecision;
+  will-change: font-variation-settings, transform;
+  transition: font-variation-settings 650ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
 .hero-name-line-primary {
-  font-size: clamp(4rem, 8.5vw, 8.5rem);
+  font-size: clamp(3.1rem, 6.4vw, 7.1rem);
   line-height: 0.9;
   color: #f4f3ee;
-  transform-origin: left center;
-  will-change: transform;
-  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  font-variation-settings: "wght" 820, "wdth" 88;
+  animation: nameRevealUp 800ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  opacity: 0;
 }
 
 .hero-name-line-accent {
-  font-size: clamp(4.8rem, 10vw, 10rem);
-  line-height: 0.82;
-  background: linear-gradient(90deg, #f4f3ee 0%, var(--accent-light) 100%);
+  font-size: clamp(3.7rem, 7.6vw, 8.2rem);
+  line-height: 0.88;
+  background: linear-gradient(90deg, #f1efff 0%, #d8d1ff 50%, #aa9cff 100%);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
   color: transparent;
-  transform-origin: center center;
-  will-change: transform;
-  transition: transform 600ms cubic-bezier(0.22, 1, 0.36, 1);
+  font-variation-settings: "wght" 820, "wdth" 92;
+  animation: nameRevealUp 850ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  animation-delay: 110ms;
+  opacity: 0;
 }
 
-.hero-name-inner {
-  display: inline-block;
-  will-change: transform;
-  transform: translateY(100%);
-}
-
-.hero-name-line-primary .hero-name-inner {
-  animation: nameRevealUp 500ms cubic-bezier(0.22, 1, 0.36, 1) forwards, nameSettle 800ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: 150ms;
-}
-
-.hero-name-line-accent .hero-name-inner {
-  animation: nameRevealUp 500ms cubic-bezier(0.22, 1, 0.36, 1) forwards, nameSettle 800ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
-  animation-delay: 250ms;
+@media (max-width: 768px) {
+  .hero-name-line-primary {
+    font-size: clamp(2.65rem, 13vw, 4.4rem);
+    letter-spacing: -0.02em;
+  }
+  .hero-name-line-accent {
+    font-size: clamp(3rem, 15vw, 5rem);
+    letter-spacing: -0.02em;
+  }
 }
 
 @keyframes roleFadeUp {
@@ -574,13 +589,8 @@ section {
 }
 
 @keyframes nameRevealUp {
-  0% { transform: translateY(100%); }
-  100% { transform: translateY(0); }
-}
-
-@keyframes nameSettle {
-  0% { transform: scaleX(0.96); }
-  100% { transform: scaleX(1); }
+  0% { opacity: 0; transform: translateY(105%); font-variation-settings: "wght" 820, "wdth" 70; }
+  100% { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes identityFadeIn {
@@ -594,25 +604,31 @@ section {
     opacity: 1 !important;
     transform: none !important;
   }
-  .hero-name-inner {
+  .hero-name-line-primary, .hero-name-line-accent {
     animation: none !important;
+    opacity: 1 !important;
     transform: none !important;
+    font-variation-settings: "wght" 820, "wdth" 88 !important;
+  }
+  .hero-name-line-accent {
+    font-variation-settings: "wght" 820, "wdth" 92 !important;
   }
   .hero-identity {
     animation: none !important;
     opacity: 1 !important;
   }
-  .hero-name:hover .hero-name-inner {
-    transform: none !important;
+  .hero-name:hover .hero-name-line-primary,
+  .hero-name:hover .hero-name-line-accent {
+    font-variation-settings: inherit !important; /* Let hover cascade normally, or disable it */
   }
 }
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .hero-name:hover .hero-name-line-primary {
-    transform: scaleX(1.1);
+    font-variation-settings: "wght" 820, "wdth" 101;
   }
   .hero-name:hover .hero-name-line-accent {
-    transform: scaleX(1.12);
+    font-variation-settings: "wght" 820, "wdth" 108;
   }
 }
 
@@ -753,16 +769,15 @@ section {
 }
 
 .identity-initials {
-  font-family: var(--font);
-  font-size: 2.75rem;
+  font-family: "Hero Flex", var(--font), sans-serif;
+  font-size: clamp(2.3rem, 3.2vw, 3.4rem);
   font-weight: 800;
-  letter-spacing: -0.05em;
+  font-variation-settings: "wght" 800, "wdth" 90;
   color: #f4f3ee;
   line-height: 1;
   display: inline-block;
-  transform-origin: left center;
-  will-change: transform;
-  transition: transform 450ms cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: font-variation-settings;
+  transition: font-variation-settings 500ms cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .identity-initials-inner {
@@ -770,7 +785,7 @@ section {
 }
 
 .identity-initials-accent {
-  color: var(--accent);
+  color: #aa9cff;
 }
 
 .identity-initials-label {
@@ -784,7 +799,7 @@ section {
 
 @media (min-width: 1024px) and (hover: hover) and (pointer: fine) {
   .profile-evidence:hover .identity-initials {
-    transform: scaleX(1.05);
+    font-variation-settings: "wght" 800, "wdth" 102;
   }
 }
 
