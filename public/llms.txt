@@ -1,0 +1,21 @@
+# Abdullah Cyber Portfolio
+
+Muhammad Abdullah is a Junior Cybersecurity Analyst based in Pakistan, pursuing a BS in Cyber Security at Riphah International University.
+
+## Core Expertise
+Vulnerability assessment, web security, security monitoring, network analysis, and penetration testing.
+
+## Canonical Pages
+- Home: https://abdullahcyber.dev/
+- About: https://abdullahcyber.dev/about/
+- Education: https://abdullahcyber.dev/education/
+- Projects: https://abdullahcyber.dev/projects/
+- Experience: https://abdullahcyber.dev/experience/
+- Certifications: https://abdullahcyber.dev/certifications/
+- Achievements: https://abdullahcyber.dev/achievements/
+
+### Projects
+- Modular Recon Tool: https://abdullahcyber.dev/projects/modular-recon-tool/
+- Authorized Phishing Awareness Campaign: https://abdullahcyber.dev/projects/phishing/
+- SSH Honeypot Deployment: https://abdullahcyber.dev/projects/honeypot/
+- CTF Challenge Practice & Organization: https://abdullahcyber.dev/projects/ctf-practice/

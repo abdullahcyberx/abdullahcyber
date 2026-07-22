@@ -15,7 +15,9 @@
     "scan:secrets": "node scripts/scan-secrets.mjs",
     "test:content-update": "node scripts/test-content-update.mjs",
     "test:e2e": "playwright test tests/site-smoke.spec.mjs",
-    "verify": "npm run validate && npm run security && npm run build && npm run test:content-update && npm run scan:secrets && npm run test:e2e",
+    "seo:audit": "node scripts/seo-audit.mjs",
+    "indexnow": "node scripts/submit-indexnow.mjs",
+    "verify": "npm run validate && npm run security && npm run build && npm run test:content-update && npm run scan:secrets && npm run seo:audit && npm run test:e2e",
     "test": "npm run verify"
   },
   "devDependencies": {
