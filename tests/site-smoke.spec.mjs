@@ -39,29 +39,29 @@ test.describe("Portfolio Smoke Tests", () => {
     // Wait for the hero animation to complete
     await page.waitForTimeout(1200);
 
-    const title = page.locator(".hero-name");
+    const title = page.locator(".hero-v2-name");
     await expect(title).toBeVisible();
 
     const textContent = await title.textContent();
     expect(textContent).toContain("Hafiz Muhammad");
     expect(textContent).toContain("Abdullah");
 
-    const lines = await page.locator(".hero-name-line").count();
+    const lines = await page.locator(".hero-v2-name-row").count();
     expect(lines).toBe(2);
 
-    const namePrimary = page.locator(".hero-name-line-primary");
+    const namePrimary = page.locator(".hero-v2-name-row").first();
     const primaryColor = await namePrimary.evaluate(
       (el) => getComputedStyle(el).color,
     );
     expect(primaryColor).toContain("rgb(244, 243, 238)");
 
-    const nameAccent = page.locator(".hero-name-line-accent");
+    const nameAccent = page.locator(".hero-v2-name-accent");
     await expect(nameAccent).toBeVisible();
 
-    const statement = page.locator(".hero-statement");
+    const statement = page.locator(".hero-v2-lead");
     await expect(statement).toBeVisible();
 
-    const actions = page.locator(".hero-actions .btn").first();
+    const actions = page.locator(".hero-v2-actions .btn").first();
     await expect(actions).toBeVisible();
   });
 
@@ -941,7 +941,7 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.goto("/");
       await page.waitForTimeout(800);
 
-      const heroSection = page.locator(".hero");
+      const heroSection = page.locator(".hero-v2");
       const skillMapSection = page.locator("#skill-map");
       
       const hBox = await heroSection.boundingBox();
@@ -1376,19 +1376,19 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.goto("/");
       await page.waitForTimeout(1200);
 
-      const h1 = page.locator("h1.hero-name");
+      const h1 = page.locator("h1.hero-v2-name");
       await expect(h1).toHaveAttribute("aria-label", "Hafiz Muhammad Abdullah");
 
-      const lines = h1.locator(".hero-name-line");
+      const lines = h1.locator(".hero-v2-name-row");
       await expect(lines).toHaveCount(2);
       await expect(lines.nth(0)).toHaveText("Hafiz Muhammad");
-      await expect(lines.nth(1)).toHaveText("Abdullah");
+      await expect(lines.nth(1)).toContainText("Abdullah");
 
       const bodyWidth = await page.evaluate(() => document.body.scrollWidth);
       const viewportWidth = await page.evaluate(() => window.innerWidth);
       expect(bodyWidth).toBeLessThanOrEqual(viewportWidth);
 
-      const namePrimaryOuter = page.locator(".hero-name-line-primary");
+      const namePrimaryOuter = page.locator(".hero-v2-name-row").first();
       
       const initialFontSettings = await namePrimaryOuter.evaluate(el => getComputedStyle(el).fontVariationSettings);
       const initialWidth = await h1.evaluate(el => el.getBoundingClientRect().width);
@@ -1399,7 +1399,7 @@ test.describe("Portfolio Smoke Tests", () => {
         
         const hoverFontSettings = await namePrimaryOuter.evaluate(el => getComputedStyle(el).fontVariationSettings);
         expect(hoverFontSettings).not.toBe(initialFontSettings);
-        expect(hoverFontSettings).toContain('"wdth" 101'); // Specific value check
+        expect(hoverFontSettings).toContain('"wdth" 98'); // Specific value check
         
         const hoverWidth = await h1.evaluate(el => el.getBoundingClientRect().width);
         expect(hoverWidth).toBe(initialWidth); // Outer layout remains stable
@@ -1420,11 +1420,12 @@ test.describe("Portfolio Smoke Tests", () => {
 
     test("Statistics card identity mark HMA", async ({ page }) => {
       await page.goto("/");
-      const initials = page.locator(".identity-initials");
+      const initials = page.locator(".snapshot-header");
       await expect(initials).toBeVisible();
       const text = await initials.textContent();
-      expect(text).toContain("HMA");
+      expect(text).not.toContain("HMA");
       expect(text).not.toContain("MA.");
+      expect(text).toContain("Career Snapshot");
     });
   });
 });

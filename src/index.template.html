@@ -154,120 +154,86 @@
     </div>
 
     <main id="main">
-      <section id="home" class="hero container" aria-labelledby="hero-title">
-        <div class="hero-grid">
-          <!-- Left: Name + details -->
-          <div class="hero-left">
-            <p class="hero-role">
-              {{ profile.professionalTitle }} · {{ profile.location }}
-            </p>
-            <h1
-              id="hero-title"
-              class="hero-name"
-              aria-label="Hafiz Muhammad Abdullah"
-            >
-              <span class="hero-name-clip">
-                <span
-                  class="hero-name-line hero-name-line-primary"
-                  aria-hidden="true"
-                >
-                  Hafiz Muhammad
-                </span>
-              </span>
-              <span class="hero-name-clip">
-                <span
-                  class="hero-name-line hero-name-line-accent"
-                  aria-hidden="true"
-                >
-                  Abdullah
-                </span>
-              </span>
+      <section class="hero-v2 container" id="home" aria-labelledby="hero-title">
+        <div class="hero-v2-grid">
+          <div class="hero-v2-content">
+            <div class="hero-v2-eyebrow fade-in-up reveal">
+              <span class="hero-v2-eyebrow-line"></span>
+              <span>{{ profile.professionalTitle }}</span>
+              <span aria-hidden="true">·</span>
+              <span>{{ profile.location }}</span>
+            </div>
+
+            <h1 class="hero-v2-name" id="hero-title" aria-label="Hafiz Muhammad Abdullah">
+              <div class="hero-v2-name-row">
+                Hafiz Muhammad
+              </div>
+              <div class="hero-v2-name-row hero-v2-name-accent">
+                Abdullah
+                <span class="hero-v2-underline" aria-hidden="true"></span>
+              </div>
             </h1>
-            <p class="hero-identity">
+
+            <p class="hero-v2-identity fade-in-up reveal" style="animation-delay: 150ms;">
               Known online as Abdullah Cyber · @abdullahcyberx
             </p>
-            <div class="hero-details">
-              <div>
-                <p class="hero-statement">
-                  Finding weaknesses, understanding risks and recommending effective security controls.
-                </p>
-              </div>
-              <div class="hero-copy">
-                <p>{{ profile.heroIntroduction }}</p>
-                <div class="hero-actions">
-                  <a class="btn btn-primary" href="#projects"
-                    >View projects</a
-                  >
-                  <a
-                    class="btn btn-outline"
-                    href="assets/Muhammad-Abdullah-CV.pdf"
-                    download
-                    >Download CV</a
-                  >
-                </div>
-                <div class="hero-social">
-                  <a
-                    href="{{ profile.githubUrl }}"
-                    target="_blank"
-                    rel="me noreferrer"
-                    >GitHub</a
-                  >
-                  <a
-                    href="{{ profile.linkedinUrl }}"
-                    target="_blank"
-                    rel="me noreferrer"
-                    >LinkedIn</a
-                  >
-                  <a
-                    href="{{ profile.youtubeUrl }}"
-                    target="_blank"
-                    rel="me noreferrer"
-                    >YouTube</a
-                  >
-                  <a href="mailto:{{ profile.email }}">Email</a>
-                </div>
-              </div>
+
+            <p class="hero-v2-lead fade-in-up reveal" style="animation-delay: 200ms;">
+              Finding weaknesses, understanding risks and recommending effective security controls.
+            </p>
+
+            <p class="hero-v2-summary fade-in-up reveal" style="animation-delay: 250ms;">
+              {{ profile.heroIntroduction }}
+            </p>
+
+            <div class="hero-v2-actions fade-in-up reveal" style="animation-delay: 300ms;">
+              <a class="btn btn-primary" href="#projects">View projects</a>
+              <a class="btn btn-outline" href="assets/Muhammad-Abdullah-CV.pdf" download>Download CV</a>
+            </div>
+
+            <div class="hero-v2-focus fade-in-up reveal" aria-label="Primary focus areas" style="animation-delay: 350ms;">
+              <span>Vulnerability Assessment</span>
+              <span>Web Security</span>
+              <span>Security Monitoring</span>
+              <span>Network Analysis</span>
             </div>
           </div>
 
-          <!-- Right: Evidence panel -->
-          <div class="hero-evidence-panel profile-evidence" aria-hidden="true">
-            <div class="hero-monogram">
-              <span class="identity-initials">
-                <span class="identity-initials-inner">
-                  <span>H</span><span class="identity-initials-accent">M</span><span>A</span>
-                </span>
-              </span>
-              <div class="identity-initials-label">HAFIZ MUHAMMAD ABDULLAH</div>
-            </div>
-            <div class="evidence-stats">
-              <div class="evidence-stat">
-                <div class="evidence-stat-value">{{ projectsCount }}</div>
-                <div class="evidence-stat-label">Projects</div>
-              </div>
-              <div class="evidence-stat">
-                <div class="evidence-stat-value">{{ skillsCount }}</div>
-                <div class="evidence-stat-label">Skills</div>
-              </div>
-              <div class="evidence-stat">
-                <div class="evidence-stat-value">{{ certificatesCount }}</div>
-                <div class="evidence-stat-label">Certificates</div>
-              </div>
-              <div class="evidence-stat">
-                <div class="evidence-stat-value">{{ internshipsCount }}</div>
-                <div class="evidence-stat-label">Internships</div>
+          <aside class="hero-v2-proof fade-in-up reveal" aria-label="Career snapshot" style="animation-delay: 400ms;">
+            <div class="snapshot-header">
+              <img class="snapshot-logo" src="/assets/branding/abdullah-cyber-symbol-web-v2.png" alt="" width="36" height="36" aria-hidden="true" />
+              <div>
+                <div class="snapshot-title">Career Snapshot</div>
+                <div class="snapshot-subtitle">Portfolio at a glance</div>
               </div>
             </div>
-            <div class="evidence-education">
-              <div class="evidence-education-label">Currently studying</div>
-              <div class="evidence-education-title">
-                <a href="/education/" style="text-decoration:none; color:inherit;">Bachelor of Cyber Security</a>
+            
+            <div class="snapshot-stats">
+              <div class="snapshot-stat">
+                <div class="snapshot-stat-val">{{ projectsCount }}</div>
+                <div class="snapshot-stat-label">Projects</div>
               </div>
-              <div class="evidence-education-school">
-                Riphah International University · Pakistan
+              <div class="snapshot-stat">
+                <div class="snapshot-stat-val">{{ skillsCount }}</div>
+                <div class="snapshot-stat-label">Skills</div>
+              </div>
+              <div class="snapshot-stat">
+                <div class="snapshot-stat-val">{{ certificatesCount }}</div>
+                <div class="snapshot-stat-label">Certificates</div>
+              </div>
+              <div class="snapshot-stat">
+                <div class="snapshot-stat-val">{{ internshipsCount }}</div>
+                <div class="snapshot-stat-label">Internships</div>
               </div>
             </div>
-          </div>
+
+            <div class="snapshot-education">
+              <div class="snapshot-education-label">Currently studying</div>
+              <div class="snapshot-education-degree"><a href="/education/" style="text-decoration:none; color:inherit;">BS Cyber Security</a></div>
+              <div class="snapshot-education-school">Riphah International University · Pakistan</div>
+              <div class="snapshot-education-date">Expected graduation · 2028</div>
+            </div>
+          </aside>
         </div>
       </section>
 

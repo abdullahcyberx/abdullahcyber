@@ -1,3 +1,8 @@
+import gsap from "gsap";
+import SplitText from "gsap/SplitText";
+
+gsap.registerPlugin(SplitText);
+
 (() => {
   "use strict";
 
@@ -10,6 +15,98 @@
   const finePointer = window.matchMedia(
     "(hover: hover) and (pointer: fine)",
   ).matches;
+
+  /* -------------------------
+     Hero V2 Animation
+     ------------------------- */
+  const initHeroAnimation = () => {
+    const heroName = document.querySelector(".hero-v2-name");
+    if (!heroName) return;
+
+    // Respect reduced motion
+    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+      return;
+    }
+
+    // Only run on desktop/larger screens where split animation works best, 
+    // or run a simpler version on mobile. We'll run SplitText for all, 
+    // but keep it clean.
+    
+    // Wait for fonts to be ready
+    document.fonts.ready.then(() => {
+      // Create GSAP context for easy cleanup
+      let ctx = gsap.context(() => {
+        // Split the text
+        const split = new SplitText(".hero-v2-name-row", {
+          type: "words,lines",
+          mask: "lines",
+          autoSplit: true,
+          aria: "auto"
+        });
+
+        const tl = gsap.timeline({
+          defaults: { ease: "power4.out" }
+        });
+
+        // 1. Eyebrow fades upward
+        tl.fromTo(".hero-v2-eyebrow", 
+          { y: 10, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8 },
+          0
+        );
+
+        // 2 & 3. Name rows split animation
+        const firstLineWords = split.words.slice(0, 2); // "Hafiz Muhammad"
+        const secondLineWords = split.words.slice(2); // "Abdullah"
+
+        tl.fromTo(firstLineWords, 
+          { yPercent: 110, opacity: 0, rotationX: 4 },
+          { yPercent: 0, opacity: 1, rotationX: 0, duration: 0.9, stagger: 0.08, ease: "power4.out" },
+          0.1
+        );
+
+        tl.fromTo(secondLineWords,
+          { yPercent: 110, opacity: 0, rotationX: 4 },
+          { yPercent: 0, opacity: 1, rotationX: 0, duration: 0.9, stagger: 0.08, ease: "power4.out" },
+          0.2
+        );
+
+        // Underline detail scaling
+        tl.to(".hero-v2-underline",
+          { scaleX: 1, duration: 0.6, ease: "power3.out" },
+          0.4
+        );
+
+        // 4. Identity line
+        tl.fromTo(".hero-v2-identity",
+          { y: 15, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" },
+          0.4
+        );
+
+        // 5. Lead, summary, actions, focus
+        tl.fromTo([".hero-v2-lead", ".hero-v2-summary", ".hero-v2-actions", ".hero-v2-focus"],
+          { y: 20, opacity: 0 },
+          { y: 0, opacity: 1, duration: 0.8, stagger: 0.1, ease: "power3.out" },
+          0.5
+        );
+
+        // 6. Career Snapshot card reveals last
+        tl.fromTo(".hero-v2-proof",
+          { y: 22, opacity: 0, scale: 0.985 },
+          { y: 0, opacity: 1, scale: 1, duration: 0.75, ease: "power3.out" },
+          0.6
+        );
+
+      }, heroName.closest('.hero-v2'));
+
+      // If JS fails or takes too long, CSS fallback opacity handles it.
+    }).catch(err => {
+      console.warn("Hero animation initialization skipped:", err);
+    });
+  };
+
+  initHeroAnimation();
 
   /* -------------------------
      Section Observer
