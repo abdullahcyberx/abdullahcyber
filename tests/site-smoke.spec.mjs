@@ -65,6 +65,57 @@ test.describe("Portfolio Smoke Tests", () => {
     await expect(actions).toBeVisible();
   });
 
+  test("Hero Abdullah line actual visibility", async ({ page, isMobile }) => {
+    await page.goto("/");
+    await page.waitForTimeout(1500);
+
+    const nameAccent = page.locator(".hero-v2-name-accent");
+    
+    await expect(nameAccent).toBeVisible();
+    await expect(nameAccent).toContainText("Abdullah");
+
+    const computedOpacity = await nameAccent.evaluate((el) => window.getComputedStyle(el).opacity);
+    expect(computedOpacity).toBe("1");
+    
+    const computedVisibility = await nameAccent.evaluate((el) => window.getComputedStyle(el).visibility);
+    expect(computedVisibility).toBe("visible");
+    
+    const box = await nameAccent.boundingBox();
+    expect(box).not.toBeNull();
+    
+    if (!isMobile) {
+      expect(box.width).toBeGreaterThan(100);
+    }
+    expect(box.height).toBeGreaterThan(40);
+    
+    const hasVisibleFill = await nameAccent.evaluate((el) => {
+      const style = window.getComputedStyle(el);
+      const textFill = style.webkitTextFillColor || style.color;
+      const bgClip = style.webkitBackgroundClip || style.backgroundClip;
+      if (textFill === "rgba(0, 0, 0, 0)" || textFill === "transparent") {
+        return bgClip === "text" && style.backgroundImage !== "none";
+      }
+      return true;
+    });
+    expect(hasVisibleFill).toBeTruthy();
+    
+    await expect(nameAccent).toBeInViewport();
+    
+    // Check ancestors aren't hiding it
+    const isHiddenByAncestor = await nameAccent.evaluate((el) => {
+      let current = el.parentElement;
+      while (current) {
+        const style = window.getComputedStyle(current);
+        if (style.opacity === "0" || style.visibility === "hidden") {
+          return true;
+        }
+        current = current.parentElement;
+      }
+      return false;
+    });
+    expect(isHiddenByAncestor).toBe(false);
+  });
+
   test.describe("Section Navigation", () => {
     const navTests = [
       {

@@ -534,11 +534,29 @@ section {
   font-size: clamp(4rem, 6.5vw, 7.6rem);
   font-weight: 800;
   font-variation-settings: "wght" 800, "wdth" 92;
-  background: linear-gradient(90deg, #f4f1ff 0%, #d8d0ff 48%, #aa9cff 100%);
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
-  color: transparent;
+  display: block;
+  opacity: 1;
+  visibility: visible;
+  color: #d8d0ff;
+  -webkit-text-fill-color: currentColor;
+}
+
+@supports (
+  (-webkit-background-clip: text) or
+  (background-clip: text)
+) {
+  .hero-v2-name-accent {
+    background: linear-gradient(
+      90deg,
+      #f4f1ff 0%,
+      #d8d0ff 48%,
+      #aa9cff 100%
+    );
+    background-clip: text;
+    -webkit-background-clip: text;
+    color: transparent;
+    -webkit-text-fill-color: transparent;
+  }
 }
 
 .hero-v2-underline {
