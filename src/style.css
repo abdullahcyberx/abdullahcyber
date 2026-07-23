@@ -481,6 +481,12 @@ section {
   margin: 0 auto;
 }
 
+@media (min-width: 1280px) {
+  .hero-v2-grid {
+    gap: clamp(72px, 8vw, 110px);
+  }
+}
+
 /* Left Content */
 .hero-v2-content {
   display: flex;
@@ -527,11 +533,11 @@ section {
 }
 
 .hero-v2-name-row:first-child {
-  font-size: clamp(3.5rem, 5.7vw, 6.8rem);
+  font-size: clamp(3.5rem, 5.25vw, 6.35rem);
 }
 
 .hero-v2-name-accent {
-  font-size: clamp(4rem, 6.5vw, 7.6rem);
+  font-size: clamp(4rem, 6.2vw, 7.25rem);
   font-weight: 800;
   font-variation-settings: "wght" 800, "wdth" 92;
   display: block;
@@ -602,9 +608,49 @@ section {
 .hero-v2-summary {
   font-size: 1rem;
   line-height: 1.75;
-  color: var(--text-muted);
+  color: var(--text-secondary);
   max-width: 590px;
   margin-bottom: 32px;
+}
+
+/* ---- Buttons --------------------------------------------- */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 24px;
+  font-family: var(--font);
+  font-size: 0.875rem;
+  font-weight: 600;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 200ms var(--ease);
+  border: 1px solid transparent;
+  text-decoration: none;
+}
+
+.btn-primary {
+  background: var(--text);
+  color: var(--bg);
+  border-color: var(--text);
+}
+
+.btn-primary:hover {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border-strong);
+}
+
+.btn-outline {
+  background: transparent;
+  color: var(--text);
+  border-color: var(--border);
+}
+
+.btn-outline:hover {
+  border-color: var(--border-strong);
+  background: var(--surface);
 }
 
 .hero-v2-actions {
@@ -623,8 +669,8 @@ section {
 
 .hero-v2-focus span {
   font-size: 0.75rem;
-  color: var(--text-muted);
-  border: 1px solid var(--border);
+  color: #d4d4db;
+  border: 1px solid rgba(255, 255, 255, 0.22);
   padding: 4px 10px;
   border-radius: 4px;
   white-space: nowrap;
@@ -640,6 +686,12 @@ section {
   max-width: 420px;
   position: relative;
   overflow: hidden;
+}
+
+@media (min-width: 1024px) {
+  .hero-v2-proof {
+    margin-top: 14px;
+  }
 }
 
 /* Dark grid background */
