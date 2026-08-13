@@ -367,17 +367,19 @@ let homeMainContentProcessed = homeMainContent;
     })),
   ];
 
-  const skillMapNodes = skillDomains
+   const skillMapNodes = skillDomains
     .map((domain, index) => {
       const evidenceCount = skillEvidenceSources.filter((item) =>
         hasSearchMatch(item.text, domain.keywords),
       ).length;
       const active = index === 0;
 
-      return `<button class="skill-map-node${active ? " is-active" : ""}" id="skill-map-node-${domain.id}" type="button" data-skill-domain="${domain.id}" aria-pressed="${active}" aria-controls="skill-domain-${domain.id}">
-        <span class="skill-map-node-mark" aria-hidden="true">${escapeHtml(domain.mark)}</span>
-        <strong>${escapeHtml(domain.label)}</strong>
-        <small>${evidenceCount} evidence ${evidenceCount === 1 ? "link" : "links"}</small>
+      return `<button class="skill-constellation__node${active ? " is-active" : ""}" id="skill-map-node-${domain.id}" type="button" data-skill-domain="${domain.id}" aria-pressed="${active}" aria-controls="skill-domain-${domain.id}">
+        <span class="skill-constellation__node-icon" aria-hidden="true">${escapeHtml(domain.mark)}</span>
+        <div class="skill-constellation__node-content">
+          <strong>${escapeHtml(domain.label)}</strong>
+          <small>${evidenceCount} evidence ${evidenceCount === 1 ? "link" : "links"}</small>
+        </div>
       </button>`;
     })
     .join("");
@@ -392,45 +394,42 @@ let homeMainContentProcessed = homeMainContent;
         .sort((a, b) => a.priority - b.priority)
         .slice(0, 5);
 
-      return `<section class="skill-domain-panel" id="skill-domain-${domain.id}" aria-labelledby="skill-map-node-${domain.id}"${index === 0 ? "" : " hidden"}>
-        <p class="skill-domain-label">Selected domain</p>
-        <h3>${escapeHtml(domain.label)}</h3>
-        <p class="skill-domain-description">${escapeHtml(domain.description)}</p>
-        <div class="skill-domain-tags" aria-label="Related skills">
-          ${relatedSkills.map((skill) => `<span>${escapeHtml(skill.name)}</span>`).join("")}
+      return `<div class="skill-constellation__panel" id="skill-domain-${domain.id}" aria-labelledby="skill-map-node-${domain.id}"${index === 0 ? "" : " hidden"}>
+        <div class="skill-constellation__panel-top">
+          <p class="skill-constellation__panel-eyebrow">Selected domain</p>
+          <h3>${escapeHtml(domain.label)}</h3>
+          <p class="skill-constellation__panel-desc">${escapeHtml(domain.description)}</p>
+          <div class="skill-constellation__panel-tags" aria-label="Related skills">
+            ${relatedSkills.map((skill) => `<span>${escapeHtml(skill.name)}</span>`).join("")}
+          </div>
         </div>
-        <ul class="skill-evidence-list">
-          ${relatedEvidence.map((item) => `<li>
-            <a href="${item.href}" data-skill-evidence="${escapeHtml(item.id)}">
-              <span class="skill-evidence-type">${escapeHtml(item.type)}</span>
-              <strong>${escapeHtml(item.title)}</strong>
-              <small>${escapeHtml(item.meta)}</small>
-              <span class="skill-evidence-arrow" aria-hidden="true">↗</span>
-            </a>
-          </li>`).join("")}
-        </ul>
-      </section>`;
+        <div class="skill-constellation__panel-evidence">
+          ${relatedEvidence.map((item) => `<a href="${item.href}" class="skill-constellation__card" data-skill-evidence="${escapeHtml(item.id)}">
+            <span class="skill-constellation__card-type">${escapeHtml(item.type)}</span>
+            <strong>${escapeHtml(item.title)}</strong>
+            <small>${escapeHtml(item.meta)}</small>
+            <span class="skill-constellation__card-arrow" aria-hidden="true">→</span>
+          </a>`).join("")}
+        </div>
+      </div>`;
     })
     .join("");
 
-  const skillMapHtml = `<div class="skill-map-shell premium-surface fade-in-up reveal" data-spotlight-surface>
-    <div class="skill-map-orbit" aria-label="Interactive cybersecurity skill map">
-      <svg class="skill-map-connectors" viewBox="0 0 100 100" aria-hidden="true" focusable="false">
-        <line data-domain-line="web" x1="50" y1="50" x2="15" y2="20"></line>
-        <line data-domain-line="recon" x1="50" y1="50" x2="50" y2="8"></line>
-        <line data-domain-line="linux" x1="50" y1="50" x2="85" y2="20"></line>
-        <line data-domain-line="networking" x1="50" y1="50" x2="15" y2="80"></line>
-        <line data-domain-line="docker" x1="50" y1="50" x2="50" y2="92"></line>
-        <line data-domain-line="ctf" x1="50" y1="50" x2="85" y2="80"></line>
-      </svg>
-      <div class="skill-map-core" aria-hidden="true">
-        <img class="skill-map-logo-symbol" src="/assets/branding/abdullah-cyber-symbol-skill-map-v2.png" alt="" width="90" height="90" aria-hidden="true" />
+  const skillMapHtml = `<div class="skill-constellation__shell fade-in-up reveal" data-spotlight-surface>
+    <div class="skill-constellation__map" aria-label="Interactive cybersecurity skill map">
+      <svg class="skill-constellation__connectors" aria-hidden="true" focusable="false"></svg>
+      <div class="skill-constellation__orbit" aria-hidden="true"></div>
+      <div class="skill-constellation__core" aria-hidden="true">
+        <div class="skill-constellation__halo"></div>
+        <img class="skill-constellation__logo" src="/assets/branding/abdullah-cyber-symbol-skill-map-v2.png" alt="" width="124" height="124" aria-hidden="true" />
       </div>
-      ${skillMapNodes}
+      <div class="skill-constellation__nodes">
+        ${skillMapNodes}
+      </div>
     </div>
-    <div class="skill-map-details" aria-live="polite">
+    <aside class="skill-constellation__details" aria-live="polite" aria-label="Selected cybersecurity domain">
       ${skillMapPanels}
-    </div>
+    </aside>
   </div>`;
   homeMainContentProcessed = homeMainContentProcessed.replaceAll("<!-- TEMPLATE: SKILL_MAP -->", skillMapHtml);
 
@@ -677,6 +676,7 @@ let homeMainContentProcessed = homeMainContent;
     { id: "experience", label: "Experience", count: journeyEntries.filter((entry) => entry.kind === "experience").length },
     { id: "project", label: "Projects", count: journeyEntries.filter((entry) => entry.kind === "project").length },
     { id: "certificate", label: "Certificates", count: journeyEntries.filter((entry) => entry.kind === "certificate").length },
+    { id: "achievement", label: "Achievements", count: journeyEntries.filter((entry) => entry.kind === "achievement").length },
     { id: "ctf", label: "CTFs", count: journeyEntries.filter((entry) => entry.isCtf).length },
   ];
 
