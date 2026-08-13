@@ -569,9 +569,9 @@ test.describe("Portfolio Smoke Tests", () => {
       await expect(featured.nth(1).locator('.cert-title')).toHaveText(/CAPT/);
       await expect(featured.nth(2).locator('.cert-title')).toHaveText(/CORE/);
 
-      // Total 17 certs
+      // Total 16 certs
       const totalCerts = await page.locator('.cert-card').count();
-      expect(totalCerts).toBe(17);
+      expect(totalCerts).toBe(16);
 
       // Verify removed certs do not appear in certificates list
       const certTitles = await page.locator('.cert-card .cert-title').allTextContents();
@@ -579,8 +579,8 @@ test.describe("Portfolio Smoke Tests", () => {
       expect(certTitles.some(t => t.includes('NaSCon'))).toBeFalsy();
       expect(certTitles.some(t => t.includes('Cyber Security Internship'))).toBeFalsy();
 
-      // Hidden cards = 17 - 3 = 14
-      await expect(hidden).toHaveCount(14);
+      // Hidden cards = 16 - 3 = 13
+      await expect(hidden).toHaveCount(13);
 
       // Verify no iframe, object, or embed in any cert preview
       const previewViewports = page.locator('.cert-preview-viewport');
@@ -694,8 +694,7 @@ test.describe("Portfolio Smoke Tests", () => {
         "C++ Advanced",
         "IT Essentials",
         "C++ Essentials 1",
-        "Introduction to IoT & Digital Transformation",
-        "Hacker Holidays"
+        "Introduction to IoT & Digital Transformation"
       ];
       
       const titles = await page.locator('.cert-card .cert-title').allTextContents();

@@ -254,21 +254,5 @@
     "skills": [],
     "description": "",
     "icon": "IoT"
-  },
-  {
-    "id": "cert-20",
-    "slug": "hacker-holidays",
-    "title": "Hacker Holidays",
-    "issuer": "TryHackMe",
-    "issueDate": "13 August 2026",
-    "credentialId": "THM-STRLIQHC64",
-    "verificationUrl": "",
-    "certificateFile": "/assets/certificates/hacker-holidays.pdf",
-    "thumbnail": "",
-    "featured": false,
-    "displayOrder": 17,
-    "skills": [],
-    "description": "checked in to the Byte Lotus in the summer of 2026, checked out 14 days later, and rooted every room in between. Five stars. Would breach again.",
-    "icon": "HH"
   }
 ]
