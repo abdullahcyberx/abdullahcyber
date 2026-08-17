@@ -119,16 +119,10 @@ test.describe("Portfolio Smoke Tests", () => {
   test.describe("Section Navigation", () => {
     const navTests = [
       {
-        name: "Skills",
-        hash: "#skill-map",
-        selector: "#skill-map",
-        prevSelector: null,
-      },
-      {
         name: "Projects",
         hash: "#projects",
         selector: "#projects",
-        prevSelector: "#skill-map",
+        prevSelector: null,
       },
       {
         name: "Experience",
@@ -988,12 +982,12 @@ test.describe("Portfolio Smoke Tests", () => {
       }
     });
 
-    test("TEST 4 & 5 — Hero to Skill Map gap", async ({ page, isMobile }) => {
+    test("TEST 4 & 5 — Hero to Projects gap", async ({ page, isMobile }) => {
       await page.goto("/");
       await page.waitForTimeout(800);
 
       const heroSection = page.locator(".hero-v2");
-      const skillMapSection = page.locator("#skill-map");
+      const skillMapSection = page.locator("#projects");
       
       const hBox = await heroSection.boundingBox();
       const skillMapBox = await skillMapSection.boundingBox();
@@ -1013,7 +1007,7 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.goto("/");
       await page.waitForTimeout(800);
 
-      const sections = ["#skill-map", "#projects", "#experience", "#credentials", "#achievements", "#journey", "#about", "#contact"];
+      const sections = ["#projects", "#experience", "#credentials", "#achievements", "#journey", "#about", "#contact"];
       for (let i = 0; i < sections.length - 1; i++) {
         const s1 = page.locator(sections[i]);
         const s2 = page.locator(sections[i+1]);
@@ -1056,37 +1050,8 @@ test.describe("Portfolio Smoke Tests", () => {
     });
   });
 
-  test.describe("Connected skill map and unified journey", () => {
-    test("Skill domains expose generated project, experience and credential evidence", async ({ page, isMobile }) => {
-      await page.goto("/");
+  test.describe("Unified journey", () => {
 
-      const nodes = page.locator("[data-skill-domain]");
-      await expect(nodes).toHaveCount(6);
-      await expect(page.locator('[data-skill-domain="web"]')).toHaveAttribute("aria-pressed", "true");
-      await expect(page.locator(".skill-constellation__panel:not([hidden])")).toHaveCount(1);
-      
-      // On mobile, there are no connectors. Since playwright defaults to 1280x720, they should exist.
-      if (!isMobile) {
-        await expect(page.locator(".skill-constellation__connectors path.is-active")).toHaveCount(1);
-      }
-
-      const reconNode = page.locator('[data-skill-domain="recon"]');
-      await reconNode.click();
-      await expect(reconNode).toHaveAttribute("aria-pressed", "true");
-      await expect(page.locator("#skill-domain-recon")).toBeVisible();
-      await expect(page.locator("#skill-domain-recon")).toContainText("Modular Recon Tool");
-      await expect(page.locator("#skill-domain-recon")).toContainText("Experience");
-      
-      if (!isMobile) {
-        await expect(page.locator('[data-connector-for="recon"]')).toHaveClass(/is-active/);
-      }
-
-      await reconNode.focus();
-      await reconNode.press("ArrowRight");
-      await expect(page.locator('[data-skill-domain="linux"]')).toBeFocused();
-      await expect(page.locator("#skill-domain-linux")).toBeVisible();
-      await expect(page.locator("#skill-domain-linux")).toContainText("SSH Honeypot Deployment");
-    });
 
     test("Journey is generated, ordered, filtered and progressively expanded", async ({ page }) => {
       await page.goto("/");
@@ -1114,27 +1079,7 @@ test.describe("Portfolio Smoke Tests", () => {
       await expect(page.locator("#journey-more")).toHaveAttribute("aria-expanded", "true");
     });
 
-    test("Mobile and reduced-motion presentations remain static and overflow-free", async ({ page, isMobile }) => {
-      if (!isMobile) test.skip();
-      await page.emulateMedia({ reducedMotion: "reduce" });
-      await page.goto("/#skill-map");
 
-      await expect(page.locator(".skill-constellation__connectors")).toBeHidden();
-      const presentation = await page.evaluate(() => {
-        const tiltSurface = document.querySelector("[data-tilt-surface]");
-        return {
-          overflow: document.documentElement.scrollWidth > document.documentElement.clientWidth + 1,
-          tiltTransform: tiltSurface ? getComputedStyle(tiltSurface).transform : "none",
-          mapColumns: getComputedStyle(document.querySelector(".skill-constellation__shell")).gridTemplateColumns,
-        };
-      });
-
-      expect(presentation.overflow).toBe(false);
-      expect(presentation.tiltTransform).toBe("none");
-      
-      // On mobile, the grid becomes a single column layout
-      expect(presentation.mapColumns.split(" ").length).toBeGreaterThanOrEqual(1);
-    });
   });
 
 
@@ -1404,15 +1349,7 @@ test.describe("Portfolio Smoke Tests", () => {
       const headerImgWidth = await headerLogo.evaluate(img => img.naturalWidth);
       expect(headerImgWidth).toBeGreaterThan(0);
 
-      // Check skill map logo
-      if (!isMobile) {
-        const skillMapLogo = page.locator('.skill-constellation__logo');
-        await expect(skillMapLogo).toBeVisible();
-        const skillImgComplete = await skillMapLogo.evaluate(img => img.complete);
-        expect(skillImgComplete).toBe(true);
-        const skillImgWidth = await skillMapLogo.evaluate(img => img.naturalWidth);
-        expect(skillImgWidth).toBeGreaterThan(0);
-      }
+
 
       // Check AI launcher logo
       const aiLauncherLogo = page.locator('.ai-launcher-symbol .ai-logo-symbol');
