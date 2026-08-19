@@ -346,7 +346,7 @@ gsap.registerPlugin(SplitText);
       return;
     }
 
-    const probeLine = getHeaderHeight() + getAnchorGap() + 4;
+    const probeLine = getHeaderHeight() + getAnchorGap() + 120;
 
     let activeId = "";
 
@@ -1569,33 +1569,141 @@ gsap.registerPlugin(SplitText);
   /* -------------------------
      Connected Skill Map
      ------------------------- */
-  const skillDomainButtons = Array.from(
-    document.querySelectorAll("[data-skill-domain]"),
-  );
-  const skillDomainPanels = Array.from(
-    document.querySelectorAll(".skill-domain-panel"),
-  );
-  const skillDomainLines = Array.from(
-    document.querySelectorAll("[data-domain-line]"),
-  );
+  const constellationMap = document.querySelector(".skill-constellation__map");
+  const constellationShell = document.querySelector(".skill-constellation__shell");
+  const svgConnectors = document.querySelector(".skill-constellation__connectors");
+  const centralLogo = document.querySelector(".skill-constellation__logo");
+  const skillNodes = Array.from(document.querySelectorAll(".skill-constellation__node"));
+  const skillPanels = Array.from(document.querySelectorAll(".skill-constellation__panel"));
+  
+  let currentDomain = null;
+  const isReducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-  const activateSkillDomain = (domain) => {
-    skillDomainButtons.forEach((button) => {
-      const active = button.dataset.skillDomain === domain;
-      button.classList.toggle("is-active", active);
-      button.setAttribute("aria-pressed", String(active));
-    });
-
-    skillDomainPanels.forEach((panel) => {
-      panel.hidden = panel.id !== `skill-domain-${domain}`;
-    });
-
-    skillDomainLines.forEach((line) => {
-      line.classList.toggle("is-active", line.dataset.domainLine === domain);
-    });
+  const getElementCenter = (el, containerRect) => {
+    const rect = el.getBoundingClientRect();
+    return {
+      x: rect.left + rect.width / 2 - containerRect.left,
+      y: rect.top + rect.height / 2 - containerRect.top
+    };
   };
 
-  skillDomainButtons.forEach((button, index) => {
+  const drawConnectors = () => {
+    if (!constellationMap || !svgConnectors || !centralLogo) return;
+    
+    // Check if it's desktop (using width as a proxy for desktop/mobile layouts)
+    const isMobileLayout = window.innerWidth <= 760;
+    if (isMobileLayout) {
+      svgConnectors.innerHTML = "";
+      return; // No connectors on mobile
+    }
+
+    const containerRect = constellationMap.getBoundingClientRect();
+    const logoCenter = getElementCenter(centralLogo, containerRect);
+
+    // Keep existing selected line if possible, or redraw all
+    svgConnectors.innerHTML = "";
+    
+    skillNodes.forEach((node) => {
+      const domain = node.dataset.skillDomain;
+      const nodeCenter = getElementCenter(node, containerRect);
+      
+      const isActive = domain === currentDomain;
+      const opacity = isActive ? 0.8 : 0.15;
+      const strokeWidth = isActive ? 2 : 1;
+      const strokeClass = isActive ? " is-active" : "";
+      
+      const midX = (logoCenter.x + nodeCenter.x) / 2;
+      const midY = (logoCenter.y + nodeCenter.y) / 2 - 20;
+
+      const path = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      path.setAttribute("data-connector-for", domain);
+      path.setAttribute("class", `skill-constellation__connector${strokeClass}`);
+      path.setAttribute("d", `M ${logoCenter.x} ${logoCenter.y} Q ${midX} ${midY} ${nodeCenter.x} ${nodeCenter.y}`);
+      path.setAttribute("fill", "none");
+      path.setAttribute("stroke-width", String(strokeWidth));
+      
+      svgConnectors.appendChild(path);
+    });
+
+    // Set up SVG viewbox to match container
+    svgConnectors.setAttribute("viewBox", `0 0 ${containerRect.width} ${containerRect.height}`);
+  };
+
+  if (constellationShell) {
+    const resizeObserver = new ResizeObserver(() => {
+      // Use requestAnimationFrame to debounce slightly
+      window.requestAnimationFrame(() => drawConnectors());
+    });
+    resizeObserver.observe(constellationShell);
+    
+    // Also re-draw when fonts load to ensure accurate measurements
+    if (document.fonts) {
+      document.fonts.ready.then(() => drawConnectors());
+    }
+  }
+
+  const activateSkillDomain = (domain) => {
+    if (domain === currentDomain) return;
+    const oldDomain = currentDomain;
+    currentDomain = domain;
+
+    skillNodes.forEach((node) => {
+      const active = node.dataset.skillDomain === domain;
+      node.classList.toggle("is-active", active);
+      node.setAttribute("aria-pressed", String(active));
+    });
+
+    // Animate connector if gsap is available
+    const isMobileLayout = window.innerWidth <= 760;
+    if (!isMobileLayout && window.gsap && !isReducedMotion) {
+      const allPaths = document.querySelectorAll(".skill-constellation__connector");
+      allPaths.forEach(path => {
+        if (path.dataset.connectorFor === domain) {
+          path.classList.add("is-active");
+          const length = path.getTotalLength();
+          gsap.fromTo(path, 
+            { strokeDasharray: length, strokeDashoffset: length, opacity: 0 },
+            { strokeDashoffset: 0, opacity: 0.8, duration: 0.6, ease: "power3.out" }
+          );
+        } else {
+          path.classList.remove("is-active");
+          gsap.to(path, { opacity: 0.15, duration: 0.3 });
+        }
+      });
+    } else {
+      drawConnectors(); // Fallback redraw
+    }
+
+    // Panel Transitions
+    const incomingPanel = document.getElementById(`skill-domain-${domain}`);
+    const outgoingPanel = oldDomain ? document.getElementById(`skill-domain-${oldDomain}`) : null;
+
+    if (window.gsap && !isReducedMotion && outgoingPanel && incomingPanel) {
+      const outgoingContent = outgoingPanel.children;
+      const incomingContent = incomingPanel.children;
+      
+      gsap.to(outgoingContent, {
+        opacity: 0,
+        y: -6,
+        duration: 0.14,
+        onComplete: () => {
+          outgoingPanel.hidden = true;
+          incomingPanel.hidden = false;
+          
+          gsap.fromTo(incomingContent, 
+            { opacity: 0, y: 8 },
+            { opacity: 1, y: 0, duration: 0.26, stagger: 0.04, ease: "power2.out" }
+          );
+        }
+      });
+    } else {
+      skillPanels.forEach((panel) => {
+        panel.hidden = panel.id !== `skill-domain-${domain}`;
+      });
+    }
+  };
+
+  skillNodes.forEach((button, index) => {
     button.addEventListener("click", () => {
       activateSkillDomain(button.dataset.skillDomain);
     });
@@ -1604,18 +1712,28 @@ gsap.registerPlugin(SplitText);
       if (!["ArrowLeft", "ArrowRight", "ArrowUp", "ArrowDown"].includes(event.key)) {
         return;
       }
-
       event.preventDefault();
       const direction = event.key === "ArrowLeft" || event.key === "ArrowUp" ? -1 : 1;
-      const nextIndex = (index + direction + skillDomainButtons.length) % skillDomainButtons.length;
-      const nextButton = skillDomainButtons[nextIndex];
+      const nextIndex = (index + direction + skillNodes.length) % skillNodes.length;
+      const nextButton = skillNodes[nextIndex];
       activateSkillDomain(nextButton.dataset.skillDomain);
       nextButton.focus();
     });
   });
 
-  if (skillDomainButtons.length) {
-    activateSkillDomain(skillDomainButtons[0].dataset.skillDomain);
+  if (skillNodes.length > 0) {
+    // Initial setup without animation
+    const initialDomain = skillNodes[0].dataset.skillDomain;
+    currentDomain = initialDomain;
+    skillNodes[0].classList.add("is-active");
+    skillNodes[0].setAttribute("aria-pressed", "true");
+    
+    skillPanels.forEach((panel) => {
+      panel.hidden = panel.id !== `skill-domain-${initialDomain}`;
+    });
+    
+    // Give DOM a tick to render before drawing connectors
+    setTimeout(drawConnectors, 50);
   }
 
   /* -------------------------

@@ -1,5 +1,8 @@
 {
   "fullName": "Hafiz Muhammad Abdullah",
+  "professionalName": "Muhammad Abdullah",
+  "onlineIdentity": "Abdullah Cyber",
+  "handle": "@abdullahcyberx",
   "professionalTitle": "Junior Cybersecurity Analyst",
   "heroHeading": "Hafiz Muhammad",
   "heroAccent": "Abdullah",
@@ -8,6 +11,23 @@
     "I focus on finding weaknesses, understanding risks and recommending effective security controls across web applications, networks and security environments.",
     "My practical experience includes vulnerability assessment, penetration testing in simulated environments, security monitoring, network analysis, Linux, Windows, Docker, access control, firewall and IDS configuration, malware analysis, SQL injection and XSS labs.",
     "I continue developing through cybersecurity internships, independent security projects and CTFs, including Python security tooling, an SSH honeypot deployment and an authorized phishing-awareness campaign."
+  ],
+  "aboutPageBiography": [
+    "Hafiz Muhammad Abdullah is a BS Cyber Security student and Junior Cybersecurity Analyst from Pakistan. His professional identity is Muhammad Abdullah, while Abdullah Cyber is his online cybersecurity identity and @abdullahcyberx is his primary online handle.",
+    "His cybersecurity interests include vulnerability assessment, web security, security monitoring, network analysis, Linux, Windows, Docker, access control, firewall and IDS configuration, malware analysis, SQL injection, XSS, penetration testing in simulated environments, CTFs, and security-focused development.",
+    "He is building practical cybersecurity experience through projects, internships, certifications, security labs, and independent research."
+  ],
+  "cybersecurityFocus": [
+    "Vulnerability Assessment",
+    "Web Security",
+    "Security Monitoring",
+    "Network Analysis",
+    "Linux",
+    "Windows",
+    "Docker",
+    "CTFs",
+    "Penetration Testing",
+    "Security Labs"
   ],
   "location": "Pakistan",
   "availabilityStatus": "Open to cybersecurity opportunities",

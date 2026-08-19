@@ -194,7 +194,8 @@ let homeMainContentProcessed = homeMainContent;
         )
         .join("")
     : `<p>${escapeHtml(profile.aboutText)}</p>`;
-  homeMainContentProcessed = homeMainContentProcessed.replaceAll("{{ profile.aboutText }}", aboutHtml);
+  const aboutHtmlWithLink = aboutHtml + '\n<div style="margin-top: 24px;"><a href="/about/" class="btn btn-outline" style="display: inline-flex;">Read more about Hafiz Muhammad Abdullah</a></div>';
+  homeMainContentProcessed = homeMainContentProcessed.replaceAll("{{ profile.aboutText }}", aboutHtmlWithLink);
 
   homeMainContentProcessed = homeMainContentProcessed.replaceAll(
     "{{ profile.ethicalDisclaimer }}",
@@ -729,7 +730,9 @@ const homeSchemaObj = {
       "@type": "WebSite",
       "@id": "https://abdullahcyber.dev/#website",
       "url": "https://abdullahcyber.dev/",
-      "name": seo.title,
+      "name": "Abdullah Cyber",
+      "alternateName": "Hafiz Muhammad Abdullah",
+      "publisher": { "@id": "https://abdullahcyber.dev/#person" },
       "inLanguage": "en-PK"
     },
     {
@@ -749,13 +752,23 @@ const homeSchemaObj = {
         "Abdullah Cyber",
         "abdullahcyberx"
       ],
-      "identifier": "abdullahcyberx",
       "url": "https://abdullahcyber.dev/",
+      "image": "https://abdullahcyber.dev/assets/abdullah-cyber-og.png",
       "jobTitle": "Junior Cybersecurity Analyst",
       "sameAs": [
         "https://www.linkedin.com/in/abdullahcyberx/",
-        "https://www.youtube.com/@abdullahcyberx",
-        "https://github.com/abdullahcyberx"
+        "https://github.com/abdullahcyberx",
+        "https://tryhackme.com/p/HAFIZABDULLAH",
+        "https://www.youtube.com/@abdullahcyberx"
+      ],
+      "knowsAbout": [
+        "Cybersecurity",
+        "Web Security",
+        "Vulnerability Assessment",
+        "Security Monitoring",
+        "Network Security",
+        "Linux",
+        "CTFs"
       ],
       "email": `mailto:${profile.email}`,
       "description": seo.description
@@ -763,7 +776,7 @@ const homeSchemaObj = {
   ]
 };
 
-writePage('/', 'Muhammad Abdullah | Junior Cybersecurity Analyst', seo.description, 'https://abdullahcyber.dev/', 'profile', homeSchemaObj, homeMainContentProcessed);
+writePage('/', 'Hafiz Muhammad Abdullah | Cybersecurity Student & Junior Analyst', seo.description, 'https://abdullahcyber.dev/', 'profile', homeSchemaObj, homeMainContentProcessed);
 
 // About
 const aboutSchemaObj = {
@@ -773,26 +786,30 @@ const aboutSchemaObj = {
       "@type": "ProfilePage",
       "@id": "https://abdullahcyber.dev/about/#profilepage",
       "url": "https://abdullahcyber.dev/about/",
-      "name": "About Muhammad Abdullah | Abdullah Cyber",
+      "name": "Hafiz Muhammad Abdullah | About",
       "mainEntity": { "@id": "https://abdullahcyber.dev/#person" }
     },
     {
       "@type": "Person",
       "@id": "https://abdullahcyber.dev/#person",
-      "name": "Hafiz Muhammad Abdullah",
+      "name": profile.fullName,
       "alternateName": [
-        "Muhammad Abdullah",
-        "Abdullah Cyber",
-        "abdullahcyberx"
+        profile.professionalName,
+        profile.onlineIdentity,
+        profile.handle.replace('@', '')
       ],
-      "identifier": "abdullahcyberx",
       "url": "https://abdullahcyber.dev/",
-      "jobTitle": "Junior Cybersecurity Analyst",
+      "image": "https://abdullahcyber.dev/assets/abdullah-cyber-og.png",
+      "jobTitle": profile.professionalTitle,
       "sameAs": [
-        "https://www.linkedin.com/in/abdullahcyberx/",
-        "https://www.youtube.com/@abdullahcyberx",
-        "https://github.com/abdullahcyberx"
-      ]
+        profile.linkedinUrl,
+        profile.githubUrl,
+        profile.tryhackmeUrl,
+        profile.youtubeUrl
+      ],
+      "knowsAbout": profile.cybersecurityFocus,
+      "email": `mailto:${profile.email}`,
+      "description": seo.description
     },
     {
       "@type": "BreadcrumbList",
@@ -803,28 +820,67 @@ const aboutSchemaObj = {
     }
   ]
 };
+
 const aboutContent = `
 <section class="container" style="padding-top: 120px; padding-bottom: 80px;">
-  <h1 class="section-header">About Hafiz Muhammad Abdullah</h1>
-  <div class="about-grid" style="margin-top: 40px;">
-    <div class="about-info" style="line-height:1.6">
-      <p><strong>Full name:</strong> Hafiz Muhammad Abdullah</p>
-      <p><strong>Professional name:</strong> ${escapeHtml(profile.fullName)}</p>
-      <p><strong>Known online as:</strong> ${escapeHtml(profile.displayName)}</p>
-      <p><strong>Handle:</strong> abdullahcyberx</p>
+  <h1 class="section-header" style="font-size: 2.5rem; margin-bottom: 8px;">${escapeHtml(profile.fullName)}</h1>
+  <p style="font-size: 1.2rem; color: var(--text-secondary); margin-bottom: 40px; line-height: 1.6; max-width: 800px;">
+    ${escapeHtml(profile.fullName)} is a ${escapeHtml(education[0].degree)} student and ${escapeHtml(profile.professionalTitle)} based in ${escapeHtml(profile.location)}. He is professionally known as ${escapeHtml(profile.professionalName)} and operates online under the cybersecurity identity ${escapeHtml(profile.onlineIdentity)} (${escapeHtml(profile.handle)}).
+  </p>
+  
+  <div class="about-grid">
+    <div class="about-info" style="line-height:1.6; background: rgba(255,255,255,0.02); padding: 24px; border-radius: 8px; border: 1px solid var(--border-color); margin-bottom: 32px;">
+      <p><strong>Full name:</strong> ${escapeHtml(profile.fullName)}</p>
+      <p><strong>Also known as:</strong> ${escapeHtml(profile.professionalName)}</p>
+      <p><strong>Online identity:</strong> ${escapeHtml(profile.onlineIdentity)}</p>
+      <p><strong>Handle:</strong> ${escapeHtml(profile.handle)}</p>
       <p><strong>Role:</strong> ${escapeHtml(profile.professionalTitle)}</p>
-      <p><strong>Education:</strong> ${escapeHtml(education[0].degree)} at ${escapeHtml(education[0].institution)}</p>
+      <p><strong>Education:</strong> ${escapeHtml(education[0].degree)} — ${escapeHtml(education[0].institution)}</p>
       <p><strong>Location:</strong> ${escapeHtml(profile.location)}</p>
-      <p><strong>Website:</strong> abdullahcyber.dev</p>
+      <p><strong>Expected graduation:</strong> ${escapeHtml(education[0].expectedCompletion)}</p>
     </div>
+    
     <div class="about-copy" style="line-height:1.6">
-      ${Array.isArray(profile.aboutText) ? profile.aboutText.map(p => `<p>${escapeHtml(p)}</p>`).join('') : `<p>${escapeHtml(profile.aboutText)}</p>`}
+      <h2 style="font-size: 1.8rem; margin-bottom: 16px;">About Hafiz Muhammad Abdullah</h2>
+      ${profile.aboutPageBiography.map(p => `<p>${escapeHtml(p)}</p>`).join('')}
+      
+      <h2 style="font-size: 1.8rem; margin-top: 32px; margin-bottom: 16px;">Cybersecurity Focus</h2>
+      <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 24px;">
+        ${profile.cybersecurityFocus.map(focus => `<span style="background: rgba(255,255,255,0.05); padding: 4px 12px; border-radius: 16px; font-size: 0.9rem; border: 1px solid var(--border-color);">${escapeHtml(focus)}</span>`).join('')}
+      </div>
+      
+      <h2 style="font-size: 1.8rem; margin-top: 32px; margin-bottom: 16px;">Education</h2>
+      <p>
+        <strong>${escapeHtml(education[0].degree)}</strong><br>
+        ${escapeHtml(education[0].institution)}<br>
+        ${escapeHtml(profile.location)}<br>
+        Expected graduation: ${escapeHtml(education[0].expectedCompletion)}
+      </p>
+      
+      <h2 style="font-size: 1.8rem; margin-top: 32px; margin-bottom: 16px;">Practical Experience</h2>
+      <p>He is actively building his skills through practical work. You can explore his professional <a href="/experience/" style="color: var(--accent); text-decoration: underline;">Experience</a>, view his hands-on <a href="/projects/" style="color: var(--accent); text-decoration: underline;">Projects</a>, or check his verified <a href="/certifications/" style="color: var(--accent); text-decoration: underline;">Certifications</a>.</p>
+
+      <h2 style="font-size: 1.8rem; margin-top: 32px; margin-bottom: 16px;">Online Presence</h2>
+      <ul style="list-style: none; padding: 0; display: flex; gap: 16px; flex-wrap: wrap;">
+        <li><a href="${escapeHtml(profile.linkedinUrl)}" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: underline;">LinkedIn</a></li>
+        <li><a href="${escapeHtml(profile.githubUrl)}" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: underline;">GitHub</a></li>
+        <li><a href="${escapeHtml(profile.tryhackmeUrl)}" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: underline;">TryHackMe</a></li>
+        <li><a href="${escapeHtml(profile.youtubeUrl)}" target="_blank" rel="noopener noreferrer" style="color: var(--accent); text-decoration: underline;">YouTube</a></li>
+      </ul>
     </div>
   </div>
-  <div style="margin-top: 40px;"><a href="/" class="btn btn-primary">Return to Homepage</a></div>
+  
+  <div style="margin-top: 40px; display: flex; gap: 16px; flex-wrap: wrap;">
+    <a href="/" class="btn btn-primary">Return to Homepage</a>
+    <a href="/projects/" class="btn btn-outline">Projects</a>
+    <a href="/experience/" class="btn btn-outline">Experience</a>
+    <a href="/certifications/" class="btn btn-outline">Certificates</a>
+    <a href="/education/" class="btn btn-outline">Education</a>
+    <a href="/#contact" class="btn btn-outline">Contact</a>
+  </div>
 </section>
 `;
-writePage('/about/', 'Hafiz Muhammad Abdullah | Abdullah Cyber', 'Hafiz Muhammad Abdullah, professionally known as Muhammad Abdullah and Abdullah Cyber, is a Junior Cybersecurity Analyst and BS Cyber Security student at Riphah International University in Pakistan.', 'https://abdullahcyber.dev/about/', 'profile', aboutSchemaObj, aboutContent);
+writePage('/about/', 'Hafiz Muhammad Abdullah | About', 'About Hafiz Muhammad Abdullah, a BS Cyber Security student and Junior Cybersecurity Analyst in Pakistan, professionally known as Muhammad Abdullah and online as Abdullah Cyber (@abdullahcyberx).', 'https://abdullahcyber.dev/about/', 'profile', aboutSchemaObj, aboutContent);
 
 // Education
 const eduSchemaObj = {

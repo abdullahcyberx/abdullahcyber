@@ -1427,4 +1427,56 @@ test.describe("Portfolio Smoke Tests", () => {
       expect(text).toContain("Career Snapshot");
     });
   });
+
+  test.describe("About Page Identity & SEO Tests", () => {
+    test("About page loads correctly and meets all identity requirements", async ({ page, isMobile }) => {
+      const response = await page.goto("/about/");
+      expect(response.status()).toBe(200);
+
+      // H1 contains exactly: Hafiz Muhammad Abdullah
+      const h1 = page.locator("h1");
+      await expect(h1).toHaveText("Hafiz Muhammad Abdullah");
+
+      // Verify canonical URL
+      const canonical = await page.locator('link[rel="canonical"]').getAttribute("href");
+      expect(canonical).toBe("https://abdullahcyber.dev/about/");
+
+      const pageText = await page.locator("body").textContent();
+      
+      // Positive assertions
+      expect(pageText).toContain("Muhammad Abdullah");
+      expect(pageText).toContain("Abdullah Cyber");
+      expect(pageText).toContain("@abdullahcyberx");
+      expect(pageText).toContain("Junior Cybersecurity Analyst");
+      expect(pageText).toContain("BS Cyber Security");
+      expect(pageText).toContain("Riphah International University");
+
+      // Negative assertions
+      expect(pageText).not.toContain("undefined");
+      expect(pageText).not.toContain("null");
+      expect(pageText).not.toContain("Known online as: undefined");
+      expect(pageText).not.toContain("Professional name: Hafiz Muhammad Abdullah");
+      expect(pageText).not.toContain("Skill Map");
+
+      // Validate JSON-LD
+      const jsonLdContent = await page.locator('script[type="application/ld+json"]').textContent();
+      const ld = JSON.parse(jsonLdContent);
+      
+      const personEntity = ld["@graph"].find(entity => entity["@type"] === "Person");
+      expect(personEntity).toBeDefined();
+      expect(personEntity.name).toBe("Hafiz Muhammad Abdullah");
+      expect(personEntity.alternateName).toContain("Muhammad Abdullah");
+      expect(personEntity.alternateName).toContain("Abdullah Cyber");
+      expect(personEntity.alternateName).toContain("abdullahcyberx");
+      
+      const profileEntity = ld["@graph"].find(entity => entity["@type"] === "ProfilePage");
+      expect(profileEntity).toBeDefined();
+      expect(profileEntity.mainEntity["@id"]).toBe("https://abdullahcyber.dev/#person");
+      expect(personEntity["@id"]).toBe("https://abdullahcyber.dev/#person");
+
+      // Mobile overflow check
+      const overflow = await page.evaluate(() => document.documentElement.scrollWidth > document.documentElement.clientWidth);
+      expect(overflow).toBeFalsy();
+    });
+  });
 });
