@@ -1,11 +1,22 @@
 [
   {
+    "id": "ach-ipcih",
+    "title": "1-Month Intensive National Training Program in Cybersecurity",
+    "organization": "IPCIH Pakistan — Wing (Youth Peace Society)",
+    "date": "August 2026",
+    "description": "Cybersecurity & Digital Defense Trainee",
+    "displayOrder": 1,
+    "isBadge": false,
+    "certificateFile": "/assets/certificates/ipcih-training-certificate.jpg",
+    "certificateLabel": "View Training Certificate"
+  },
+  {
     "id": "ach-1",
     "title": "Riphah CTF",
     "organization": "Riphah",
     "date": "2025",
     "description": "CTF runner-up placement",
-    "displayOrder": 1,
+    "displayOrder": 2,
     "isBadge": false
   },
   {
@@ -14,7 +25,7 @@
     "organization": "Islamia Bahawalpur",
     "date": "2025",
     "description": "CTF runner-up placement",
-    "displayOrder": 2,
+    "displayOrder": 3,
     "isBadge": false
   },
   {
@@ -23,7 +34,7 @@
     "organization": "TryHackMe",
     "date": "2025",
     "description": "Achievement badge",
-    "displayOrder": 3,
+    "displayOrder": 4,
     "isBadge": true,
     "certificateFile": "/assets/certificates/tryhackme-advent-of-cyber-2025.pdf",
     "certificateLabel": "View Achievement Certificate"
@@ -34,7 +45,7 @@
     "organization": "Self-employed",
     "date": "2025",
     "description": "Organized events",
-    "displayOrder": 4,
+    "displayOrder": 5,
     "isBadge": true
   },
   {
@@ -43,7 +54,7 @@
     "organization": "NaSCon",
     "date": "2025",
     "description": "Participation certificate",
-    "displayOrder": 5,
+    "displayOrder": 6,
     "isBadge": false,
     "certificateFile": "/assets/certificates/nascon-2025-participation.pdf",
     "certificateLabel": "View Participation Certificate"
@@ -54,20 +65,9 @@
     "organization": "TryHackMe",
     "date": "13 August 2026",
     "description": "checked in to the Byte Lotus in the summer of 2026, checked out 14 days later, and rooted every room in between. Five stars. Would breach again.",
-    "displayOrder": 6,
+    "displayOrder": 7,
     "isBadge": true,
     "certificateFile": "/assets/certificates/hacker-holidays.pdf",
     "certificateLabel": "View Achievement Certificate"
-  },
-  {
-    "id": "ach-ipcih",
-    "title": "1-Month Intensive National Training Program in Cybersecurity",
-    "organization": "IPCIH Pakistan — Wing (Youth Peace Society)",
-    "date": "August 2026",
-    "description": "Cybersecurity & Digital Defense Trainee",
-    "displayOrder": 7,
-    "isBadge": false,
-    "certificateFile": "/assets/certificates/ipcih-training-certificate.jpg",
-    "certificateLabel": "View Training Certificate"
   }
 ]
