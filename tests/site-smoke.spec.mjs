@@ -752,13 +752,10 @@ test.describe("Portfolio Smoke Tests", () => {
       const expRoles = await page.locator('.timeline-role').allTextContents();
       expect(expRoles).not.toContain('CTF Organizer & Player');
       
-      const ipcih = page.locator('.timeline-row').nth(0);
-      await expect(ipcih.locator('.timeline-company')).toHaveText('IPCIH Pakistan — Wing (Youth Peace Society)');
-
-      const inara = page.locator('.timeline-row').nth(1);
+      const inara = page.locator('.timeline-row').nth(0);
       await expect(inara.locator('.timeline-company')).toHaveText('Inara Technologies');
       
-      const den = page.locator('.timeline-row').nth(2);
+      const den = page.locator('.timeline-row').nth(1);
       await expect(den.locator('.timeline-company')).toHaveText('Digital Empowerment Network');
 
       const internBtn = den.locator('button');

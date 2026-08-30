@@ -1,20 +1,5 @@
 [
   {
-    "id": "exp-ipcih-training",
-    "company": "IPCIH Pakistan — Wing (Youth Peace Society)",
-    "role": "Cybersecurity & Digital Defense Trainee",
-    "location": "Pakistan",
-    "workType": "TRAINING PROGRAM",
-    "startDate": "Jul 2026",
-    "endDate": "Aug 2026",
-    "currentStatus": false,
-    "description": "Successfully completed the 1-Month Intensive National Training Program in Cybersecurity organized by IPCIH Youth & Peace Society. Participated actively in the program and developed essential cybersecurity knowledge and practical skills within the Cybersecurity & Digital Defense track.",
-    "responsibilities": [],
-    "displayOrder": 1,
-    "certificateFile": "/assets/certificates/ipcih-training-certificate.jpg",
-    "certificateLabel": "View Training Certificate"
-  },
-  {
     "id": "exp-2",
     "company": "Inara Technologies",
     "role": "Cyber Security Intern",
@@ -31,7 +16,7 @@
       "SQL injection",
       "XSS"
     ],
-    "displayOrder": 2
+    "displayOrder": 1
   },
   {
     "id": "exp-3",
@@ -48,7 +33,7 @@
       "Reporting",
       "Simulated attacks"
     ],
-    "displayOrder": 3,
+    "displayOrder": 2,
     "certificateFile": "/assets/certificates/digital-empowerment-network-internship.pdf",
     "certificateLabel": "View Internship Certificate"
   }
