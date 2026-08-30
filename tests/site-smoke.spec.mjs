@@ -752,10 +752,13 @@ test.describe("Portfolio Smoke Tests", () => {
       const expRoles = await page.locator('.timeline-role').allTextContents();
       expect(expRoles).not.toContain('CTF Organizer & Player');
       
-      const inara = page.locator('.timeline-row').nth(0);
+      const ipcih = page.locator('.timeline-row').nth(0);
+      await expect(ipcih.locator('.timeline-company')).toHaveText('IPCIH Pakistan — Wing (Youth Peace Society)');
+
+      const inara = page.locator('.timeline-row').nth(1);
       await expect(inara.locator('.timeline-company')).toHaveText('Inara Technologies');
       
-      const den = page.locator('.timeline-row').nth(1);
+      const den = page.locator('.timeline-row').nth(2);
       await expect(den.locator('.timeline-company')).toHaveText('Digital Empowerment Network');
 
       const internBtn = den.locator('button');
@@ -1057,7 +1060,7 @@ test.describe("Portfolio Smoke Tests", () => {
       await page.goto("/");
 
       const allItems = page.locator(".journey-item");
-      await expect(allItems).toHaveCount(28);
+      await expect(allItems).toHaveCount(29);
       await expect(page.locator(".journey-item:not([hidden])")).toHaveCount(10);
       await expect(page.locator(".journey-item:not([hidden])").first()).toContainText("2026");
 
@@ -1075,7 +1078,7 @@ test.describe("Portfolio Smoke Tests", () => {
 
       await page.locator('[data-journey-filter="all"]').click();
       await page.locator("#journey-more").click();
-      await expect(page.locator(".journey-item:not([hidden])")).toHaveCount(28);
+      await expect(page.locator(".journey-item:not([hidden])")).toHaveCount(29);
       await expect(page.locator("#journey-more")).toHaveAttribute("aria-expanded", "true");
     });
 
