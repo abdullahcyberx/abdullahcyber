@@ -1,5 +1,9 @@
 {
-  "version": 1,
-  "include": ["/arena/*"],
-  "exclude": []
+    "version":  1,
+    "include":  [
+                    "/arena/*"
+                ],
+    "exclude":  [
+
+                ]
 }
