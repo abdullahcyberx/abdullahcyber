@@ -1,6 +1,6 @@
-// USE ME / isolated Cloudflare Pages Crypto CTF (no login secrets in GitHub)
+// Cipher Vault / isolated Cloudflare Pages Crypto CTF (no login secrets in GitHub)
 // Public source exposes only the intentionally recoverable ciphertext.
-const NOTE_CIPHERTEXT = 'IzIwbDlINkMjFytRRTFXGVlXNEIhFy5TNzZTEEw=';
+const NOTE_CIPHERTEXT = 'IzIwbDlIYwIzRCMUXScSC0FBJBEpUmMENzZTEEw=';
 const LOGIN_ACCOUNT = 'operator';
 const encoder = new TextEncoder();
 const RESP_HEADERS = {
@@ -47,8 +47,8 @@ export function serveLogin(ctx){
 }
 export function serveNote(ctx){
   const denied=gate(ctx);if(denied)return denied;
-  // Only the ciphertext is visible. The browser tab retains the original "use me" clue.
-  const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>use me</title><style>body{margin:0;padding:18px;background:#070d17;color:#d7f6e9;font:16px/1.7 Consolas,monospace;overflow-wrap:anywhere}</style></head><body>'+NOTE_CIPHERTEXT+'</body></html>';
+  // Only the ciphertext is visible. The browser tab contains the decryption-key clue.
+  const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>use me 2</title><style>body{margin:0;padding:18px;background:#070d17;color:#d7f6e9;font:16px/1.7 Consolas,monospace;overflow-wrap:anywhere}</style></head><body>'+NOTE_CIPHERTEXT+'</body></html>';
   return response(html);
 }
 function secureEqualHex(a,b){
