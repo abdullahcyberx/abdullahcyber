@@ -31,7 +31,7 @@ label{display:block;color:#bdd3e4;font:bold 12px Consolas,monospace;margin:16px 
 input{width:100%;border-radius:7px;border:1px solid #385773;color:#fff;background:#060e1b;padding:13px;font:14px Consolas,monospace;outline:none}input:focus{border-color:var(--mint);box-shadow:0 0 0 2px #62fac427}
 button{margin-top:24px;width:100%;padding:13px 12px;background:#19b68d;border:1px solid #67f8c5;border-radius:8px;color:#081c1a;font:bold 14px Consolas,monospace;cursor:pointer}button:hover{background:#5bf3be}button:disabled{opacity:.6;cursor:wait}
 #notice{min-height:20px;margin-top:14px;text-align:center;font:12px Consolas,monospace;color:var(--red)}.fine{font:12px Consolas,monospace;color:var(--muted);text-align:center;margin:22px 0 0}
-.site-bottom{margin-top:auto;padding-top:58px;padding-bottom:4px;text-align:center;font:12px Consolas,monospace}.site-bottom a,.footerlink{color:#82deff;text-decoration:underline;text-underline-offset:3px}.site-bottom a:hover,.footerlink:hover{color:#b6efff}
+.site-bottom{margin-top:auto;padding-top:38px;padding-bottom:16px;text-align:center;font:16px Consolas,monospace;width:100%}.site-bottom a{display:inline-block;color:#d4faff;text-decoration:none;font-weight:700;letter-spacing:.045em;background:#123449;border:1px solid #5fdac4;border-radius:9px;padding:13px 23px;box-shadow:0 0 24px #2dc5b52a}.site-bottom a:hover,.site-bottom a:focus{color:#ffffff;background:#18566a;box-shadow:0 0 28px #53e7c05c}
 .note{width:min(700px,100%);padding:32px;background:linear-gradient(135deg,#101f31,#0b1525);border:1px solid var(--line);border-radius:14px;box-shadow:0 22px 62px #0008}.note h1{text-align:left;font:800 24px Consolas,monospace;color:var(--mint);margin:0 0 12px}.note p{text-align:left;color:var(--muted);font-size:14px}
 pre{font:13px/1.8 Consolas,monospace;color:#c7f6e4;background:#050e18;padding:18px;border:1px solid #284458;border-radius:8px;white-space:pre-wrap;overflow-wrap:anywhere}.meta{font:12px/1.8 Consolas,monospace;color:#abc4d3;margin:23px 0 12px}
 #result{display:none;background:#051610;border:1px solid #408f72;border-radius:8px;padding:14px;margin-top:17px;text-align:center;color:var(--mint);font:600 14px Consolas,monospace;overflow-wrap:anywhere}
@@ -47,7 +47,9 @@ export function serveLogin(ctx){
 }
 export function serveNote(ctx){
   const denied=gate(ctx);if(denied)return denied;
-  return response(page(`<main class="wrap"><div class="brand">ARCHIVE / RECORD #07</div><article class="note"><h1>use me // a forgotten note</h1><p>The operator's password was sealed in an old encryption record. The note survived, but its contents are unreadable without the proper secret key.</p><div class="meta">ENCRYPTION: REPEATING-KEY XOR<br>TEXT STORAGE: BASE64<br>KEY FORMAT: UTF-8 TEXT</div><pre id="cipher">${NOTE_CIPHERTEXT}</pre><p>The note title might be more useful than it looks. The key is case-sensitive.</p><p>Recover the original message with a cryptography toolkit, then try the login again.</p></article><footer class="site-bottom"><a class="footerlink" href="./">← BACK TO VAULT</a></footer></main>`, 'use me // Archived Note'));
+  // Only the ciphertext is visible. The browser tab retains the original "use me" clue.
+  const html='<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="robots" content="noindex,nofollow"><title>use me</title><style>body{margin:0;padding:18px;background:#070d17;color:#d7f6e9;font:16px/1.7 Consolas,monospace;overflow-wrap:anywhere}</style></head><body>'+NOTE_CIPHERTEXT+'</body></html>';
+  return response(html);
 }
 function secureEqualHex(a,b){
   if(typeof b!=='string'||!/^([a-fA-F0-9]{64})$/.test(b))return false;
