@@ -1,6 +1,6 @@
 // USE ME / isolated Cloudflare Pages Crypto CTF (no login secrets in GitHub)
 // Public source exposes only the intentionally recoverable ciphertext.
-const NOTE_CIPHERTEXT = 'JzYmbzsgJzYhACwmNjY2c003MDAqcilvICAgciMkODZfAAIVEAEEVAIXfyMkcz4yOiEhGk0zNCYpdEAmRTVSZllVN0FcFF8kRDdSY1snMEVVAWdvMB0RRR9FARsAUwhFFgEARAgLARoETB5FGh1FVAUAVQUEVQERVR8KRwQLVQMERwhL';
+const NOTE_CIPHERTEXT = 'IzIwbDlINkMjFytRRTFXGVlXNEIhFy5TNzZTEEw=';
 const LOGIN_ACCOUNT = 'operator';
 const encoder = new TextEncoder();
 const RESP_HEADERS = {
