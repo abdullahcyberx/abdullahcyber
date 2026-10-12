@@ -122,7 +122,7 @@ export async function serveGame(ctx) {
   // Stage 4 progress after a browser reload, without requiring KV or D1.
   const cookie = await sessionHeader(newState(), ctx);
   const pathname = new URL(ctx.request.url).pathname.replace(/\/?$/, '/');
-  const clientPath = pathname + 'engine.js';
+  const clientPath = pathname + 'engine';
   const html = GAME_HTML.replace('__CLIENT_JS_PATH__', clientPath);
   return response(html, 200, {'Content-Type':'text/html; charset=utf-8', 'Set-Cookie':cookie});
 }
